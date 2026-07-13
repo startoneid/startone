@@ -519,3 +519,61 @@ margin-top:60px;
     .stat h2 { font-size: 16px; }
     .stat p { font-size: 10px; }
 }
+
+/* Styling tombol burger (sembunyi di desktop) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+/* RESPONSIVE UNTUK BURGER MENU (HP & TABLET) */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block !important; /* Munculkan tombol di HP */
+    }
+
+    /* Ubah nav menjadi dropdown melayang di bawah header */
+    .nav-container {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* Pas di bawah header */
+        left: 0;
+        width: 100%;
+        background: rgba(40, 40, 43, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 20px 0;
+        gap: 15px;
+        text-align: center;
+        
+        /* Efek sembunyi secara default (slide up + transparan) */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px);
+        transition: all 0.4s ease;
+        z-index: 998;
+    }
+
+    /* Ketika kelas 'active' ditambahkan lewat JS, menu akan muncul */
+    .nav-container.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-container a {
+        margin: 0 !important;
+        padding: 10px 0;
+        font-size: 16px;
+        width: 100%;
+        display: block;
+    }
+}

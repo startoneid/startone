@@ -1,10 +1,9 @@
-AOS.init({
-
-    duration:1000,
-
-    once:true
-
-});
+if (typeof AOS !== "undefined") {
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+}
 
 // ==============================
 // Tutorial Download
@@ -13,7 +12,7 @@ AOS.init({
 // Ganti link ini nanti dengan link Google Drive milikmu
 
 const mobileTutorialLink =
-"https://drive.google.com/file/d/ID_FILE_SMARTPHONE/view";
+"https://drive.google.com/file/d/ID_FILE/view";
 
 const pcTutorialLink =
 "https://drive.google.com/file/d/ID_FILE_PC/view";

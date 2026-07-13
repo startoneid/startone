@@ -74,3 +74,31 @@ backToTop.addEventListener("click", () => {
     });
 
 });
+
+const menuToggle = document.getElementById('menuToggle');
+const navContainer = document.getElementById('navContainer');
+const toggleIcon = menuToggle.querySelector('i');
+
+// Fungsi untuk buka-tutup menu saat tombol burger diklik
+menuToggle.addEventListener('click', () => {
+    navContainer.classList.toggle('active');
+    
+    // Mengubah ikon bars (garis tiga) menjadi ikon X saat terbuka
+    if (navContainer.classList.contains('active')) {
+        toggleIcon.classList.remove('fa-bars');
+        toggleIcon.classList.add('fa-times');
+    } else {
+        toggleIcon.classList.remove('fa-times');
+        toggleIcon.classList.add('fa-bars');
+    }
+});
+
+// Otomatis menutup menu kembali ketika salah satu link diklik
+const navLinks = navContainer.querySelectorAll('a');
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        navContainer.classList.remove('active');
+        toggleIcon.classList.remove('fa-times');
+        toggleIcon.classList.add('fa-bars');
+    });
+});
