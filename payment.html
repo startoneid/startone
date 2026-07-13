@@ -117,11 +117,6 @@ input[type=file]{
     object-fit:cover;
 }
 
-.pay-btn:hover{
-    background:white;
-    transform:translateY(-2px);
-}
-
 .order-box{
     background:#28282B;
     padding:25px;
@@ -136,10 +131,12 @@ input[type=file]{
     align-items:center;
     margin:18px 0;
     font-size:18px;
+    gap:10px;
 }
 
 .row strong{
     color:#FFD166;
+    text-align:right;
 }
 
 button{
@@ -293,6 +290,97 @@ background:white;
 
 transform:translateY(-2px);
 
+}
+
+/* ========================================== */
+/* KODE RESPONSIF SMARTPHONE (TAMBAHAN BARU)  */
+/* ========================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 12px; /* Mengurangi jarak di luar kontainer */
+    }
+
+    .container {
+        padding: 25px 15px; /* Mengoptimalkan ruang di dalam kontainer */
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    body > p {
+        font-size: 14px;
+    }
+
+    .order-box {
+        padding: 15px;
+        margin: 20px 0;
+    }
+
+    .invoice-warning {
+        padding: 12px;
+        gap: 10px;
+        margin: 15px 0 20px;
+    }
+
+    .warning-icon {
+        font-size: 24px;
+    }
+
+    .warning-content h4 {
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+
+    .warning-content p {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .invoice-box h3 {
+        font-size: 20px;
+    }
+
+    .row {
+        font-size: 15px;
+        margin: 12px 0;
+    }
+
+    .qris {
+        width: 220px; /* Ukuran barcode disesuaikan agar pas di layar HP */
+        margin: 25px auto 15px;
+    }
+
+    .info {
+        font-size: 13px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    input[type=file] {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .pay-btn, .track-btn {
+        padding: 14px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px 8px;
+    }
+
+    .container {
+        padding: 20px 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
 }
 
 </style>
