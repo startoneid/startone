@@ -1,919 +1,130 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-
-    scroll-behavior:smooth;
-
-}
-
-body{
-
-    background:#090909;
-
-    color:white;
-
-    font-family:
-    Poppins,
-    sans-serif;
-
-}
-
-section{
-
-    padding:100px 10%;
-
-}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{ background:#090909; color:white; font-family: Poppins, sans-serif; }
+section{ padding:100px 10%; }
 
 .hero{
-
-    height:100vh;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    text-align:center;
-
-    background:
-    linear-gradient(
-    rgba(0,0,0,.75),
-    rgba(0,0,0,.55)),
-    url("../images/pexels-thatguycraig000-2688058.jpg");
-
-    background-size:cover;
-
-    background-position:center;
-
+    height:100vh; display:flex; justify-content:center; align-items:center; text-align:center;
+    background: linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.55)), url("../images/pexels-thatguycraig000-2688058.jpg");
+    background-size:cover; background-position:center;
 }
-
-.hero-content{
-
-    max-width:850px;
-
-}
-
-.badge{
-
-    display:inline-block;
-
-    margin-bottom:20px;
-
-    padding:8px 18px;
-
-    border-radius:50px;
-
-    background:#ffffff20;
-
-    backdrop-filter:blur(15px);
-
-}
-
-.hero h1{
-
-    font-size:58px;
-
-    margin-bottom:25px;
-
-    line-height:1.2;
-
-}
-
-.hero p{
-
-    font-size:18px;
-
-    color:#d6d6d6;
-
-    line-height:1.8;
-
-    margin-bottom:40px;
-
-}
-
-.btn{
-
-    display:inline-block;
-
-    text-decoration:none;
-
-    color:white;
-
-    background:white;
-
-    color:black;
-
-    padding:16px 40px;
-
-    border-radius:50px;
-
-    font-weight:700;
-
-    transition:.35s;
-
-}
-
-.btn:hover{
-
-    transform:translateY(-6px);
-
-}
-
-/* ===========================
-   PURCHASE GUIDE
-=========================== */
-
-.purchase{
-
-    max-width:1100px;
-
-    margin:auto;
-
-}
-
-.section-title{
-
-    text-align:center;
-
-    margin-bottom:70px;
-
-}
-
-.section-title span{
-
-    color:#9b9b9b;
-
-    text-transform:uppercase;
-
-    letter-spacing:3px;
-
-    font-size:14px;
-
-}
-
-.section-title h2{
-
-    font-size:42px;
-
-    margin-top:10px;
-
-    margin-bottom:20px;
-
-}
-
-.section-title p{
-
-    color:#bdbdbd;
-
-    max-width:700px;
-
-    margin:auto;
-
-    line-height:1.8;
-
-}
-
-.steps{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:25px;
-
-}
-
-.step{
-
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:30px;
-
-    padding:25px 0;
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-
-}
-
-.step span{
-
-    min-width:70px;
-
-    font-size:38px;
-
-    font-weight:700;
-
-    color:#ffffff30;
-
-}
-
-.step p{
-
-    font-size:18px;
-
-    color:#d8d8d8;
-
-    line-height:1.8;
-
-}
-
-/* ===========================
-   TERMS
-=========================== */
-
-.terms{
-
-    max-width:1100px;
-
-    margin:auto;
-
-}
-
-.terms-box{
-
-    margin-top:50px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
-}
-
-.term-item{
-
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:18px;
-
-    padding:20px 25px;
-
-    background:#111;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:15px;
-
-    transition:.3s;
-
-}
-
-.term-item:hover{
-
-    transform:translateY(-4px);
-
-    border-color:#ffffff40;
-
-}
-
-.term-item i{
-
-    color:#4ade80;
-
-    font-size:22px;
-
-    margin-top:3px;
-
-}
-
-.term-item p{
-
-    color:#d8d8d8;
-
-    line-height:1.8;
-
-}
-
-/* ===========================
-   TUTORIAL
-=========================== */
-
-.tutorial{
-
-    max-width:1200px;
-
-    margin:auto;
-
-}
-
-.tutorial-container{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-
-    gap:30px;
-
-    margin-top:60px;
-
-}
-
-.tutorial-card{
-
-    background:#111;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:20px;
-
-    padding:40px;
-
-    text-align:center;
-
-    transition:.35s;
-
-}
-
-.tutorial-card:hover{
-
-    transform:translateY(-8px);
-
-    border-color:#ffffff40;
-
-}
-
-.tutorial-card i{
-
-    font-size:60px;
-
-    margin-bottom:25px;
-
-    color:white;
-
-}
-
-.tutorial-card h3{
-
-    margin-bottom:18px;
-
-    font-size:28px;
-
-}
-
-.tutorial-card p{
-
-    color:#cfcfcf;
-
-    line-height:1.8;
-
-    margin-bottom:35px;
-
-}
-
-.download-btn{
-
-    padding:15px 35px;
-
-    border:none;
-
-    border-radius:50px;
-
-    background:white;
-
-    color:black;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.download-btn:hover{
-
-    transform:translateY(-4px);
-
-}
-
-/* ===========================
-   FAQ
-=========================== */
-
-.faq{
-
-    max-width:900px;
-
-    margin:auto;
-
-}
-
-.faq-container{
-
-    margin-top:50px;
-
-}
-
-.faq-item{
-
-    border-bottom:1px solid rgba(255,255,255,.1);
-
-}
-
-.faq-question{
-
-    width:100%;
-
-    background:none;
-
-    border:none;
-
-    color:white;
-
-    padding:25px 0;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    cursor:pointer;
-
-    font-size:18px;
-
-    font-weight:600;
-
-    text-align:left;
-
-}
-
-.faq-question i{
-
-    transition:.3s;
-
-}
-
-.faq-answer{
-
-    max-height:0;
-
-    overflow:hidden;
-
-    transition:max-height .35s ease;
-
-}
-
-.faq-answer p{
-
-    color:#cfcfcf;
-
-    line-height:1.8;
-
-    padding-bottom:25px;
-
-}
-
-/* ===========================
-   CONTACT
-=========================== */
-
-.contact{
-
-    max-width:1200px;
-
-    margin:auto;
-
-}
-
-.contact-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
-    gap:30px;
-
-    margin-top:60px;
-
-}
-
-.contact-card{
-
-    background:#111;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:20px;
-
-    padding:35px;
-
-    text-align:center;
-
-    transition:.35s;
-
-}
-
-.contact-card:hover{
-
-    transform:translateY(-8px);
-
-    border-color:#ffffff40;
-
-}
-
-.contact-card i{
-
-    font-size:50px;
-
-    margin-bottom:20px;
-
-}
-
-.contact-card h3{
-
-    margin-bottom:15px;
-
-}
-
-.contact-card p{
-
-    color:#cfcfcf;
-
-    line-height:1.7;
-
-    margin-bottom:30px;
-
-}
-
-.contact-btn{
-
-    display:inline-block;
-
-    text-decoration:none;
-
-    padding:14px 30px;
-
-    border-radius:50px;
-
-    background:white;
-
-    color:black;
-
-    font-weight:600;
-
-    transition:.3s;
-
-}
-
-.contact-btn:hover{
-
-    transform:translateY(-4px);
-
-}
-
-/* ===========================
-   FOOTER
-=========================== */
-
-.footer{
-
-    background:#060606;
-
-    padding:80px 10% 30px;
-
-    margin-top:100px;
-
-}
-
-.footer-container{
-
-    display:grid;
-
-    grid-template-columns:2fr 1fr 1fr;
-
-    gap:60px;
-
-}
-
-.footer h2{
-
-    margin-bottom:20px;
-
-}
-
-.footer h3{
-
-    margin-bottom:20px;
-
-}
-
-.footer p{
-
-    color:#bfbfbf;
-
-    line-height:1.8;
-
-}
-
-.footer ul{
-
-    list-style:none;
-
-}
-
-.footer li{
-
-    margin-bottom:15px;
-
-}
-
-.footer a{
-
-    text-decoration:none;
-
-    color:#bfbfbf;
-
-    transition:.3s;
-
-}
-
-.footer a:hover{
-
-    color:white;
-
-}
-
-.footer-social{
-
-    margin-top:25px;
-
-    display:flex;
-
-    gap:20px;
-
-}
-
-.footer-social a{
-
-    font-size:24px;
-
-}
-
-.copyright{
-
-    margin-top:60px;
-
-    border-top:1px solid rgba(255,255,255,.08);
-
-    padding-top:30px;
-
-    text-align:center;
-
-    color:#888;
-
-}
-
-/* ===========================
-   BACK TO TOP
-=========================== */
-
-#backToTop{
-
-    position:fixed;
-
-    right:30px;
-
-    bottom:30px;
-
-    width:55px;
-
-    height:55px;
-
-    border:none;
-
-    border-radius:50%;
-
-    background:white;
-
-    color:black;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-    display:none;
-
-    z-index:999;
-
-    transition:.3s;
-
-}
-
-#backToTop:hover{
-
-    transform:translateY(-5px);
-
-}
-
-/* =====================================================
-   RESPONSIVE TABLET
-===================================================== */
-
+.hero-content{ max-width:850px; }
+.badge{ display:inline-block; margin-bottom:20px; padding:8px 18px; border-radius:50px; background:#ffffff20; backdrop-filter:blur(15px); }
+.hero h1{ font-size:58px; margin-bottom:25px; line-height:1.2; }
+.hero p{ font-size:18px; color:#d6d6d6; line-height:1.8; margin-bottom:40px; }
+.btn{ display:inline-block; text-decoration:none; color:black; background:white; padding:16px 40px; border-radius:50px; font-weight:700; transition:.35s; }
+.btn:hover{ transform:translateY(-6px); }
+
+/* PURCHASE GUIDE */
+.purchase{ max-width:1100px; margin:auto; }
+.section-title{ text-align:center; margin-bottom:70px; }
+.section-title span{ color:#9b9b9b; text-transform:uppercase; letter-spacing:3px; font-size:14px; }
+.section-title h2{ font-size:42px; margin-top:10px; margin-bottom:20px; }
+.section-title p{ color:#bdbdbd; max-width:700px; margin:auto; line-height:1.8; }
+.steps{ display:flex; flex-direction:column; gap:25px; }
+.step{ display:flex; align-items:flex-start; gap:30px; padding:25px 0; border-bottom:1px solid rgba(255,255,255,.08); }
+.step span{ min-width:70px; font-size:38px; font-weight:700; color:#ffffff30; }
+.step p{ font-size:18px; color:#d8d8d8; line-height:1.8; }
+
+/* TERMS */
+.terms{ max-width:1100px; margin:auto; }
+.terms-box{ margin-top:50px; display:flex; flex-direction:column; gap:18px; }
+.term-item{ display:flex; align-items:flex-start; gap:18px; padding:20px 25px; background:#111; border:1px solid rgba(255,255,255,.08); border-radius:15px; transition:.3s; }
+.term-item:hover{ transform:translateY(-4px); border-color:#ffffff40; }
+.term-item i{ color:#4ade80; font-size:22px; margin-top:3px; }
+.term-item p{ color:#d8d8d8; line-height:1.8; }
+
+/* TUTORIAL */
+.tutorial{ max-width:1200px; margin:auto; }
+.tutorial-container{ display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:30px; margin-top:60px; }
+.tutorial-card{ background:#111; border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:40px; text-align:center; transition:.35s; }
+.tutorial-card:hover{ transform:translateY(-8px); border-color:#ffffff40; }
+.tutorial-card i{ font-size:60px; margin-bottom:25px; color:white; }
+.tutorial-card h3{ margin-bottom:18px; font-size:28px; }
+.tutorial-card p{ color:#cfcfcf; line-height:1.8; margin-bottom:35px; }
+.download-btn{ padding:15px 35px; border:none; border-radius:50px; background:white; color:black; font-weight:bold; cursor:pointer; transition:.3s; }
+.download-btn:hover{ transform:translateY(-4px); }
+
+/* FAQ */
+.faq{ max-width:900px; margin:auto; }
+.faq-container{ margin-top:50px; }
+.faq-item{ border-bottom:1px solid rgba(255,255,255,.1); }
+.faq-question{ width:100%; background:none; border:none; color:white; padding:25px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-size:18px; font-weight:600; text-align:left; }
+.faq-question i{ transition:.3s; }
+.faq-answer{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
+.faq-answer p{ color:#cfcfcf; line-height:1.8; padding-bottom:25px; }
+
+/* CONTACT */
+.contact{ max-width:1200px; margin:auto; }
+.contact-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:30px; margin-top:60px; }
+.contact-card{ background:#111; border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:35px; text-align:center; transition:.35s; }
+.contact-card:hover{ transform:translateY(-8px); border-color:#ffffff40; }
+.contact-card i{ font-size:50px; margin-bottom:20px; }
+.contact-card h3{ margin-bottom:15px; }
+.contact-card p{ color:#cfcfcf; line-height:1.7; margin-bottom:30px; }
+.contact-btn{ display:inline-block; text-decoration:none; padding:14px 30px; border-radius:50px; background:white; color:black; font-weight:600; transition:.3s; }
+.contact-btn:hover{ transform:translateY(-4px); }
+
+/* FOOTER & BACK TO TOP */
+.footer{ background:#060606; padding:80px 10% 30px; margin-top:100px; }
+.footer-container{ display:grid; grid-template-columns:2fr 1fr 1fr; gap:60px; }
+.footer h2, .footer h3{ margin-bottom:20px; }
+.footer p, .footer a{ color:#bfbfbf; line-height:1.8; }
+.footer ul{ list-style:none; }
+.footer li{ margin-bottom:15px; }
+.footer a{ text-decoration:none; transition:.3s; }
+.footer a:hover{ color:white; }
+.footer-social{ margin-top:25px; display:flex; gap:20px; }
+.footer-social a{ font-size:24px; }
+.copyright{ margin-top:60px; border-top:1px solid rgba(255,255,255,.08); padding-top:30px; text-align:center; color:#888; }
+#backToTop{ position:fixed; right:30px; bottom:30px; width:55px; height:55px; border:none; border-radius:50%; background:white; color:black; font-size:18px; cursor:pointer; display:none; z-index:999; transition:.3s; }
+#backToTop:hover{ transform:translateY(-5px); }
+
+/* RESPONSIVE MEDIA QUERIES */
 @media (max-width:992px){
-
-section{
-    padding:80px 7%;
+    section{ padding:80px 7%; }
+    .hero{ height:auto; min-height:100vh; padding:120px 7%; }
+    .hero h1{ font-size:44px; line-height:1.3; }
+    .hero p{ font-size:17px; }
+    .section-title h2{ font-size:34px; }
+    .step{ gap:20px; }
+    .step span{ min-width:55px; font-size:30px; }
+    .step p{ font-size:17px; }
+    .tutorial-container{ grid-template-columns:1fr; }
+    .contact-grid{ grid-template-columns:repeat(2,1fr); }
+    .footer-container{ grid-template-columns:1fr; gap:40px; text-align:center; }
+    .footer-social{ justify-content:center; }
 }
-
-.hero{
-    height:auto;
-    min-height:100vh;
-    padding:120px 7%;
-}
-
-.hero h1{
-    font-size:44px;
-    line-height:1.3;
-}
-
-.hero p{
-    font-size:17px;
-}
-
-.section-title h2{
-    font-size:34px;
-}
-
-.step{
-    gap:20px;
-}
-
-.step span{
-    min-width:55px;
-    font-size:30px;
-}
-
-.step p{
-    font-size:17px;
-}
-
-.tutorial-container{
-    grid-template-columns:1fr;
-}
-
-.contact-grid{
-    grid-template-columns:repeat(2,1fr);
-}
-
-.footer-container{
-    grid-template-columns:1fr;
-    gap:40px;
-    text-align:center;
-}
-
-.footer-social{
-    justify-content:center;
-}
-
-}
-
-/* =====================================================
-   RESPONSIVE SMARTPHONE
-===================================================== */
 
 @media (max-width:768px){
-
-section{
-    padding:70px 6%;
+    section{ padding:70px 6%; }
+    .hero{ min-height:100vh; padding:120px 6% 90px; }
+    .badge{ font-size:13px; }
+    .hero h1{ font-size:32px; line-height:1.35; }
+    .hero p{ font-size:16px; line-height:1.8; }
+    .btn{ width:100%; text-align:center; padding:16px; }
+    .section-title{ margin-bottom:45px; }
+    .section-title h2{ font-size:28px; }
+    .section-title p{ font-size:15px; }
+    .step{ flex-direction:column; gap:12px; padding:22px 0; }
+    .step span{ font-size:28px; }
+    .step p{ font-size:15px; }
+    .term-item{ padding:18px; }
+    .term-item p{ font-size:15px; }
+    .tutorial-card{ padding:30px 25px; }
+    .tutorial-card h3{ font-size:24px; }
+    .download-btn{ width:100%; }
+    .faq-question{ font-size:16px; line-height:1.5; }
+    .contact-grid{ grid-template-columns:1fr; }
+    .contact-card{ padding:30px; }
+    .contact-btn{ width:100%; text-align:center; }
+    .footer{ padding:60px 6% 25px; }
+    #backToTop{ width:48px; height:48px; right:20px; bottom:20px; }
 }
-
-.hero{
-    min-height:100vh;
-    padding:120px 6% 90px;
-}
-
-.badge{
-    font-size:13px;
-}
-
-.hero h1{
-    font-size:32px;
-    line-height:1.35;
-}
-
-.hero p{
-    font-size:16px;
-    line-height:1.8;
-}
-
-.btn{
-    width:100%;
-    text-align:center;
-    padding:16px;
-}
-
-.section-title{
-    margin-bottom:45px;
-}
-
-.section-title h2{
-    font-size:28px;
-}
-
-.section-title p{
-    font-size:15px;
-}
-
-.step{
-    flex-direction:column;
-    gap:12px;
-    padding:22px 0;
-}
-
-.step span{
-    font-size:28px;
-}
-
-.step p{
-    font-size:15px;
-}
-
-.term-item{
-    padding:18px;
-}
-
-.term-item p{
-    font-size:15px;
-}
-
-.tutorial-card{
-    padding:30px 25px;
-}
-
-.tutorial-card h3{
-    font-size:24px;
-}
-
-.download-btn{
-    width:100%;
-}
-
-.faq-question{
-    font-size:16px;
-    line-height:1.5;
-}
-
-.contact-grid{
-    grid-template-columns:1fr;
-}
-
-.contact-card{
-    padding:30px;
-}
-
-.contact-btn{
-    width:100%;
-    text-align:center;
-}
-
-.footer{
-    padding:60px 6% 25px;
-}
-
-#backToTop{
-    width:48px;
-    height:48px;
-    right:20px;
-    bottom:20px;
-}
-
-}
-
-/* =====================================================
-   SMALL PHONE
-===================================================== */
 
 @media (max-width:480px){
-
-.hero h1{
-    font-size:27px;
-}
-
-.hero p{
-    font-size:15px;
-}
-
-.section-title h2{
-    font-size:24px;
-}
-
-.tutorial-card{
-    padding:25px 20px;
-}
-
-.contact-card{
-    padding:25px 20px;
-}
-
+    .hero h1{ font-size:27px; }
+    .hero p{ font-size:15px; }
+    .section-title h2{ font-size:24px; }
+    .tutorial-card, .contact-card{ padding:25px 20px; }
 }
