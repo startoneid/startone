@@ -1,124 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+<title>StarTone | Lightroom Presets</title>
+<!-- ===================== -->
+<!-- FAVICON -->
+<!-- ===================== -->
 
-<title>StarTone Admin</title>
+<link rel="icon" href="icon/StarTone Circle.png" type="image/x-icon">
+<link rel="shortcut icon" href="icon/StarTone Circle.png">
+<link rel="apple-touch-icon" href="icon/StarTone Circle.png">
 
-<link rel="icon" href="../images/StarTone Circle.png">
+<!-- ===================== -->
+<!-- SEO -->
+<!-- ===================== -->
+
+<meta name="description"
+content="StarTone menyediakan preset Adobe Lightroom premium untuk Android, iPhone, Windows, dan Mac. Download instan setelah pembayaran berhasil.">
+
+<meta name="keywords"
+content="Lightroom Preset, Preset Lightroom Mobile, Preset Lightroom PC, Preset Jepang, Preset Korea, Preset Cinematic">
+
+<meta name="author"
+content="StarTone">
 
 <meta name="robots"
-content="noindex,nofollow">
+content="index, follow">
+
+<meta name="theme-color"
+content="#28282B">
+
+<!-- ===================== -->
+<!-- OPEN GRAPH -->
+<!-- ===================== -->
+
+<meta property="og:type"
+content="website">
+
+<meta property="og:title"
+content="StarTone | Premium Lightroom Presets">
+
+<meta property="og:description"
+content="Preset Lightroom premium untuk Android, iPhone, Windows, dan Mac.">
+
+<meta property="og:image"
+content="https://DOMAINMU/images/preview.jpg">
+
+<meta property="og:url"
+content="https://DOMAINMU">
+
+<!-- ===================== -->
+<!-- TWITTER -->
+<!-- ===================== -->
+
+<meta name="twitter:card"
+content="summary_large_image">
+
+<meta name="twitter:title"
+content="StarTone | Premium Lightroom Presets">
+
+<meta name="twitter:description"
+content="Preset Lightroom premium untuk Android, iPhone, Windows, dan Mac.">
+
+<meta name="twitter:image"
+content="https://DOMAINMU/images/preview.jpg">
+
+<link rel="canonical"
+href="https://DOMAINMU/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet"
-href="style.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+
+<link rel="stylesheet" href="CSS/index.css">
 
 </head>
 
 <body>
 
-<div class="topbar">
+<header>
 
-    <h1>StarTone Admin Dashboard</h1>
+<div class="logo">STAR<span>TONE</span></div>
 
-    <button id="logoutBtn">
-        Logout
-    </button>
+<nav>
 
-</div>
+<nav>
 
-<div class="dashboard">
+<a href="#home">Home</a>
+<a href="#shop">Shop</a>
+<a href="tracking.html">Tracking</a>
+<a href="guide.html#tutorial">Tutorial</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
 
-    <div class="card">
-        <h3>Total Order</h3>
-        <h2 id="totalOrders">0</h2>
-    </div>
+</nav>
 
-    <div class="card">
-        <h3>Waiting</h3>
-        <h2 id="waitingOrders">0</h2>
-    </div>
+</nav>
 
-    <div class="card">
-        <h3>Verified</h3>
-        <h2 id="verifiedOrders">0</h2>
-    </div>
+</header>
 
-    <div class="card">
-        <h3>Revenue</h3>
-        <h2 id="totalRevenue">Rp0</h2>
-    </div>
+<section class="hero" id="home">
 
-</div>
+    <img
+        src="images/pexels-nuhyil-ahammed-282191113-28232142.jpg"
+        class="hero-bg"
+        alt="Hero Background">
 
-<div class="toolbar">
+<div data-aos="fade-up">
 
-    <input
-        type="text"
-        id="searchInput"
-        placeholder="🔍 Cari customer atau produk...">
+<h1>LIGHTROOM PRESET</h1>
 
-    <select id="statusFilter">
+<p>Temukan Karakter Warna Fotomu.</p>
 
-        <option value="all">Semua Status</option>
+<a href="#shop" id="shopNowBtn" class="btn btn-primary">
+    Shop Now
+</a>
 
-        <option value="waiting">
-            Waiting
-        </option>
-
-        <option value="waiting_verification">
-            Waiting Verification
-        </option>
-
-        <option value="verified">
-            Verified
-        </option>
-
-        <option value="rejected">
-            Rejected
-        </option>
-
-    </select>
+<a href="guide.html" class="btn btn-outline">Panduan</a>
 
 </div>
 
-<table>
+</section>
 
-<thead>
+<section class="section" id="shop">
 
-<tr>
+<h2 class="title section-title" data-aos="fade-up">
+Featured Collections
+</h2>
 
-<th>Invoice</th>
+<div class="grid">
 
-<th>Customer</th>
+    <div class="card">
+        <img src="images/japan.webp" alt="Japan Collection">
 
-<th>Produk</th>
+        <div class="card-content">
+            <h3>Japan Collection</h3>
+            <p>Warm Japanese colors.</p>
 
-<th>Harga</th>
+            <div class="price">Rp39.000</div>
 
-<th>Bukti Pembayaran</th>
+            <button class="buy"
+                onclick="buyProduct('Japan Collection',39000)">
+                Buy Now
+            </button>
+        </div>
+    </div>
 
-<th>Status</th>
+    <div class="card">
+        <img src="images/korean.webp" alt="Korean Collection">
 
-<th>Aksi</th>
+        <div class="card-content">
+            <h3>Korean Collection</h3>
+            <p>Soft premium aesthetic.</p>
 
-</tr>
+            <div class="price">Rp59.000</div>
 
-</thead>
+            <button class="buy"
+                onclick="buyProduct('Korean Collection',59000)">
+                Buy Now
+            </button>
+        </div>
+    </div>
 
-<tbody id="orders">
+    <div class="card">
+        <img src="images/cinematic.webp" alt="Cinematic Collection">
 
-</tbody>
+        <div class="card-content">
+            <h3>Cinematic Collection</h3>
+            <p>Professional film look.</p>
 
-</table>
+            <div class="price">Rp99.000</div>
 
-<script type="module" src="admin.js"></script>
+            <button class="buy"
+                onclick="buyProduct('Cinematic Collection',99000)">
+                Buy Now
+            </button>
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="title" data-aos="fade-up">
+Why Choose Us?
+</h2>
+
+<div class="features">
+
+<div class="feature">
+
+<i class="fas fa-download"></i>
+
+<h3>Instant Download</h3>
+
+<p>Receive your preset instantly after purchase.</p>
+
+</div>
+
+<div class="feature">
+
+<i class="fas fa-mobile-alt"></i>
+
+<h3>Mobile Ready</h3>
+
+<p>Works on Lightroom Mobile and Desktop.</p>
+
+</div>
+
+<div class="feature">
+
+<i class="fas fa-star"></i>
+
+<h3>Premium Quality</h3>
+
+<p>Designed by professional creators.</p>
+
+</div>
+
+<div class="feature">
+
+<i class="fas fa-sync-alt"></i>
+
+<h3>Lifetime Updates</h3>
+
+<p>Free updates forever.</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section" id="about">
+
+<h2 class="title section-title">
+About StarTone
+</h2>
+
+<div class="about">
+
+<div class="about-image">
+
+<img src="icon/S.png" alt="About StarTone">
+
+</div>
+
+<div class="about-content">
+
+<h3>Tentang Kami</h3>
+
+<p>
+StarTone menghadirkan preset Lightroom yang dirancang untuk
+memberikan warna profesional dengan sekali klik. Cocok untuk content
+creator, fotografer, traveler, hingga pebisnis yang ingin menghasilkan
+foto estetik dengan cepat.
+</p>
+
+<div class="stats">
+
+<div class="stat">
+<h2>9K+</h2>
+<p>Downloads</p>
+</div>
+
+<div class="stat">
+<h2>4.9★</h2>
+<p>Rating</p>
+</div>
+
+<div class="stat">
+<h2>Available</h2>
+<p>Smartphone and PC</p>
+</div>
+
+</div>
+
+<a href="#shop" class="btn btn-primary">Explore Presets</a>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section" id="collections">
+
+    <h2 class="title section-title">
+Tutorial Pemasangan Preset Lightroom
+</h2>
+
+    <div class="tutorial">
+
+        <div class="step">
+            <h3>01. Download File Preset</h3>
+            <p>
+                Setelah pembayaran berhasil, download file preset yang telah diberikan oleh StarTone.
+            </p>
+        </div>
+
+        <div class="step">
+            <h3>02. Ekstrak File</h3>
+            <p>
+                Jika file masih berformat ZIP atau RAR, ekstrak terlebih dahulu hingga mendapatkan file preset (.DNG atau .XMP).
+            </p>
+        </div>
+
+        <div class="step">
+            <h3>03. Buka Adobe Lightroom</h3>
+            <p>
+                Jalankan aplikasi Adobe Lightroom Mobile atau Desktop, kemudian masuk ke halaman Library.
+            </p>
+        </div>
+
+        <div class="step">
+            <h3>04. Import Preset</h3>
+            <p>
+                Pilih menu Import lalu tambahkan file preset yang sudah diekstrak ke dalam Lightroom.
+            </p>
+        </div>
+
+        <div class="step">
+            <h3>05. Terapkan Preset</h3>
+            <p>
+                Buka foto yang ingin diedit, kemudian pilih menu Presets dan gunakan preset StarTone yang telah diimport.
+            </p>
+        </div>
+
+        <div class="step">
+            <h3>06. Simpan Hasil Edit</h3>
+            <p>
+                Setelah warna sesuai keinginan, tekan tombol Export atau Save untuk menyimpan foto dengan kualitas terbaik.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section" id="contact">
+
+<h2 class="title">Contact Us</h2>
+
+<div class="contact">
+
+<div class="contact-info">
+
+<h3>Let's Work Together</h3>
+
+<p>
+Punya pertanyaan atau ingin bekerja sama?
+Hubungi kami melalui salah satu platform berikut.
+</p>
+
+<div class="contact-item">
+<i class="fas fa-envelope"></i>
+<span>startone.id@gmail.com</span>
+</div>
+
+<div class="contact-item">
+<i class="fab fa-instagram"></i>
+<span>@startone.id</span>
+</div>
+
+<div class="contact-item">
+<i class="fab fa-tiktok"></i>
+<span>@startone.id</span>
+</div>
+
+
+</div>
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script src="JS/index.js"></script>
+
+<script src="JS/footer.js"></script>
 
 </body>
-
 </html>
