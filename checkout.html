@@ -237,6 +237,78 @@ opacity:.9;
     color:#bbb;
 }
 
+/* ========================================== */
+/* KODE RESPONSIF SMARTPHONE (TAMBAHAN BARU)  */
+/* ========================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 12px; /* Mengurangi padding luar di layar HP */
+    }
+
+    .container {
+        padding: 25px 15px; /* Memperluas area form di dalam kotak */
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 26px; /* Menyesuaikan ukuran judul utama */
+        margin-bottom: 20px;
+    }
+
+    .row {
+        grid-template-columns: 1fr; /* Nama Depan dan Belakang otomatis menumpuk atas-bawah */
+        gap: 0;
+    }
+
+    input {
+        padding: 12px;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-size: 14px;
+    }
+
+    .summary {
+        padding: 20px 15px;
+        margin-top: 20px;
+    }
+
+    .summary h2 {
+        font-size: 20px;
+    }
+
+    .item {
+        font-size: 14px;
+        margin: 10px 0;
+    }
+
+    .total {
+        font-size: 18px;
+        margin-top: 15px;
+    }
+
+    button {
+        padding: 14px;
+        font-size: 16px;
+        margin-top: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px 8px;
+    }
+
+    .container {
+        padding: 20px 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+}
 
 </style>
 
@@ -305,8 +377,6 @@ required>
 <div class="item total">
     <span>Total</span>
     <span id="total"></span>
-</div>
-
 </div>
 
 </div>
