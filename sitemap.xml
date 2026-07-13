@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
-      <loc>https://startone.id/</loc> <lastmod>2026-07-13</lastmod>
+      <loc>https://startone.pages.dev/</loc>
+      <lastmod>2026-07-13</lastmod>
       <priority>1.00</priority>
+   </url>
+
+   <url>
+      <loc>https://startone.pages.dev/guide.html</loc>
+      <lastmod>2026-07-13</lastmod>
+      <priority>0.80</priority>
+   </url>
+
+   <url>
+      <loc>https://startone.pages.dev/terms.html</loc>
+      <lastmod>2026-07-13</lastmod>
+      <priority>0.50</priority>
    </url>
 </urlset>
