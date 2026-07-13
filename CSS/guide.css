@@ -49,7 +49,7 @@ section{ padding:100px 10%; }
 .faq{ max-width:900px; margin:auto; }
 .faq-container{ margin-top:50px; }
 .faq-item{ border-bottom:1px solid rgba(255,255,255,.1); }
-.faq-question{ width:100%; background:none; border:none; color:white; padding:25px 0; display:flex; justify-between:space-between; align-items:center; cursor:pointer; font-size:18px; font-weight:600; text-align:left; }
+.faq-question{ width:100%; background:none; border:none; color:white; padding:25px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-size:18px; font-weight:600; text-align:left; }
 .faq-question i{ transition:.3s; }
 .faq-answer{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
 .faq-answer p{ color:#cfcfcf; line-height:1.8; padding-bottom:25px; }
