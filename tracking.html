@@ -1,53 +1,129 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Track Order | StarTone</title>
-
-<link rel="icon" href="icon/StarTone Circle.png">
-
-<meta name="description"
-content="Lacak status pesanan StarTone menggunakan invoice.">
-
-<meta name="robots"
-content="noindex,nofollow">
-
-<link rel="stylesheet" href="CSS/tracking.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Track Order | StarTone</title>
+    
+    <link rel="icon" href="icon/StarTone Circle.png">
+    
+    <meta name="description" content="Lacak status pesanan StarTone menggunakan invoice.">
+    <meta name="robots" content="noindex,nofollow">
+    
+    <link rel="stylesheet" href="CSS/tracking.css">
 </head>
-
 <body>
 
 <div class="container">
-
-<h1>Track Order</h1>
-
-<p>
-Masukkan nomor invoice dan email yang digunakan saat checkout.
-</p>
-
-<input
-id="invoice"
-placeholder="Invoice">
-
-<input
-id="email"
-placeholder="Email">
-
-<button id="checkBtn">
-
-Cek Status
-
-</button>
-
-<div id="result"></div>
-
+    <h1>Track Order</h1>
+    <p>Masukkan nomor invoice dan email yang digunakan saat checkout.</p>
+    
+    <input id="invoice" placeholder="Invoice">
+    <input id="email" placeholder="Email">
+    
+    <button id="checkBtn">Cek Status</button>
+    
+    <div id="result"></div>
 </div>
 
-<script type="module" src="JS/tracking.js"></script>
+<script type="module">
+    // 1. Import SDK Firebase langsung dari CDN resmi
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 2. Konfigurasi Firebase milik StarTone
+    const firebaseConfig = {
+      apiKey: "AIzaSyCe_fBo7M-2kROpNPpMfnI6qbZPXfHj8dE",
+      authDomain: "startone-d8aee.firebaseapp.com",
+      projectId: "startone-d8aee",
+      storageBucket: "startone-d8aee.firebasestorage.app",
+      messagingSenderId: "656485405720",
+      appId: "1:656485405720:web:8c6473209c12103c43df6d",
+    };
+
+    // 3. Inisialisasi koneksi ke Database
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const btn = document.getElementById("checkBtn");
+
+    btn.onclick = async () => {
+        const invoice = document.getElementById("invoice").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const result = document.getElementById("result");
+
+        // Validasi input kosong
+        if (!invoice || !email) {
+            result.innerHTML = "<p style='color:#FFD166; margin-top:20px; font-weight:bold;'>⚠️ Mohon isi Invoice dan Email terlebih dahulu.</p>";
+            return;
+        }
+
+        result.innerHTML = "<p style='margin-top:20px;'>Mencari...</p>";
+
+        try {
+            // Query mencari data ke Firestore orders
+            const q = query(
+                collection(db, "orders"),
+                where("invoiceNumber", "==", invoice),
+                where("email", "==", email)
+            );
+
+            const snap = await getDocs(q);
+
+            if (snap.empty) {
+                result.innerHTML = "<p style='color:#FF5555; margin-top:20px; font-weight:bold;'>❌ Order tidak ditemukan. Periksa kembali Invoice/Email Anda.</p>";
+                return;
+            }
+
+            const data = snap.docs[0].data();
+            let statusIcon = "🟡";
+
+            if (data.status === "verified") statusIcon = "🟢";
+            if (data.status === "rejected") statusIcon = "🔴";
+
+            let download = "";
+
+            if (data.status === "verified") {
+                download = `
+                    <br><br>
+                    <a href="${data.downloadURL}" download style="display:inline-block; background:#FFD166; color:#222; padding:12px 25px; border-radius:10px; text-decoration:none; font-weight:bold; width:100%; text-align:center;">
+                        ⬇️ Download Produk
+                    </a>
+                `;
+            }
+
+            // Menampilkan komponen status pesanan yang bisa ditekan tombol downloadnya
+            result.innerHTML = `
+                <div class="card">
+                    <h2>${data.invoiceNumber}</h2>
+                    <p><b>Nama :</b> ${data.customerName}</p>
+                    <p><b>Produk :</b> ${data.product}</p>
+                    <p><b>Status :</b> ${statusIcon} ${data.status}</p>
+                    
+                    <div class="progress">
+                        <div class="step">
+                            ${data.status === "waiting" ? "🟡" : "🟢"} Checkout
+                        </div>
+                        <div class="step">
+                            ${data.status === "waiting_verification" || data.status === "verified" ? "🟢" : "⚪"} Pembayaran
+                        </div>
+                        <div class="step">
+                            ${data.status === "verified" ? "🟢" : "🟠"} Verifikasi
+                        </div>
+                        <div class="step">
+                            ${data.status === "verified" ? "🟢" : "⚪"} Download
+                        </div>
+                    </div>
+                    ${download}
+                </div>
+            `;
+        } catch (error) {
+            console.error("Firebase Error:", error);
+            result.innerHTML = "<p style='color:#FF5555; margin-top:20px;'>❌ Terjadi gangguan koneksi ke database.</p>";
+        }
+    };
+</script>
 
 </body>
 </html>
