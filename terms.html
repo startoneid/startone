@@ -54,7 +54,6 @@ gap:10px;
 }
 
 button{
-
 margin-top:30px;
 width:100%;
 padding:15px;
@@ -64,12 +63,69 @@ background:#FFD166;
 font-size:17px;
 font-weight:600;
 cursor:pointer;
-
+transition: 0.3s;
 }
 
 button:disabled{
 background:#777;
 cursor:not-allowed;
+}
+
+/* ========================================== */
+/* KODE RESPONSIF SMARTPHONE (TAMBAHAN BHARU)  */
+/* ========================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 12px; /* Mengurangi jarak di luar kotak */
+    }
+
+    .container {
+        padding: 30px 20px; /* Mengurangi jarak di dalam kotak */
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 26px; /* Menyesuaikan ukuran judul utama */
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 18px; /* Menyesuaikan sub-judul ketentuan */
+    }
+
+    p {
+        font-size: 14px; /* Ukuran teks isi sedikit diperkecil agar pas */
+        line-height: 1.6;
+    }
+
+    .check {
+        align-items: flex-start; /* Menjaga checkbox tetap rapi di atas jika teks membungkus jadi 2 baris */
+    }
+
+    .check label {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    button {
+        padding: 14px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px 8px;
+    }
+
+    .container {
+        padding: 25px 15px;
+        border-radius: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
 }
 
 </style>
