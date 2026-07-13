@@ -75,30 +75,50 @@ backToTop.addEventListener("click", () => {
 
 });
 
-const menuToggle = document.getElementById('menuToggle');
-const navContainer = document.getElementById('navContainer');
-const toggleIcon = menuToggle.querySelector('i');
+// Hapus kode burger menu lama di bagian bawah index.js, lalu ganti dengan ini:
+document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById('menuToggle');
+    const navContainer = document.getElementById('navContainer');
+    const toggleIcon = menuToggle ? menuToggle.querySelector('i') : null;
 
-// Fungsi untuk buka-tutup menu saat tombol burger diklik
-menuToggle.addEventListener('click', () => {
-    navContainer.classList.toggle('active');
-    
-    // Mengubah ikon bars (garis tiga) menjadi ikon X saat terbuka
-    if (navContainer.classList.contains('active')) {
-        toggleIcon.classList.remove('fa-bars');
-        toggleIcon.classList.add('fa-times');
-    } else {
-        toggleIcon.classList.remove('fa-times');
-        toggleIcon.classList.add('fa-bars');
+    if (menuToggle && navContainer) {
+        // Fungsi buka-tutup menu saat tombol burger diklik
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navContainer.classList.toggle('active');
+            
+            if (toggleIcon) {
+                if (navContainer.classList.contains('active')) {
+                    toggleIcon.classList.remove('fa-bars');
+                    toggleIcon.classList.add('fa-times');
+                } else {
+                    toggleIcon.classList.remove('fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            }
+        });
+
+        // Otomatis menutup menu kembali ketika salah satu link menu diklik
+        const navLinks = navContainer.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navContainer.classList.remove('active');
+                if (toggleIcon) {
+                    toggleIcon.classList.remove('fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            });
+        });
+
+        // Menutup menu jika mengklik di luar area menu dropdown
+        document.addEventListener('click', (e) => {
+            if (!navContainer.contains(e.target) && !menuToggle.contains(e.target)) {
+                navContainer.classList.remove('active');
+                if (toggleIcon) {
+                    toggleIcon.classList.remove('fa-times');
+                    toggleIcon.classList.add('fa-bars');
+                }
+            }
+        });
     }
-});
-
-// Otomatis menutup menu kembali ketika salah satu link diklik
-const navLinks = navContainer.querySelectorAll('a');
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navContainer.classList.remove('active');
-        toggleIcon.classList.remove('fa-times');
-        toggleIcon.classList.add('fa-bars');
-    });
 });
