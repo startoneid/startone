@@ -75,14 +75,18 @@ backToTop.addEventListener("click", () => {
 
 });
 
-// Hapus kode burger menu lama di bagian bawah index.js, lalu ganti dengan ini:
+// ==========================================
+// BURGER MENU RESPONSIF (DIPERBAIKI)
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const menuToggle = document.getElementById('menuToggle');
     const navContainer = document.getElementById('navContainer');
-    const toggleIcon = menuToggle ? menuToggle.querySelector('i') : null;
-
+    
+    // Pastikan menuToggle ditemukan dulu sebelum mencari icon di dalamnya
     if (menuToggle && navContainer) {
-        // Fungsi buka-tutup menu saat tombol burger diklik
+        const toggleIcon = menuToggle.querySelector('i');
+
+        // Fungsi untuk buka-tutup menu saat tombol burger diklik
         menuToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             navContainer.classList.toggle('active');
@@ -98,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Otomatis menutup menu kembali ketika salah satu link menu diklik
+        // Otomatis menutup menu kembali ketika salah satu link diklik
         const navLinks = navContainer.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -110,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // Menutup menu jika mengklik di luar area menu dropdown
+        // Menutup menu jika pengguna mengklik di luar area menu dropdown
         document.addEventListener('click', (e) => {
             if (!navContainer.contains(e.target) && !menuToggle.contains(e.target)) {
                 navContainer.classList.remove('active');
