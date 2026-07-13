@@ -1,10 +1,9 @@
-AOS.init({
-
-    duration:1000,
-
-    once:true
-
-});
+if (typeof AOS !== "undefined") {
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+}
 
 // ==============================
 // Tutorial Download
@@ -13,7 +12,7 @@ AOS.init({
 // Ganti link ini nanti dengan link Google Drive milikmu
 
 const mobileTutorialLink =
-"https://www.google.com/imgres?q=bunga&imgurl=https%3A%2F%2Fmillionbloom.com%2Fcdn%2Fshop%2Farticles%2F20_Daftar_Nama_nama_Bunga_di_Indonesia_yang_Sangat_Langka_1500x.jpg%3Fv%3D1712050485&imgrefurl=https%3A%2F%2Fmillionbloom.com%2Fblogs%2Fnews%2Fnama-nama-bunga-di-indonesia%3Fsrsltid%3DAfmBOorslh5KfLYvLy8MVnG3K7KfcP2jfQkx0UfmCdxo1n1QkeUfGHwt&docid=YDZOaG-7YkUioM&tbnid=V2WeNRgxfoCu4M&vet=12ahUKEwjFntyByM-VAxX3SGwGHcsLHaYQnPAOegQILhAA..i&w=1200&h=800&hcb=2&ved=2ahUKEwjFntyByM-VAxX3SGwGHcsLHaYQnPAOegQILhAA";
+"https://drive.google.com/file/d/ID_FILE/view";
 
 const pcTutorialLink =
 "https://drive.google.com/file/d/ID_FILE_PC/view";
