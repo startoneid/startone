@@ -49,7 +49,7 @@ section{ padding:100px 10%; }
 .faq{ max-width:900px; margin:auto; }
 .faq-container{ margin-top:50px; }
 .faq-item{ border-bottom:1px solid rgba(255,255,255,.1); }
-.faq-question{ width:100%; background:none; border:none; color:white; padding:25px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-size:18px; font-weight:600; text-align:left; }
+.faq-question{ width:100%; background:none; border:none; color:white; padding:25px 0; display:flex; justify-between:space-between; align-items:center; cursor:pointer; font-size:18px; font-weight:600; text-align:left; }
 .faq-question i{ transition:.3s; }
 .faq-answer{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
 .faq-answer p{ color:#cfcfcf; line-height:1.8; padding-bottom:25px; }
@@ -80,7 +80,7 @@ section{ padding:100px 10%; }
 #backToTop{ position:fixed; right:30px; bottom:30px; width:55px; height:55px; border:none; border-radius:50%; background:white; color:black; font-size:18px; cursor:pointer; display:none; z-index:999; transition:.3s; }
 #backToTop:hover{ transform:translateY(-5px); }
 
-/* RESPONSIVE MEDIA QUERIES */
+/* RESPONSIVE MEDIA QUERIES (MODIFIED) */
 @media (max-width:992px){
     section{ padding:80px 7%; }
     .hero{ height:auto; min-height:100vh; padding:120px 7%; }
@@ -90,15 +90,11 @@ section{ padding:100px 10%; }
     .step{ gap:20px; }
     .step span{ min-width:55px; font-size:30px; }
     .step p{ font-size:17px; }
-    .tutorial-container{ grid-template-columns:1fr; }
-    .contact-grid{ grid-template-columns:repeat(2,1fr); }
-    .footer-container{ grid-template-columns:1fr; gap:40px; text-align:center; }
-    .footer-social{ justify-content:center; }
 }
 
-@media (max-width:768px){
-    section{ padding:70px 6%; }
-    .hero{ min-height:100vh; padding:120px 6% 90px; }
+@media (max-width:768px) {
+    section{ padding:60px 4%; }
+    .hero{ min-height:100vh; padding:120px 4% 90px; }
     .badge{ font-size:13px; }
     .hero h1{ font-size:32px; line-height:1.35; }
     .hero p{ font-size:16px; line-height:1.8; }
@@ -106,25 +102,54 @@ section{ padding:100px 10%; }
     .section-title{ margin-bottom:45px; }
     .section-title h2{ font-size:28px; }
     .section-title p{ font-size:15px; }
-    .step{ flex-direction:column; gap:12px; padding:22px 0; }
-    .step span{ font-size:28px; }
-    .step p{ font-size:15px; }
-    .term-item{ padding:18px; }
-    .term-item p{ font-size:15px; }
-    .tutorial-card{ padding:30px 25px; }
-    .tutorial-card h3{ font-size:24px; }
-    .download-btn{ width:100%; }
-    .faq-question{ font-size:16px; line-height:1.5; }
-    .contact-grid{ grid-template-columns:1fr; }
-    .contact-card{ padding:30px; }
-    .contact-btn{ width:100%; text-align:center; }
-    .footer{ padding:60px 6% 25px; }
-    #backToTop{ width:48px; height:48px; right:20px; bottom:20px; }
+
+    /* Tutorial Pemasangan Preset (Tetap Berjajar Kolom ke Samping) */
+    .tutorial-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px;
+    }
+    .tutorial-card { padding: 20px 15px; }
+    .tutorial-card i { font-size: 35px; margin-bottom: 15px; }
+    .tutorial-card h3 { font-size: 18px; margin-bottom: 10px; }
+    .tutorial-card p { font-size: 12px; margin-bottom: 20px; line-height: 1.5; }
+    .download-btn { padding: 10px 20px; font-size: 13px; width: 100%; }
+
+    /* Contact Us (Tetap Berjajar Kolom ke Samping) */
+    .contact-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px;
+    }
+    .contact-card { padding: 20px 15px; }
+    .contact-card i { font-size: 30px; margin-bottom: 12px; }
+    .contact-card h3 { font-size: 16px; margin-bottom: 8px; }
+    .contact-card p { font-size: 12px; margin-bottom: 20px; line-height: 1.5; }
+    .contact-btn { padding: 10px 20px; font-size: 13px; width: 100%; text-align: center; }
+
+    /* Footer di Halaman Guide (Tetap Berjajar 3 Kolom) */
+    .footer-container {
+        grid-template-columns: 2fr 1fr 1fr !important;
+        gap: 20px;
+        text-align: left !important;
+    }
+    .footer h2, .footer h3 { font-size: 16px; margin-bottom: 10px; }
+    .footer p, .footer li, .footer a { font-size: 12px; line-height: 1.6; }
+    .footer-social { justify-content: flex-start !important; margin-top: 15px; gap: 10px; }
+    .footer-social a { font-size: 18px; }
+
+    /* Step & FAQ */
+    .step { flex-direction: row; gap: 15px; padding: 15px 0; }
+    .step span { font-size: 24px; min-width: 35px; }
+    .step p { font-size: 14px; }
+    .term-item { padding: 15px; gap: 12px; }
+    .term-item p { font-size: 13px; }
+    .faq-question { font-size: 15px; padding: 18px 0; }
+    .footer { padding: 60px 4% 25px; }
+    #backToTop { width: 48px; height: 48px; right: 20px; bottom: 20px; }
 }
 
-@media (max-width:480px){
-    .hero h1{ font-size:27px; }
-    .hero p{ font-size:15px; }
-    .section-title h2{ font-size:24px; }
-    .tutorial-card, .contact-card{ padding:25px 20px; }
+@media (max-width: 480px) {
+    .hero h1{ font-size:25px; }
+    .hero p{ font-size:14px; }
+    .section-title h2{ font-size:22px; }
+    .tutorial-container, .contact-grid { grid-template-columns: 1fr !important; } /* Fallback untuk layar super kecil agar tulisan tidak tumpang tindih */
 }

@@ -356,9 +356,6 @@ text-align:center;
 margin-top:60px;
 }
 
-/* ===========================
-   FOOTER & UTILITIES
-=========================== */
 .footer{
     background:#060606;
     padding:80px 10% 30px;
@@ -443,7 +440,7 @@ margin-top:60px;
 }
 
 /* =====================================================
-   RESPONSIVE LAYOUT UNTUK TABLET & HP
+   RESPONSIVE LAYOUT (SMARTPHONE & TABLET MATCH DESKTOP)
 ===================================================== */
 
 @media (max-width: 1024px) {
@@ -452,84 +449,74 @@ margin-top:60px;
 }
 
 @media (max-width: 768px) {
-    /* 1. Navigasi Tetap Muncul di Smartphone */
-    header {
-        padding: 15px 4%;
-    }
-    nav {
-        display: flex !important;
-    }
-    nav a {
-        margin-left: 15px;
-        font-size: 13px;
-    }
-    .logo {
-        font-size: 20px;
-    }
+    /* Navigasi */
+    header { padding: 15px 4%; }
+    nav { display: flex !important; }
+    nav a { margin-left: 12px; font-size: 13px; }
+    .logo { font-size: 19px; }
 
-    /* 2. Featured Collection diubah menjadi 2 Grid kesamping */
+    /* Featured Collection (2 Kolom) */
     .grid {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 15px;
     }
-    .card-content {
-        padding: 15px;
-    }
-    .card h3 {
-        font-size: 16px;
-    }
-    .price {
-        font-size: 18px;
-    }
+    .card-content { padding: 15px; }
+    .card h3 { font-size: 15px; }
+    .price { font-size: 16px; }
 
-    /* 3. Why Choose Us diubah menjadi 4 Grid kesamping */
+    /* Why Choose Us (4 Kolom) */
     .features {
         grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8px;
+    }
+    .feature { padding: 15px 5px; }
+    .feature i { font-size: 20px; margin-bottom: 8px; }
+    .feature h3 { font-size: 11px; }
+    .feature p { font-size: 10px; line-height: 1.3; }
+
+    /* About Startone (Disamakan Desktop: 2 Kolom Kiri-Kanan) */
+    .about {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 20px;
+    }
+    .about-content h3 { font-size: 22px; margin-bottom: 10px; }
+    .about-content p { font-size: 13px; line-height: 1.6; margin-bottom: 15px; }
+    
+    /* Stats di dalam About (Tetap Berdampingan Kiri-Kanan) */
+    .stats {
+        display: flex !important;
+        flex-direction: row !important;
         gap: 10px;
     }
-    .feature {
-        padding: 15px 5px;
-    }
-    .feature i {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-    .feature h3 {
-        font-size: 12px;
-    }
-    .feature p {
-        font-size: 10px;
-        line-height: 1.4;
-    }
+    .stat { padding: 15px 10px; }
+    .stat h2 { font-size: 20px; }
+    .stat p { font-size: 12px; margin-top: 4px; }
 
-    /* Penyesuaian Komponen Sekunder Lainnya */
-    .hero h1 { font-size: 2.3rem; }
-    .hero p { font-size: 1rem; }
-    .section { padding: 50px 4%; }
-    .about, .stats {
-        grid-template-columns: 1fr;
-        flex-direction: column;
-    }
+    /* Footer (Disamakan Desktop: 3 Kolom Kiri-Kanan) */
     .footer-container {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        text-align: center;
+        grid-template-columns: 2fr 1fr 1fr !important;
+        gap: 20px;
+        text-align: left !important;
     }
-    .footer-social { justify-content: center; }
+    .footer h2, .footer h3 { font-size: 16px; margin-bottom: 10px; }
+    .footer p, .footer li, .footer a { font-size: 12px; line-height: 1.6; }
+    .footer-social { justify-content: flex-start !important; margin-top: 15px; gap: 10px; }
+    .footer-social a { font-size: 18px; }
+
+    /* Pengaturan Hero & Section HP */
+    .hero h1 { font-size: 2.2rem; }
+    .hero p { font-size: 1rem; }
+    .section { padding: 60px 4%; }
 }
 
 @media (max-width: 480px) {
-    nav a {
-        margin-left: 8px;
-        font-size: 11px;
-    }
-    .logo {
-        font-size: 16px;
-    }
-    .feature h3 {
-        font-size: 10px;
-    }
-    .feature p {
-        display: none; /* Menyembunyikan deskripsi kecil di HP sangat kecil agar tidak merusak kotak grid */
-    }
+    nav a { margin-left: 6px; font-size: 10px; }
+    .logo { font-size: 14px; }
+    .feature h3 { font-size: 9px; }
+    .feature p { display: none; }
+    .about { gap: 15px; }
+    .about-content h3 { font-size: 18px; }
+    .about-content p { font-size: 11px; }
+    .stat h2 { font-size: 16px; }
+    .stat p { font-size: 10px; }
 }
