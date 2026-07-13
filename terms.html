@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Syarat & Ketentuan | StarTone</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#28282B;
+color:white;
+padding:40px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+background:#35363A;
+padding:40px;
+border-radius:20px;
+}
+
+h1{
+margin-bottom:25px;
+text-align:center;
+}
+
+h3{
+margin-top:25px;
+margin-bottom:10px;
+}
+
+p{
+line-height:1.8;
+color:#ddd;
+}
+
+.check{
+margin-top:30px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+button{
+
+margin-top:30px;
+width:100%;
+padding:15px;
+border:none;
+border-radius:10px;
+background:#FFD166;
+font-size:17px;
+font-weight:600;
+cursor:pointer;
+
+}
+
+button:disabled{
+background:#777;
+cursor:not-allowed;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Syarat & Ketentuan</h1>
+
+<h3>1. Produk Digital</h3>
+
+<p>
+Semua preset merupakan produk digital sehingga tidak dapat dikembalikan atau ditukar setelah pembayaran berhasil.
+</p>
+
+<h3>2. Penggunaan</h3>
+
+<p>
+Preset hanya boleh digunakan untuk kebutuhan pribadi atau komersial milik pembeli.
+</p>
+
+<h3>3. Dilarang Menjual Ulang</h3>
+
+<p>
+Dilarang membagikan atau menjual ulang file preset tanpa izin dari StarTone.
+</p>
+
+<h3>4. Download</h3>
+
+<p>
+Link download akan diberikan setelah proses pembayaran selesai.
+</p>
+
+<div class="check">
+
+<input type="checkbox" id="agree">
+
+<label for="agree">
+Saya telah membaca dan menyetujui syarat & ketentuan.
+</label>
+
+</div>
+
+<button id="next" disabled>
+Lanjut ke Checkout
+</button>
+
+</div>
+
+<script>
+
+const check = document.getElementById("agree");
+const next = document.getElementById("next");
+
+check.addEventListener("change",function(){
+
+next.disabled=!this.checked;
+
+});
+
+next.onclick=function(){
+
+window.location.href="checkout.html";
+
+}
+
+</script>
+
+</body>
+</html>

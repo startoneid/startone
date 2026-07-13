@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>Pembayaran | StarTone</title>
+
+<link rel="icon" href="images/StarTone Circle.png">
+
+<meta name="description"
+content="Halaman pembayaran StarTone.">
+
+<meta name="robots"
+content="noindex,nofollow">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#28282B;
+color:white;
+padding:50px;
+}
+
+.container{
+
+max-width:700px;
+margin:auto;
+background:#35363A;
+padding:40px;
+border-radius:20px;
+text-align:center;
+
+}
+
+img{
+
+width:300px;
+max-width:100%;
+border-radius:15px;
+margin:30px 0;
+
+}
+
+.price{
+
+font-size:35px;
+font-weight:bold;
+color:#FFD166;
+margin-bottom:20px;
+
+}
+
+.qris{
+    width:260px;
+    display:block;
+    margin:35px auto 20px;
+    border-radius:12px;
+    background:white;
+    padding:10px;
+}
+
+.info{
+    color:#d6d6d6;
+    font-size:15px;
+    line-height:1.7;
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.pay-btn{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:10px;
+    background:#FFD166;
+    color:#28282B;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.pay-btn:hover{
+    background:white;
+    transform:translateY(-2px);
+}
+
+input[type=file]{
+    width:100%;
+    padding:14px;
+    background:#28282B;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+}
+
+#previewImage{
+    display:none;
+    width:220px;
+    border-radius:12px;
+    margin:20px auto;
+    border:3px solid #FFD166;
+    object-fit:cover;
+}
+
+.pay-btn:hover{
+    background:white;
+    transform:translateY(-2px);
+}
+
+.order-box{
+    background:#28282B;
+    padding:25px;
+    border-radius:15px;
+    margin:30px 0;
+    text-align:left;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:18px 0;
+    font-size:18px;
+}
+
+.row strong{
+    color:#FFD166;
+}
+
+button{
+
+width:100%;
+padding:18px;
+border:none;
+border-radius:10px;
+background:#FFD166;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+
+}
+
+button:hover{
+
+opacity:.9;
+
+}
+
+.invoice-box{
+
+background:#28282B;
+
+padding:20px;
+
+border-radius:12px;
+
+margin-bottom:25px;
+
+text-align:center;
+
+}
+
+.invoice-box span{
+
+color:#FFD166;
+
+font-size:15px;
+
+}
+
+.invoice-box h3{
+
+margin:10px 0;
+
+font-size:24px;
+
+color:white;
+
+letter-spacing:1px;
+
+}
+
+.invoice-warning{
+
+display:flex;
+align-items:flex-start;
+gap:15px;
+
+background:#3f3721;
+
+border:1px solid #FFD166;
+
+padding:18px;
+
+border-radius:12px;
+
+margin:20px 0 30px;
+
+}
+
+.warning-icon{
+
+font-size:32px;
+
+line-height:1;
+
+}
+
+.warning-content h4{
+
+color:#FFD166;
+
+margin-bottom:8px;
+
+}
+
+.warning-content p{
+
+color:#ddd;
+
+line-height:1.7;
+
+font-size:14px;
+
+}
+
+.copy-btn{
+
+margin-top:10px;
+
+width:auto;
+
+padding:10px 20px;
+
+background:#FFD166;
+
+color:#28282B;
+
+border:none;
+
+border-radius:8px;
+
+font-weight:600;
+
+cursor:pointer;
+
+}
+
+.track-btn{
+
+display:block;
+
+width:100%;
+
+margin-top:15px;
+
+padding:15px;
+
+text-align:center;
+
+text-decoration:none;
+
+background:#FFD166;
+
+color:#28282B;
+
+font-weight:600;
+
+border-radius:10px;
+
+transition:.3s;
+
+}
+
+.track-btn:hover{
+
+background:white;
+
+transform:translateY(-2px);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Pembayaran QRIS</h1>
+
+<p>Silakan scan QRIS berikut untuk menyelesaikan pembayaran.</p>
+
+<div class="order-box">
+
+    <div class="invoice-box">
+
+        <div class="invoice-warning">
+
+    <div class="warning-icon">
+        ⚠
+    </div>
+
+    <div class="warning-content">
+
+        <h4>Simpan Nomor Invoice Anda</h4>
+
+        <p>
+            Nomor invoice digunakan untuk melihat status pesanan,
+            menghubungi admin apabila terjadi kendala,
+            serta melakukan tracking pesanan hingga proses download produk.
+        </p>
+
+    </div>
+
+</div>
+
+    <span>Invoice</span>
+
+    <h3 id="invoiceNumber">-</h3>
+
+    <button
+        type="button"
+        class="copy-btn"
+        onclick="copyInvoice()">
+        📋 Copy Invoice
+    </button>
+
+</div>
+
+    <div class="row">
+        <span>Produk</span>
+        <strong id="paymentProduct"></strong>
+    </div>
+
+    <div class="row">
+        <span>Subtotal</span>
+        <strong id="paymentSubtotal"></strong>
+    </div>
+
+    <div class="row">
+        <span>Total</span>
+        <strong id="paymentTotal"></strong>
+    </div>
+
+    <div class="row">
+    <span>Status</span>
+
+    <strong
+        id="paymentStatus"
+        style="color:#FFD166;">
+        🟡 Menunggu Pembayaran
+    </strong>
+
+</div>
+
+   <img src="images/QRIS.png" alt="QRIS" class="qris"
+    loading="lazy"
+    decoding="async"
+    alt="Preset Cinematic">
+
+<p class="info">
+Silakan scan QRIS di atas untuk melakukan pembayaran.
+Setelah pembayaran berhasil, upload bukti pembayaran terlebih dahulu.
+</p>
+
+<label style="display:block;margin:20px 0;font-weight:600;">
+Upload Bukti Pembayaran
+</label>
+
+<input
+type="file"
+id="paymentProof"
+accept="image/*">
+
+<br><br>
+
+<img
+id="previewImage"
+style="
+display:none;
+width:220px;
+border-radius:12px;
+margin:auto;
+">
+
+<br>
+
+<button
+id="paidBtn"
+class="pay-btn"
+onclick="iHavePaid()">
+Saya Sudah Bayar
+</button>
+
+<a href="tracking.html" class="track-btn">
+    🔍 Lacak Status Pesanan
+</a>
+
+<a
+
+id="downloadBtn"
+
+class="pay-btn"
+
+style="display:none;text-decoration:none;text-align:center;"
+
+download>
+
+⬇ Download Produk
+
+</a>
+
+</div>
+
+</div>
+
+<script>
+const product = localStorage.getItem("productName");
+const price = Number(localStorage.getItem("productPrice"));
+
+document.getElementById("paymentProduct").textContent =
+    product || "-";
+
+document.getElementById("paymentSubtotal").textContent =
+    "Rp " + price.toLocaleString("id-ID");
+
+document.getElementById("paymentTotal").textContent =
+    "Rp " + price.toLocaleString("id-ID");
+</script>
+
+<script type="module" src="js/payment.js"></script>
+
+</body>
+
+</html>
