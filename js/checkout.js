@@ -1,6 +1,6 @@
 import { sendTelegramNotification } from "./telegram.js";
 
-import { db } from "../Firebase/firebase.js";
+import { db } from "./firebase.js";
 
 import {
     collection,
