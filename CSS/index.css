@@ -534,47 +534,45 @@ margin-top:60px;
 
 /* RESPONSIVE UNTUK BURGER MENU (HP & TABLET) */
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: block !important; /* Munculkan tombol di HP */
+    /* Navigasi bawaan desktop kita sembunyikan terlebih dahulu */
+    header nav { 
+        display: none !important; 
     }
 
-    /* Ubah nav menjadi dropdown melayang di bawah header */
+    .menu-toggle {
+        display: block !important; /* Memunculkan tombol garis tiga di HP */
+    }
+
+    /* Styling Menu Dropdown saat melayang ke bawah */
     .nav-container {
-        display: flex;
+        display: none !important; /* Sembunyikan default */
         flex-direction: column;
         position: absolute;
-        top: 100%; /* Pas di bawah header */
+        top: 100%; 
         left: 0;
         width: 100%;
-        background: rgba(40, 40, 43, 0.95);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: rgba(40, 40, 43, 0.98); /* Bikin sedikit lebih gelap agar tulisan jelas */
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         padding: 20px 0;
         gap: 15px;
         text-align: center;
-        
-        /* Efek sembunyi secara default (slide up + transparan) */
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-20px);
-        transition: all 0.4s ease;
         z-index: 998;
     }
 
-    /* Ketika kelas 'active' ditambahkan lewat JS, menu akan muncul */
+    /* KUNCI UTAMA: Ketika tombol ditekan dan JS memberikan kelas 'active' */
     .nav-container.active {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
+        display: flex !important; /* Paksa memunculkan menu ke bawah */
     }
 
     .nav-container a {
         margin: 0 !important;
-        padding: 10px 0;
+        padding: 12px 0;
         font-size: 16px;
         width: 100%;
         display: block;
+        color: white;
     }
 }
 
