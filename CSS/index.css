@@ -735,115 +735,158 @@ section{
 }
 
 /* =====================================================
-   RESPONSIVE SMARTPHONE
+   RESPONSIVE SMARTPHONE (MODIFIED)
 ===================================================== */
 
-@media (max-width:768px){
+@media (max-width: 768px) {
+    /* 1. Memunculkan navigasi menu seperti di desktop */
+    nav {
+        display: block !important;
+    }
+    
+    nav a {
+        margin-left: 15px; /* Sedikit diperkecil jaraknya agar muat di layar HP */
+        font-size: 14px;
+    }
 
-section{
-    padding:70px 6%;
-}
+    /* 2. Mengubah Featured Collection (.grid) menjadi 2 grid ke samping */
+    .grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px; /* Memperkecil gap agar proporsional di HP */
+    }
 
-.hero{
-    min-height:100vh;
-    padding:120px 6% 90px;
-}
+    /* 3. Mengubah Why Choose Us? (.features) menjadi 4 grid ke samping */
+    .features {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 10px; /* Memperkecil gap agar 4 kolom muat ke samping */
+    }
+    
+    /* Penyesuaian padding komponen Why Choose Us (.feature) agar tulisan tidak berantakan */
+    .feature {
+        padding: 15px 10px; 
+    }
+    .feature i {
+        font-size: 24px; /* Memperkecil ukuran icon */
+        margin-bottom: 10px;
+    }
+    .feature h3 {
+        font-size: 13px; /* Memperkecil ukuran teks judul */
+    }
+    .feature p {
+        font-size: 11px; /* Memperkecil ukuran deskripsi */
+    }
 
-.badge{
-    font-size:13px;
-}
+    /* Sisa pengaturan smartphone bawaan Anda */
+    section {
+        padding: 70px 6%;
+    }
 
-.hero h1{
-    font-size:32px;
-    line-height:1.35;
-}
+    .hero {
+        min-height: 100vh;
+        padding: 120px 6% 90px;
+    }
 
-.hero p{
-    font-size:16px;
-    line-height:1.8;
-}
+    .badge {
+        font-size: 13px;
+    }
 
-.btn{
-    width:100%;
-    text-align:center;
-    padding:16px;
-}
+    .hero h1 {
+        font-size: 32px;
+        line-height: 1.35;
+    }
 
-.section-title{
-    margin-bottom:45px;
-}
+    .hero p {
+        font-size: 16px;
+        line-height: 1.8;
+    }
 
-.section-title h2{
-    font-size:28px;
-}
+    .btn {
+        width: 100%;
+        text-align: center;
+        padding: 16px;
+    }
 
-.section-title p{
-    font-size:15px;
-}
+    .section-title {
+        margin-bottom: 45px;
+    }
 
-.step{
-    flex-direction:column;
-    gap:12px;
-    padding:22px 0;
-}
+    .section-title h2 {
+        font-size: 28px;
+    }
 
-.step span{
-    font-size:28px;
-}
+    .section-title p {
+        font-size: 15px;
+    }
 
-.step p{
-    font-size:15px;
-}
+    .about,
+    .contact,
+    .stats {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
 
-.term-item{
-    padding:18px;
-}
+    .step {
+        flex-direction: column;
+        gap: 12px;
+        padding: 22px 0;
+    }
 
-.term-item p{
-    font-size:15px;
-}
+    .step span {
+        font-size: 28px;
+    }
 
-.tutorial-card{
-    padding:30px 25px;
-}
+    .step p {
+        font-size: 15px;
+    }
 
-.tutorial-card h3{
-    font-size:24px;
-}
+    .term-item {
+        padding: 18px;
+    }
 
-.download-btn{
-    width:100%;
-}
+    .term-item p {
+        font-size: 15px;
+    }
 
-.faq-question{
-    font-size:16px;
-    line-height:1.5;
-}
+    .tutorial-card {
+        padding: 30px 25px;
+    }
 
-.contact-grid{
-    grid-template-columns:1fr;
-}
+    .tutorial-card h3 {
+        font-size: 24px;
+    }
 
-.contact-card{
-    padding:30px;
-}
+    .download-btn {
+        width: 100%;
+    }
 
-.contact-btn{
-    width:100%;
-    text-align:center;
-}
+    .faq-question {
+        font-size: 16px;
+        line-height: 1.5;
+    }
 
-.footer{
-    padding:60px 6% 25px;
-}
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
 
-#backToTop{
-    width:48px;
-    height:48px;
-    right:20px;
-    bottom:20px;
-}
+    .contact-card {
+        padding: 30px;
+    }
 
+    .contact-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .footer {
+        padding: 60px 6% 25px;
+    }
+
+    #backToTop {
+        width: 48px;
+        height: 48px;
+        right: 20px;
+        bottom: 20px;
+    }
 }
 
 /* =====================================================
