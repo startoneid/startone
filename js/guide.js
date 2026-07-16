@@ -15,7 +15,7 @@ const mobileTutorialLink =
 "https://drive.google.com/drive/folders/1xWFboJnDqgn6jVrSBBAX_TxEYv7hySYU?usp=sharing";
 
 const pcTutorialLink =
-"https://drive.google.com/file/d/ID_FILE_PC/view";
+"https://drive.google.com/drive/folders/1o7ubFQNTJXQL_WteNz1OuL4kY6h-jWQm?usp=sharing";
 
 document
 .getElementById("mobileTutorial")
