@@ -57,21 +57,12 @@ if(data.status==="rejected") statusIcon="🔴";
 let download="";
 
 if(data.status==="verified"){
-
 download=`
-
 <br><br>
-
-<a
-href="${data.downloadURL}"
-download>
-
-Download Produk
-
+<a href="${data.downloadURL}" target="_blank" rel="noopener noreferrer" class="pay-btn" style="text-decoration:none; display:inline-block;">
+⬇ Buka & Download Produk (Google Drive)
 </a>
-
 `;
-
 }
 
 result.innerHTML=`
