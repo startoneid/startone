@@ -12,7 +12,7 @@ if (typeof AOS !== "undefined") {
 // Ganti link ini nanti dengan link Google Drive milikmu
 
 const mobileTutorialLink =
-"https://drive.google.com/file/d/ID_FILE/view";
+"https://drive.google.com/drive/folders/1xWFboJnDqgn6jVrSBBAX_TxEYv7hySYU?usp=sharing";
 
 const pcTutorialLink =
 "https://drive.google.com/file/d/ID_FILE_PC/view";
