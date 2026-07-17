@@ -2,7 +2,8 @@
 // PRODUCTS.JS
 // Mengambil data produk dari Firestore (koleksi "products") secara
 // realtime, lalu menampilkannya di Featured Collections.
-// Juga menangani modal detail & tips saat kartu produk diklik.
+// Juga menangani modal detail & tips saat kartu produk diklik,
+// pencarian, sortir, wishlist (favorit), dan badge rating.
 //
 // Karena pakai onSnapshot, begitu Admin menambah/mengedit/menghapus
 // produk di panel Admin, halaman utama ini akan otomatis update
@@ -22,9 +23,44 @@ const grid = document.getElementById("productsGrid");
 const modal = document.getElementById("productModal");
 const modalBody = document.getElementById("productModalBody");
 const modalCloseBtn = document.getElementById("productModalClose");
+const searchInput = document.getElementById("productSearch");
+const sortSelect = document.getElementById("productSort");
+const wishlistFilterBtn = document.getElementById("wishlistFilterBtn");
 
 // Cache lokal supaya saat kartu diklik kita tidak perlu fetch ulang
 let productsCache = [];
+let currentSearch = "";
+let currentSort = "default";
+let wishlistOnly = false;
+
+const WISHLIST_KEY = "startone_wishlist";
+
+function getWishlist() {
+    try {
+        return JSON.parse(localStorage.getItem(WISHLIST_KEY)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function saveWishlist(list) {
+    localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+}
+
+function isWishlisted(id) {
+    return getWishlist().includes(id);
+}
+
+function toggleWishlist(id) {
+    let list = getWishlist();
+    if (list.includes(id)) {
+        list = list.filter(x => x !== id);
+    } else {
+        list.push(id);
+        window.showToast?.("Ditambahkan ke Favorit", "fa-solid fa-heart");
+    }
+    saveWishlist(list);
+}
 
 function formatPrice(price) {
     return "Rp" + Number(price || 0).toLocaleString("id-ID");
@@ -36,21 +72,69 @@ function escapeHTML(str) {
     return div.innerHTML;
 }
 
-function renderProducts(products) {
+// ==============================================================
+// FILTER + SORT sebelum render
+// ==============================================================
+function getVisibleProducts() {
+    let list = [...productsCache];
+
+    if (currentSearch.trim()) {
+        const q = currentSearch.trim().toLowerCase();
+        list = list.filter(p =>
+            (p.name || "").toLowerCase().includes(q) ||
+            (p.shortDesc || "").toLowerCase().includes(q)
+        );
+    }
+
+    if (wishlistOnly) {
+        const wl = getWishlist();
+        list = list.filter(p => wl.includes(p.id));
+    }
+
+    switch (currentSort) {
+        case "price-asc":
+            list.sort((a, b) => (a.price || 0) - (b.price || 0));
+            break;
+        case "price-desc":
+            list.sort((a, b) => (b.price || 0) - (a.price || 0));
+            break;
+        case "name-asc":
+            list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+            break;
+        default:
+            break; // urutan bawaan (field "order")
+    }
+
+    return list;
+}
+
+function renderProducts() {
     if (!grid) return;
+
+    const products = getVisibleProducts();
 
     if (products.length === 0) {
         grid.innerHTML = `
-            <p style="grid-column:1/-1;text-align:center;color:#bbb;">
-                Belum ada produk tersedia saat ini.
+            <p style="grid-column:1/-1;text-align:center;color:#bbb;padding:20px 0;">
+                ${wishlistOnly
+                    ? "Belum ada produk favorit. Klik ikon hati pada produk untuk menyimpannya."
+                    : "Belum ada produk yang cocok dengan pencarianmu."}
             </p>
         `;
         return;
     }
 
-    grid.innerHTML = products.map(p => `
-        <div class="card" data-id="${p.id}">
-            <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}">
+    grid.innerHTML = products.map((p, index) => {
+        const wished = isWishlisted(p.id);
+
+        return `
+        <div class="card" data-id="${p.id}" style="animation-delay:${Math.min(index, 6) * 60}ms">
+            <div class="card-img-wrap">
+                <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" loading="lazy">
+                <button class="wishlist-btn ${wished ? "active" : ""}" data-id="${p.id}" aria-label="Favorit" type="button">
+                    <i class="fa-solid fa-heart"></i>
+                </button>
+            </div>
             <div class="card-content">
                 <h3>${escapeHTML(p.name)}</h3>
                 <p>${escapeHTML(p.shortDesc)}</p>
@@ -63,7 +147,8 @@ function renderProducts(products) {
                 </button>
             </div>
         </div>
-    `).join("");
+    `;
+    }).join("");
 }
 
 // ==============================================================
@@ -78,7 +163,7 @@ onSnapshot(productsQuery, (snapshot) => {
         productsCache.push({ id: docSnap.id, ...docSnap.data() });
     });
 
-    renderProducts(productsCache);
+    renderProducts();
 
 }, (error) => {
     console.error("Gagal memuat produk:", error);
@@ -93,11 +178,46 @@ onSnapshot(productsQuery, (snapshot) => {
 });
 
 // ==============================================================
+// SEARCH & SORT & WISHLIST FILTER CONTROLS
+// ==============================================================
+let searchDebounce;
+searchInput?.addEventListener("input", (e) => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+        currentSearch = e.target.value;
+        renderProducts();
+    }, 200);
+});
+
+sortSelect?.addEventListener("change", (e) => {
+    currentSort = e.target.value;
+    renderProducts();
+});
+
+wishlistFilterBtn?.addEventListener("click", () => {
+    wishlistOnly = !wishlistOnly;
+    wishlistFilterBtn.classList.toggle("active", wishlistOnly);
+    renderProducts();
+});
+
+// ==============================================================
 // KLIK KARTU -> BUKA MODAL DETAIL & TIPS
 // KLIK TOMBOL "BUY NOW" -> LANGSUNG KE ALUR CHECKOUT (tidak buka modal)
+// KLIK ICON HATI -> TOGGLE WISHLIST (tidak buka modal)
 // ==============================================================
 if (grid) {
     grid.addEventListener("click", (e) => {
+
+        const wishBtn = e.target.closest(".wishlist-btn");
+        if (wishBtn) {
+            e.stopPropagation();
+            toggleWishlist(wishBtn.dataset.id);
+            wishBtn.classList.toggle("active");
+            wishBtn.classList.add("pop");
+            setTimeout(() => wishBtn.classList.remove("pop"), 450);
+            if (wishlistOnly) renderProducts();
+            return;
+        }
 
         const buyBtn = e.target.closest(".buy");
         if (buyBtn) {
