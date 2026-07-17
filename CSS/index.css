@@ -910,18 +910,14 @@ margin-top:60px;
     .nav-overlay{
         position:fixed;
         inset:0;
-        background:rgba(0,0,0,0);
-        backdrop-filter:blur(0px);
+        background:transparent;
         opacity:0;
         visibility:hidden;
-        transition:background .4s var(--ease), backdrop-filter .4s var(--ease), opacity .4s var(--ease), visibility .4s var(--ease);
+        transition:visibility .4s var(--ease);
         z-index:1000;
     }
 
     .nav-overlay.active{
-        background:rgba(0,0,0,.4);
-        backdrop-filter:blur(6px);
-        -webkit-backdrop-filter:blur(6px);
         opacity:1;
         visibility:visible;
     }
