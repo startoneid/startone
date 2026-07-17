@@ -86,9 +86,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <link rel="stylesheet" href="CSS/index.css">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "StarTone",
+  "url": "https://startone.pages.dev",
+  "logo": "https://startone.pages.dev/icon/StarTone Circle.png",
+  "sameAs": [
+    "https://instagram.com/startone.id",
+    "https://tiktok.com/@startone.id"
+  ]
+}
+</script>
+
 </head>
 
 <body>
+
+<a href="#home" class="skip-link">Lewati ke konten utama</a>
 
 <!-- Preloader -->
 <div class="preloader" id="preloader">
@@ -98,12 +114,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <!-- Scroll progress bar -->
 <div id="scrollProgress"></div>
-
-<!-- Announcement bar -->
-<div class="announcement-bar">
-    <i class="fa-solid fa-bolt"></i>
-    Promo spesial minggu ini — diskon preset pilihan, cek Featured Collections di bawah!
-</div>
 
 <div class="nav-overlay" id="navOverlay"></div>
 
@@ -320,16 +330,19 @@ Hubungi kami melalui salah satu platform berikut.
 <div class="contact-item">
 <i class="fas fa-envelope"></i>
 <span>startone.id@gmail.com</span>
+<button class="copy-btn" data-copy="startone.id@gmail.com" aria-label="Salin email" type="button"><i class="fa-regular fa-copy"></i></button>
 </div>
 
 <div class="contact-item">
 <i class="fab fa-instagram"></i>
 <span>@startone.id</span>
+<button class="copy-btn" data-copy="@startone.id" aria-label="Salin username Instagram" type="button"><i class="fa-regular fa-copy"></i></button>
 </div>
 
 <div class="contact-item">
 <i class="fab fa-tiktok"></i>
 <span>@startone.id</span>
+<button class="copy-btn" data-copy="@startone.id" aria-label="Salin username TikTok" type="button"><i class="fa-regular fa-copy"></i></button>
 </div>
 
 
@@ -347,17 +360,14 @@ Hubungi kami melalui salah satu platform berikut.
 </section>
 
 <!-- ===================== -->
-<!-- NEWSLETTER -->
+<!-- RECENTLY VIEWED -->
 <!-- ===================== -->
-<section class="section">
-<div class="newsletter" data-aos="fade-up">
-<h2>Jangan Sampai Ketinggalan Promo</h2>
-<p>Daftarkan email kamu untuk info preset baru dan diskon spesial dari StarTone.</p>
-<form class="newsletter-form" id="newsletterForm">
-<input type="email" id="newsletterEmail" placeholder="Alamat email kamu" required>
-<button type="submit">Subscribe</button>
-</form>
-</div>
+<section class="section" id="recentlyViewedSection" style="display:none;">
+
+<h2 class="title section-title" data-aos="fade-up">Baru Saja Dilihat</h2>
+
+<div class="grid recently-viewed-grid" id="recentlyViewedGrid"></div>
+
 </section>
 
 <div id="footer-placeholder"></div>

@@ -204,18 +204,60 @@ if (countEls.length) {
 }
 
 // ==============================
-// Newsletter Form (disimpan lokal, tidak ada backend khusus)
+// Copy-to-Clipboard (Contact Info)
 // ==============================
 
-const newsletterForm = document.getElementById("newsletterForm");
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".copy-btn");
+    if (!btn) return;
 
-newsletterForm?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const emailInput = document.getElementById("newsletterEmail");
-    const email = emailInput?.value?.trim();
+    const text = btn.dataset.copy;
+    if (!text) return;
 
-    if (!email) return;
+    navigator.clipboard?.writeText(text).then(() => {
+        btn.classList.add("copied");
+        btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+        showToast("Berhasil disalin: " + text, "fa-solid fa-copy");
 
-    showToast("Terima kasih! Email kamu berhasil didaftarkan.", "fa-solid fa-paper-plane");
-    newsletterForm.reset();
+        setTimeout(() => {
+            btn.classList.remove("copied");
+            btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+        }, 1800);
+    }).catch(() => {
+        showToast("Gagal menyalin, coba lagi.", "fa-solid fa-triangle-exclamation");
+    });
 });
+
+// ==============================
+// Card Tilt (efek 3D ringan mengikuti posisi kursor)
+// Hanya aktif di layar yang punya mouse (bukan sentuh) & tidak reduced-motion
+// ==============================
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+if (supportsHover && !prefersReducedMotion) {
+
+    document.addEventListener("mousemove", (e) => {
+        const card = e.target.closest(".card");
+        if (!card) return;
+
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateY = ((x - centerX) / centerX) * 6;
+        const rotateX = ((centerY - y) / centerY) * 6;
+
+        card.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+    });
+
+    document.addEventListener("mouseleave", (e) => {
+        const card = e.target.closest?.(".card");
+        if (card) card.style.transform = "";
+    }, true);
+}
+

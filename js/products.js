@@ -3,7 +3,7 @@
 // Mengambil data produk dari Firestore (koleksi "products") secara
 // realtime, lalu menampilkannya di Featured Collections.
 // Juga menangani modal detail & tips saat kartu produk diklik,
-// pencarian, sortir, wishlist (favorit), dan badge rating.
+// pencarian, sortir, wishlist (favorit), dan riwayat "Baru Saja Dilihat".
 //
 // Karena pakai onSnapshot, begitu Admin menambah/mengedit/menghapus
 // produk di panel Admin, halaman utama ini akan otomatis update
@@ -26,6 +26,8 @@ const modalCloseBtn = document.getElementById("productModalClose");
 const searchInput = document.getElementById("productSearch");
 const sortSelect = document.getElementById("productSort");
 const wishlistFilterBtn = document.getElementById("wishlistFilterBtn");
+const recentlyViewedSection = document.getElementById("recentlyViewedSection");
+const recentlyViewedGrid = document.getElementById("recentlyViewedGrid");
 
 // Cache lokal supaya saat kartu diklik kita tidak perlu fetch ulang
 let productsCache = [];
@@ -34,6 +36,8 @@ let currentSort = "default";
 let wishlistOnly = false;
 
 const WISHLIST_KEY = "startone_wishlist";
+const RECENTLY_VIEWED_KEY = "startone_recently_viewed";
+const MAX_RECENTLY_VIEWED = 4;
 
 function getWishlist() {
     try {
@@ -71,6 +75,89 @@ function escapeHTML(str) {
     div.textContent = str ?? "";
     return div.innerHTML;
 }
+
+// ==============================================================
+// RECENTLY VIEWED (localStorage, murni sisi klien)
+// ==============================================================
+function getRecentlyViewed() {
+    try {
+        return JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function addRecentlyViewed(id) {
+    let list = getRecentlyViewed().filter(x => x !== id);
+    list.unshift(id);
+    list = list.slice(0, MAX_RECENTLY_VIEWED);
+    localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(list));
+    renderRecentlyViewed();
+}
+
+function renderRecentlyViewed() {
+    if (!recentlyViewedGrid || !recentlyViewedSection) return;
+
+    const ids = getRecentlyViewed();
+    const items = ids
+        .map(id => productsCache.find(p => p.id === id))
+        .filter(Boolean);
+
+    if (items.length === 0) {
+        recentlyViewedSection.style.display = "none";
+        return;
+    }
+
+    recentlyViewedSection.style.display = "";
+
+    recentlyViewedGrid.innerHTML = items.map(p => `
+        <div class="card" data-id="${p.id}">
+            <div class="card-img-wrap">
+                <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" loading="lazy">
+                <button class="wishlist-btn ${isWishlisted(p.id) ? "active" : ""}" data-id="${p.id}" aria-label="Favorit" type="button">
+                    <i class="fa-solid fa-heart"></i>
+                </button>
+            </div>
+            <div class="card-content">
+                <h3>${escapeHTML(p.name)}</h3>
+                <p>${escapeHTML(p.shortDesc)}</p>
+                <div class="price">${formatPrice(p.price)}</div>
+                <button
+                    class="buy"
+                    data-name="${escapeHTML(p.name)}"
+                    data-price="${p.price}">
+                    Buy Now
+                </button>
+            </div>
+        </div>
+    `).join("");
+}
+
+// Klik pada grid "Baru Saja Dilihat" pakai logika yang sama seperti grid utama
+recentlyViewedGrid?.addEventListener("click", (e) => {
+    const wishBtn = e.target.closest(".wishlist-btn");
+    if (wishBtn) {
+        e.stopPropagation();
+        toggleWishlist(wishBtn.dataset.id);
+        wishBtn.classList.toggle("active");
+        wishBtn.classList.add("pop");
+        setTimeout(() => wishBtn.classList.remove("pop"), 450);
+        return;
+    }
+
+    const buyBtn = e.target.closest(".buy");
+    if (buyBtn) {
+        e.stopPropagation();
+        window.buyProduct(buyBtn.dataset.name, Number(buyBtn.dataset.price));
+        return;
+    }
+
+    const card = e.target.closest(".card");
+    if (!card) return;
+
+    const product = productsCache.find(p => p.id === card.dataset.id);
+    if (product) openProductModal(product);
+});
 
 // ==============================================================
 // FILTER + SORT sebelum render
@@ -164,6 +251,7 @@ onSnapshot(productsQuery, (snapshot) => {
     });
 
     renderProducts();
+    renderRecentlyViewed();
 
 }, (error) => {
     console.error("Gagal memuat produk:", error);
@@ -236,6 +324,8 @@ if (grid) {
 
 function openProductModal(product) {
     if (!modal || !modalBody) return;
+
+    addRecentlyViewed(product.id);
 
     modalBody.innerHTML = `
         <img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}">

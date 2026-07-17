@@ -113,26 +113,23 @@ animation:bodyFadeIn .6s var(--ease) forwards;
 }
 
 /* ===================== */
-/* ANNOUNCEMENT / PROMO BAR */
+/* ACCESSIBILITY: SKIP LINK */
 /* ===================== */
-.announcement-bar{
-    position:relative;
-    width:100%;
-    background:linear-gradient(90deg,#1f1f22,#3a3a3f,#1f1f22);
-    background-size:200% auto;
-    animation:announceShine 6s linear infinite;
-    color:var(--text);
-    text-align:center;
-    font-size:13.5px;
-    font-weight:500;
-    padding:9px 15px;
-    letter-spacing:.02em;
-    z-index:1001;
+.skip-link{
+    position:fixed;
+    top:-60px;
+    left:16px;
+    background:var(--accent);
+    color:#222;
+    padding:12px 22px;
+    border-radius:10px;
+    font-weight:700;
+    text-decoration:none;
+    z-index:9999;
+    transition:top .3s var(--ease);
 }
-.announcement-bar i{ color:var(--accent); margin-right:6px; }
-@keyframes announceShine{
-    0%{ background-position:0% 50%; }
-    100%{ background-position:200% 50%; }
+.skip-link:focus{
+    top:16px;
 }
 
 header{
@@ -395,75 +392,44 @@ transform:translateY(-4px);
 }
 
 /* ===================== */
-/* NEWSLETTER */
+/* CONTACT COPY BUTTON */
 /* ===================== */
-.newsletter{
-    background:linear-gradient(120deg,#35363A,#28282B);
-    border-radius:24px;
-    padding:60px;
-    text-align:center;
+.contact-item{
     position:relative;
-    overflow:hidden;
 }
 
-.newsletter::before{
-    content:"";
-    position:absolute;
-    width:300px;
-    height:300px;
-    background:radial-gradient(circle,rgba(255,209,102,.15),transparent 70%);
-    top:-100px;
-    right:-80px;
-}
-
-.newsletter h2{
-    font-size:32px;
-    margin-bottom:12px;
-}
-
-.newsletter p{
-    color:var(--text-muted);
-    margin-bottom:28px;
-}
-
-.newsletter-form{
-    display:flex;
-    gap:12px;
-    max-width:480px;
-    margin:0 auto;
-    flex-wrap:wrap;
-    justify-content:center;
-}
-
-.newsletter-form input{
-    flex:1;
-    min-width:220px;
-    padding:16px 22px;
-    border-radius:40px;
-    border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.05);
-    color:white;
-    font-size:15px;
-}
-
-.newsletter-form input:focus{
-    outline:none;
-    border-color:var(--accent);
-}
-
-.newsletter-form button{
-    padding:16px 32px;
+.copy-btn{
+    margin-left:auto;
+    width:34px;
+    height:34px;
+    border-radius:50%;
     border:none;
-    border-radius:40px;
-    background:linear-gradient(90deg,var(--accent),var(--accent-2));
-    color:#222;
-    font-weight:700;
+    background:rgba(255,255,255,.06);
+    color:var(--text-muted);
     cursor:pointer;
-    transition:transform .3s var(--ease);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .3s var(--ease), background .3s var(--ease), color .3s var(--ease);
+    flex-shrink:0;
 }
 
-.newsletter-form button:hover{
-    transform:translateY(-3px);
+.copy-btn:hover{
+    background:var(--accent);
+    color:#222;
+    transform:scale(1.1);
+}
+
+.copy-btn.copied{
+    background:#4ade80;
+    color:#123a1f;
+}
+
+/* ===================== */
+/* RECENTLY VIEWED PRODUCTS */
+/* ===================== */
+.recently-viewed-grid .card{
+    animation-delay:0ms !important;
 }
 
 /* ===================== */
@@ -967,8 +933,6 @@ margin-top:60px;
     .shop-controls{ justify-content:stretch; }
     .shop-controls select,
     .wishlist-filter-btn{ flex:1; text-align:center; }
-    .newsletter{ padding:36px 22px; }
-    .newsletter h2{ font-size:24px; }
 
     /* Featured Collection (2 Kolom) */
     .grid {
@@ -1137,4 +1101,16 @@ margin-top:60px;
 @media (max-width: 480px) {
     .product-modal-content{ padding:25px 20px; }
     .product-modal-content img{ height:180px; }
+}
+
+/* ===================== */
+/* AKSESIBILITAS: HORMATI PREFERENSI "REDUCED MOTION" */
+/* ===================== */
+@media (prefers-reduced-motion: reduce){
+    *{
+        animation-duration:.001ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.001ms !important;
+        scroll-behavior:auto !important;
+    }
 }
