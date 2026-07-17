@@ -1,0 +1,21 @@
+{
+  "name": "StarTone | Lightroom Presets",
+  "short_name": "StarTone",
+  "description": "StarTone menyediakan preset Adobe Lightroom premium untuk Android, iPhone, Windows, dan Mac.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#28282B",
+  "theme_color": "#28282B",
+  "icons": [
+    {
+      "src": "icon/StarTone Circle.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon/StarTone Circle.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

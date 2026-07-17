@@ -15,6 +15,7 @@
 <link rel="icon" href="icon/StarTone Circle.png" type="image/x-icon">
 <link rel="shortcut icon" href="icon/StarTone Circle.png">
 <link rel="apple-touch-icon" href="icon/StarTone Circle.png">
+<link rel="manifest" href="manifest.json">
 
 <!-- ===================== -->
 <!-- SEO -->
@@ -76,7 +77,7 @@ href="https://startone.pages.dev/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -89,11 +90,28 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <body>
 
-<header>
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+    <div class="preloader-logo">STAR<span style="color:#FFD166">TONE</span></div>
+    <div class="preloader-bar"></div>
+</div>
+
+<!-- Scroll progress bar -->
+<div id="scrollProgress"></div>
+
+<!-- Announcement bar -->
+<div class="announcement-bar">
+    <i class="fa-solid fa-bolt"></i>
+    Promo spesial minggu ini — diskon preset pilihan, cek Featured Collections di bawah!
+</div>
+
+<div class="nav-overlay" id="navOverlay"></div>
+
+<header id="siteHeader">
 
 <div class="logo">STAR<span>TONE</span></div>
 
-<nav>
+<nav id="mainNav">
 
 <a href="#home">Home</a>
 <a href="#shop">Shop</a>
@@ -103,6 +121,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <a href="#contact">Contact</a>
 
 </nav>
+
+<button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+</button>
 
 </header>
 
@@ -135,9 +157,29 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 Featured Collections
 </h2>
 
+<div class="shop-toolbar" data-aos="fade-up">
+    <div class="shop-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="productSearch" placeholder="Cari preset (contoh: Japan, Cinematic)...">
+    </div>
+    <div class="shop-controls">
+        <select id="productSort">
+            <option value="default">Urutan Bawaan</option>
+            <option value="price-asc">Harga Terendah</option>
+            <option value="price-desc">Harga Tertinggi</option>
+            <option value="name-asc">Nama A-Z</option>
+        </select>
+        <button class="wishlist-filter-btn" id="wishlistFilterBtn" type="button">
+            <i class="fa-solid fa-heart"></i> Favorit
+        </button>
+    </div>
+</div>
+
 <div class="grid" id="productsGrid">
     <!-- Produk dimuat otomatis dari database (Firestore) lewat js/products.js -->
-    <p style="grid-column:1/-1;text-align:center;color:#bbb;">Memuat produk...</p>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
 </div>
 
 </section>
@@ -236,12 +278,12 @@ foto estetik dengan cepat.
 <div class="stats">
 
 <div class="stat">
-<h2>9K+</h2>
+<h2 class="count-up" data-count="9" data-suffix="K+">0</h2>
 <p>Downloads</p>
 </div>
 
 <div class="stat">
-<h2>4.9★</h2>
+<h2 class="count-up" data-count="4.9" data-suffix="★">0</h2>
 <p>Rating</p>
 </div>
 
@@ -297,13 +339,31 @@ Hubungi kami melalui salah satu platform berikut.
 
 
 
+
 </div>
 
 
 
 </section>
 
+<!-- ===================== -->
+<!-- NEWSLETTER -->
+<!-- ===================== -->
+<section class="section">
+<div class="newsletter" data-aos="fade-up">
+<h2>Jangan Sampai Ketinggalan Promo</h2>
+<p>Daftarkan email kamu untuk info preset baru dan diskon spesial dari StarTone.</p>
+<form class="newsletter-form" id="newsletterForm">
+<input type="email" id="newsletterEmail" placeholder="Alamat email kamu" required>
+<button type="submit">Subscribe</button>
+</form>
+</div>
+</section>
+
 <div id="footer-placeholder"></div>
+
+<!-- Toast Notification Container -->
+<div class="toast-container" id="toastContainer"></div>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
