@@ -135,67 +135,22 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 Featured Collections
 </h2>
 
-<div class="grid">
-
-    <div class="card">
-        <img src="images/Summer-Tone.webp" alt="Summer Tone">
-
-        <div class="card-content">
-            <h3>Summer Tone</h3>
-            <p>Sentuhan ala film analog yang hangat, lembut, dengan sedikit efek fade estetik pada bayangan.</p>
-
-            <div class="price">Rp15.000</div>
-
-            <button class="buy"
-                onclick="buyProduct('Summer Tone',15000)">
-                Buy Now
-            </button>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="images/korean.webp" alt="Korean Collection">
-
-        <div class="card-content">
-            <h3>Korean Collection</h3>
-            <p>Soft premium aesthetic.</p>
-
-            <div class="price">Rp59.000</div>
-
-            <button class="buy"
-                onclick="buyProduct('Korean Collection',59000)">
-                Buy Now
-            </button>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="images/cinematic.webp" alt="Cinematic Collection">
-
-        <div class="card-content">
-            <h3>Cinematic Collection</h3>
-            <p>Professional film look.</p>
-
-            <div class="price">Rp99.000</div>
-
-            <button class="buy"
-                onclick="buyProduct('Cinematic Collection',99000)">
-                Buy Now
-            </button>
-        </div>
-    </div>
-
-</div>
-
-</div>
-
-
-
-</div>
-
+<div class="grid" id="productsGrid">
+    <!-- Produk dimuat otomatis dari database (Firestore) lewat js/products.js -->
+    <p style="grid-column:1/-1;text-align:center;color:#bbb;">Memuat produk...</p>
 </div>
 
 </section>
+
+<!-- ===================== -->
+<!-- MODAL DETAIL & TIPS PRODUK -->
+<!-- ===================== -->
+<div class="product-modal" id="productModal">
+    <div class="product-modal-content">
+        <button class="product-modal-close" id="productModalClose" aria-label="Tutup">&times;</button>
+        <div id="productModalBody"></div>
+    </div>
+</div>
 
 <section class="section">
 
@@ -353,6 +308,8 @@ Hubungi kami melalui salah satu platform berikut.
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
 <script src="js/index.js"></script>
+
+<script type="module" src="js/products.js"></script>
 
 <script src="js/footer.js"></script>
 
