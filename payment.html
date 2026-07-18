@@ -385,10 +385,6 @@ transform:translateY(-2px);
 
 </style>
 
-<!-- Xendit tidak butuh script pihak ketiga di halaman ini — pembeli
-     otomatis diarahkan (redirect) ke halaman pembayaran hosted Xendit
-     lewat js/xendit.js. -->
-
 </head>
 
 <body>
@@ -462,17 +458,6 @@ transform:translateY(-2px);
 
 </div>
 
-   <button
-id="autoPayBtn"
-class="pay-btn"
-style="background:#FFD166;color:#222;">
-&#9889; Bayar Otomatis (E-Wallet / VA / Kartu)
-</button>
-
-<p class="info" style="margin:14px 0;text-align:center;color:#999;font-size:13px;">
-&mdash; atau bayar manual pakai QRIS di bawah ini &mdash;
-</p>
-
    <img src="images/QRIS.png" alt="QRIS" class="qris"
     loading="lazy"
     decoding="async"
@@ -544,8 +529,6 @@ document.getElementById("paymentTotal").textContent =
 </script>
 
 <script type="module" src="js/payment.js"></script>
-
-<script src="js/xendit.js"></script>
 
 </body>
 

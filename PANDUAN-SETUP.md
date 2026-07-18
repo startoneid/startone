@@ -1,10 +1,8 @@
 # 📋 Panduan Setup Fitur Baru — StarTone
 
-Dokumen ini menjelaskan fitur-fitur baru yang baru ditambahkan ke website kamu.
+Dokumen ini menjelaskan fitur-fitur baru yang ditambahkan ke website kamu.
 Sebagian fitur **langsung aktif** tanpa perlu setting apa pun, sebagian lagi
-**butuh kamu daftar akun gratis** ke layanan pihak ketiga dulu (karena
-melibatkan uang/email, ini butuh API key milikmu sendiri, bukan sesuatu
-yang bisa saya buatkan otomatis).
+**butuh kamu daftar akun gratis** ke layanan pihak ketiga dulu.
 
 ---
 
@@ -33,99 +31,54 @@ yang bisa saya buatkan otomatis).
     file JSON, simpan di Google Drive/penyimpanan lain sebagai cadangan
     rutin (disarankan sebulan sekali).
 
-### 5. Service Worker (Mode Offline)
-- File baru: `sw.js`, otomatis aktif di halaman utama, Panduan, dan Tracking.
-- Pengunjung yang koneksinya lemah/putus masih bisa membuka versi terakhir
-  halaman-halaman tersebut. Data Firebase (harga, status order) tetap selalu
-  realtime dan **tidak** ikut di-cache, supaya tidak basi.
-
-### 6. Rate Limiting & Honeypot Anti-Spam (Checkout)
+### 5. Rate Limiting & Honeypot Anti-Spam (Checkout)
 - Sudah aktif otomatis: kalau ada yang mencoba checkout berkali-kali dalam
   waktu singkat (kurang dari 30 detik), sistem akan menahan submit berikutnya.
 - Ada juga "honeypot" (jebakan bot) tersembunyi di form — bot otomatis yang
   asal isi form akan otomatis diblokir tanpa mengganggu pengguna asli.
 
-### 7. Sitemap Dinamis
+### 6. Sitemap Dinamis
 - File baru: `functions/sitemap.xml.js` (Cloudflare Pages Function).
 - Setelah kamu deploy ulang, otomatis mengganti sitemap.xml jadi dinamis —
   setiap kali ada produk baru, sitemap ikut update sendiri tanpa kamu edit manual.
 - **Tidak perlu setting tambahan**, cukup pastikan folder `functions/` ikut
   ter-upload saat deploy ke Cloudflare Pages.
 
-### 8. Link Download Produk Tersimpan Permanen
+### 7. Link Download Produk Tersimpan Permanen
 - Form produk di Admin sekarang punya field **"Link Download Produk"**.
-- Manfaatnya: saat memverifikasi order manual, link download otomatis
-  muncul (tidak perlu ketik ulang tiap kali ada order untuk produk yang sama).
-  Field ini juga wajib diisi supaya fitur pembayaran & email otomatis di
-  bawah bisa jalan.
+- Manfaatnya: saat memverifikasi order manual, link download ini otomatis
+  muncul sebagai saran (tidak perlu ketik ulang tiap kali ada order untuk
+  produk yang sama) — kamu tetap bisa mengubahnya manual sebelum konfirmasi
+  kalau perlu.
 
 ---
 
 ## ⚙️ PERLU SETUP AKUN (gratis, tapi wajib kamu lakukan sendiri)
 
-### 1. 💳 Pembayaran Otomatis (Xendit)
+### 1. 📧 Email Konfirmasi Otomatis (Resend)
 
-Saat ini pembeli tetap bisa bayar manual pakai QRIS seperti biasa — fitur
-ini menambahkan **opsi tambahan** "Bayar Otomatis" (QRIS, e-wallet seperti
-OVO/DANA/ShopeePay, virtual account bank, kartu) yang langsung
-terverifikasi tanpa kamu cek manual satu-satu.
-
-Kenapa Xendit? Karena bisa didaftar sebagai akun **Individual/Perorangan**
-tanpa perlu nomor telepon bisnis/badan usaha — cocok kalau kamu belum
-punya nomor bisnis terpisah.
-
-**Langkah setup:**
-1. Daftar gratis di **https://dashboard.xendit.co/register**
-2. Saat proses onboarding, pilih tipe akun **"Individual/Perorangan"**
-   (bukan "Business") — supaya tidak diminta nomor telepon bisnis.
-3. Setelah masuk dashboard, kamu otomatis berada di mode **Test/Sandbox**
-   dulu (aman untuk uji coba, belum transaksi uang asli).
-4. Ambil **Secret Key** di menu *Settings → Developers → API Keys*.
-5. Buka dashboard project Cloudflare Pages kamu → **Settings → Environment
-   variables**, tambahkan:
-   - `XENDIT_SECRET_KEY` = (Secret Key dari Xendit, mode Test dulu)
-6. Redeploy project.
-7. Di dashboard Xendit: **Settings → Developers → Webhooks**, tambahkan:
-   - URL: `https://startone.pages.dev/api/xendit-notification`
-   - Event: **Invoice Paid**
-   
-   Lalu salin **Verification Token** yang muncul, dan tambahkan juga
-   sebagai environment variable di Cloudflare Pages:
-   - `XENDIT_CALLBACK_TOKEN` = (Verification Token dari Xendit)
-8. Redeploy project lagi.
-9. Kalau sudah yakin semua jalan lancar di mode Test, ajukan aktivasi akun
-   (KYC/verifikasi identitas) di dashboard Xendit untuk pindah ke mode
-   **Live**, lalu ganti `XENDIT_SECRET_KEY` dengan Secret Key mode Live.
-
-**Catatan penting:** setiap produk **wajib** diisi field "Link Download
-Produk" di Admin, karena sistem otomatis mengambil link ini saat pembayaran
-lewat Xendit berhasil.
-
----
-
-### 2. 📧 Email Konfirmasi Otomatis (Resend)
-
-Setelah order diverifikasi (baik manual oleh kamu, atau otomatis lewat
-Xendit), pembeli akan menerima email berisi link download.
+Setelah kamu memverifikasi order secara manual di Admin panel (isi/konfirmasi
+link download seperti biasa), pembeli akan otomatis menerima email berisi
+link download tersebut — tanpa kamu perlu kirim manual lewat WhatsApp/chat.
 
 **Langkah setup:**
 1. Daftar gratis di **https://resend.com** (gratis untuk 3.000 email/bulan).
 2. Verifikasi domain email kamu di dashboard Resend (atau pakai domain
    testing bawaan mereka dulu untuk uji coba).
 3. Ambil **API Key** dari dashboard Resend.
-4. Di Cloudflare Pages dashboard → **Settings → Environment variables**,
-   tambahkan:
+4. Di Cloudflare Pages dashboard project kamu → **Settings → Environment
+   variables**, tambahkan:
    - `RESEND_API_KEY` = (API Key dari Resend)
    - `SENDER_EMAIL` = (email pengirim, misalnya `noreply@startone.id`)
 5. Redeploy project.
 
-Selama kedua langkah di atas belum dilakukan, sistem tetap berjalan normal
-seperti biasa (order tetap tersimpan & bisa diverifikasi manual), hanya
-saja email otomatis belum terkirim — tidak ada yang rusak.
+Selama langkah di atas belum dilakukan, sistem tetap berjalan normal seperti
+biasa (order tetap tersimpan & bisa diverifikasi manual seperti sekarang),
+hanya saja email otomatis belum terkirim — tidak ada yang rusak.
 
 ---
 
-### 3. 🛡️ CAPTCHA Checkout (Cloudflare Turnstile)
+### 2. 🛡️ CAPTCHA Checkout (Cloudflare Turnstile)
 
 Widget captcha gratis dari Cloudflare sudah dipasang di form checkout,
 tinggal aktifkan Site Key-nya.
@@ -152,8 +105,6 @@ jadi tidak akan mengganggu pembeli sebelum kamu sempat setting captcha asli.
 
 | Variable | Dari mana | Wajib untuk fitur |
 |---|---|---|
-| `XENDIT_SECRET_KEY` | Dashboard Xendit | Pembayaran otomatis |
-| `XENDIT_CALLBACK_TOKEN` | Dashboard Xendit (Webhooks) | Pembayaran otomatis |
 | `RESEND_API_KEY` | Dashboard Resend | Email otomatis |
 | `SENDER_EMAIL` | Domain email kamu | Email otomatis |
 
@@ -163,4 +114,4 @@ environment variable tambahan apa pun.
 ---
 
 Kalau ada langkah yang membingungkan atau butuh bantuan waktu setup akun
-Xendit/Resend/Turnstile, tinggal tanya lagi ke saya kapan saja.
+Resend/Turnstile, tinggal tanya lagi ke saya kapan saja.

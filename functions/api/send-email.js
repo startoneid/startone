@@ -2,9 +2,8 @@
 // CLOUDFLARE PAGES FUNCTION — Kirim Email Konfirmasi Order
 // ==============================================================
 // Endpoint: POST /api/send-email
-// Dipanggil otomatis oleh Admin panel setelah order diverifikasi,
-// dan bisa juga dipanggil otomatis oleh webhook Xendit (lihat
-// functions/api/xendit-notification.js) untuk pembayaran otomatis.
+// Dipanggil otomatis oleh Admin panel setelah order diverifikasi secara
+// manual (Admin klik tombol "Verifikasi").
 //
 // CARA SETUP (wajib sebelum fitur ini aktif):
 // 1. Daftar gratis di https://resend.com
