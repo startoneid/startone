@@ -20,6 +20,8 @@ content="noindex,nofollow">
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <style>
 
 *{
@@ -147,6 +149,21 @@ font-weight:bold;
 
 margin-top:20px;
 
+}
+
+/* Honeypot anti-bot: disembunyikan dari manusia tapi tetap ada di DOM
+   supaya bot otomatis yang mengisi semua field akan terjebak. */
+.honeypot-field{
+    position:absolute;
+    left:-9999px;
+    top:-9999px;
+    height:0;
+    width:0;
+    overflow:hidden;
+}
+
+.cf-turnstile{
+    margin-top:20px;
 }
 
 button{
@@ -380,6 +397,18 @@ required>
 </div>
 
 </div>
+
+<!-- Honeypot anti-bot: field ini disembunyikan dari manusia lewat CSS.
+     Bot otomatis biasanya tetap mengisi semua field yang ada di HTML,
+     jadi kalau field ini terisi, submission dianggap spam & ditolak. -->
+<div class="honeypot-field" aria-hidden="true">
+    <label for="website">Jangan isi kolom ini</label>
+    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+</div>
+
+<!-- Cloudflare Turnstile (CAPTCHA gratis). Ganti data-sitekey di bawah
+     dengan Site Key asli dari dashboard Cloudflare kamu (Turnstile). -->
+<div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" id="turnstileWidget"></div>
 
 <button type="submit">
 

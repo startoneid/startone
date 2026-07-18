@@ -385,6 +385,14 @@ transform:translateY(-2px);
 
 </style>
 
+<!-- Midtrans Snap.js: ganti data-client-key dengan Client Key asli dari
+     dashboard Midtrans kamu (bukan Server Key). Pakai URL sandbox dulu
+     untuk uji coba, ganti ke app.midtrans.com/snap/snap.js kalau sudah live. -->
+<script
+    src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key="SB-Mid-client-XXXXXXXXXXXXXXXX">
+</script>
+
 </head>
 
 <body>
@@ -458,6 +466,17 @@ transform:translateY(-2px);
 
 </div>
 
+   <button
+id="autoPayBtn"
+class="pay-btn"
+style="background:#FFD166;color:#222;">
+&#9889; Bayar Otomatis (E-Wallet / VA / Kartu)
+</button>
+
+<p class="info" style="margin:14px 0;text-align:center;color:#999;font-size:13px;">
+&mdash; atau bayar manual pakai QRIS di bawah ini &mdash;
+</p>
+
    <img src="images/QRIS.png" alt="QRIS" class="qris"
     loading="lazy"
     decoding="async"
@@ -529,6 +548,8 @@ document.getElementById("paymentTotal").textContent =
 </script>
 
 <script type="module" src="js/payment.js"></script>
+
+<script src="js/midtrans.js"></script>
 
 </body>
 

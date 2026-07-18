@@ -28,11 +28,13 @@ const sortSelect = document.getElementById("productSort");
 const wishlistFilterBtn = document.getElementById("wishlistFilterBtn");
 const recentlyViewedSection = document.getElementById("recentlyViewedSection");
 const recentlyViewedGrid = document.getElementById("recentlyViewedGrid");
+const categoryPills = document.getElementById("categoryPills");
 
 // Cache lokal supaya saat kartu diklik kita tidak perlu fetch ulang
 let productsCache = [];
 let currentSearch = "";
 let currentSort = "default";
+let currentCategory = "all";
 let wishlistOnly = false;
 
 const WISHLIST_KEY = "startone_wishlist";
@@ -125,7 +127,8 @@ function renderRecentlyViewed() {
                 <button
                     class="buy"
                     data-name="${escapeHTML(p.name)}"
-                    data-price="${p.price}">
+                    data-price="${p.price}"
+                    data-id="${p.id}">
                     Buy Now
                 </button>
             </div>
@@ -148,7 +151,7 @@ recentlyViewedGrid?.addEventListener("click", (e) => {
     const buyBtn = e.target.closest(".buy");
     if (buyBtn) {
         e.stopPropagation();
-        window.buyProduct(buyBtn.dataset.name, Number(buyBtn.dataset.price));
+        window.buyProduct(buyBtn.dataset.name, Number(buyBtn.dataset.price), buyBtn.dataset.id);
         return;
     }
 
@@ -164,6 +167,10 @@ recentlyViewedGrid?.addEventListener("click", (e) => {
 // ==============================================================
 function getVisibleProducts() {
     let list = [...productsCache];
+
+    if (currentCategory !== "all") {
+        list = list.filter(p => p.category === currentCategory);
+    }
 
     if (currentSearch.trim()) {
         const q = currentSearch.trim().toLowerCase();
@@ -229,7 +236,8 @@ function renderProducts() {
                 <button
                     class="buy"
                     data-name="${escapeHTML(p.name)}"
-                    data-price="${p.price}">
+                    data-price="${p.price}"
+                    data-id="${p.id}">
                     Buy Now
                 </button>
             </div>
@@ -237,6 +245,43 @@ function renderProducts() {
     `;
     }).join("");
 }
+
+// ==============================================================
+// CATEGORY PILLS (dibuat otomatis dari kategori produk yang ada)
+// ==============================================================
+function renderCategoryPills() {
+    if (!categoryPills) return;
+
+    const categories = [...new Set(
+        productsCache.map(p => p.category).filter(Boolean)
+    )];
+
+    if (categories.length === 0) {
+        categoryPills.style.display = "none";
+        return;
+    }
+
+    categoryPills.style.display = "flex";
+
+    categoryPills.innerHTML = `
+        <button class="pill ${currentCategory === "all" ? "active" : ""}" data-category="all" type="button">Semua</button>
+        ${categories.map(cat => `
+            <button class="pill ${currentCategory === cat ? "active" : ""}" data-category="${escapeHTML(cat)}" type="button">${escapeHTML(cat)}</button>
+        `).join("")}
+    `;
+}
+
+categoryPills?.addEventListener("click", (e) => {
+    const pill = e.target.closest(".pill");
+    if (!pill) return;
+
+    currentCategory = pill.dataset.category;
+
+    categoryPills.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+    pill.classList.add("active");
+
+    renderProducts();
+});
 
 // ==============================================================
 // REALTIME LISTENER
@@ -251,6 +296,7 @@ onSnapshot(productsQuery, (snapshot) => {
     });
 
     renderProducts();
+    renderCategoryPills();
     renderRecentlyViewed();
 
 }, (error) => {
@@ -310,7 +356,7 @@ if (grid) {
         const buyBtn = e.target.closest(".buy");
         if (buyBtn) {
             e.stopPropagation();
-            window.buyProduct(buyBtn.dataset.name, Number(buyBtn.dataset.price));
+            window.buyProduct(buyBtn.dataset.name, Number(buyBtn.dataset.price), buyBtn.dataset.id);
             return;
         }
 
@@ -350,7 +396,7 @@ function openProductModal(product) {
     document.body.style.overflow = "hidden";
 
     modalBody.querySelector(".buy-modal-btn").addEventListener("click", () => {
-        window.buyProduct(product.name, product.price);
+        window.buyProduct(product.name, product.price, product.id);
     });
 }
 

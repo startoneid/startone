@@ -185,6 +185,10 @@ Featured Collections
     </div>
 </div>
 
+<div class="category-pills" id="categoryPills" data-aos="fade-up">
+    <button class="pill active" data-category="all" type="button">Semua</button>
+</div>
+
 <div class="grid" id="productsGrid">
     <!-- Produk dimuat otomatis dari database (Firestore) lewat js/products.js -->
     <div class="skeleton-card"></div>
@@ -387,6 +391,14 @@ Hubungi kami melalui salah satu platform berikut.
  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' 
  data-cf-beacon='{"token": "f6bd4a5f65a34379b5fa8005d0aca53e"}'></script>
  <!-- End Cloudflare Web Analytics -->
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(console.warn);
+    });
+}
+</script>
 
 </body>
 </html>
