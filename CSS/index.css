@@ -914,7 +914,7 @@ margin-top:60px;
         opacity:0;
         visibility:hidden;
         transition:visibility .4s var(--ease);
-        z-index:1000;
+        z-index:998;
     }
 
     .nav-overlay.active{
