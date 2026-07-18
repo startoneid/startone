@@ -81,32 +81,6 @@ faqItems.forEach(item => {
 
 // ==============================
 // Back To Top
+// (ditangani oleh js/footer.js setelah footer selesai dimuat,
+// jadi tidak perlu diulang di sini)
 // ==============================
-
-const backToTop = document.getElementById("backToTop");
-
-window.addEventListener("scroll",()=>{
-
-    if(window.scrollY>500){
-
-        backToTop.style.display="block";
-
-    }else{
-
-        backToTop.style.display="none";
-
-    }
-
-});
-
-backToTop.addEventListener("click",()=>{
-
-    window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
-
-    });
-
-});
