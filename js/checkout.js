@@ -11,45 +11,9 @@ import {
 
 const form = document.getElementById("checkoutForm");
 
-// ==============================================================
-// ANTI-SPAM: Honeypot + Rate Limit + Cloudflare Turnstile (CAPTCHA)
-// ==============================================================
-const RATE_LIMIT_KEY = "startone_last_checkout";
-const RATE_LIMIT_SECONDS = 30; // jeda minimum antar submit dari browser yang sama
-
-function checkRateLimit() {
-    const last = Number(localStorage.getItem(RATE_LIMIT_KEY) || 0);
-    const now = Date.now();
-    const diffSeconds = (now - last) / 1000;
-
-    if (diffSeconds < RATE_LIMIT_SECONDS) {
-        const remaining = Math.ceil(RATE_LIMIT_SECONDS - diffSeconds);
-        alert(`Mohon tunggu ${remaining} detik lagi sebelum mencoba checkout kembali.`);
-        return false;
-    }
-    return true;
-}
-
 form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
-
-    // 1. Honeypot: kalau field jebakan terisi, submission dianggap bot -> hentikan diam-diam
-    const honeypot = document.getElementById("website");
-    if (honeypot && honeypot.value.trim() !== "") {
-        console.warn("Honeypot terisi, submission diblokir.");
-        return;
-    }
-
-    // 2. Rate limit sisi klien (mencegah spam order berulang-ulang cepat)
-    if (!checkRateLimit()) return;
-
-    // 3. Verifikasi Cloudflare Turnstile (CAPTCHA) sudah diselesaikan
-    const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]')?.value;
-    if (typeof turnstile !== "undefined" && !turnstileResponse) {
-        alert("Mohon selesaikan verifikasi keamanan (centang captcha) sebelum lanjut.");
-        return;
-    }
 
     document.getElementById("loadingScreen").style.display = "flex";
 
@@ -60,7 +24,6 @@ form.addEventListener("submit", async (e) => {
 
     const product = localStorage.getItem("productName");
     const price = Number(localStorage.getItem("productPrice"));
-    const productId = localStorage.getItem("productId") || "";
     // Membuat tanggal DDMMYYYY
 const today = new Date();
 
@@ -105,7 +68,6 @@ const invoiceNumber =
         email,
         phone,
         product,
-        productId,
         price,
         status: "waiting",
         downloadReady: false,
@@ -123,7 +85,6 @@ await sendTelegramNotification({
 });
 
     localStorage.setItem("orderID", docRef.id);
-    localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
 
     alert("Order berhasil disimpan");
 window.location.href = "payment.html";

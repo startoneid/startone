@@ -143,11 +143,10 @@ if (shopNowBtn) {
 // Buy Product
 // ==============================
 
-function buyProduct(name, price, id = "") {
+function buyProduct(name, price) {
 
     localStorage.setItem("productName", name);
     localStorage.setItem("productPrice", price);
-    localStorage.setItem("productId", id);
 
     window.location.href = "terms.html";
 

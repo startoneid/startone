@@ -392,40 +392,6 @@ transform:translateY(-4px);
 }
 
 /* ===================== */
-/* CATEGORY FILTER PILLS */
-/* ===================== */
-.category-pills{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-bottom:30px;
-}
-
-.pill{
-    padding:9px 20px;
-    border-radius:40px;
-    border:1px solid rgba(255,255,255,.12);
-    background:transparent;
-    color:var(--text-muted);
-    font-size:13.5px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.3s var(--ease);
-    white-space:nowrap;
-}
-
-.pill:hover{
-    border-color:var(--accent);
-    color:var(--text);
-}
-
-.pill.active{
-    background:var(--accent);
-    border-color:var(--accent);
-    color:#222;
-}
-
-/* ===================== */
 /* CONTACT COPY BUTTON */
 /* ===================== */
 .contact-item{
