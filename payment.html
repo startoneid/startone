@@ -385,13 +385,9 @@ transform:translateY(-2px);
 
 </style>
 
-<!-- Midtrans Snap.js: ganti data-client-key dengan Client Key asli dari
-     dashboard Midtrans kamu (bukan Server Key). Pakai URL sandbox dulu
-     untuk uji coba, ganti ke app.midtrans.com/snap/snap.js kalau sudah live. -->
-<script
-    src="https://app.sandbox.midtrans.com/snap/snap.js"
-    data-client-key="SB-Mid-client-XXXXXXXXXXXXXXXX">
-</script>
+<!-- Xendit tidak butuh script pihak ketiga di halaman ini — pembeli
+     otomatis diarahkan (redirect) ke halaman pembayaran hosted Xendit
+     lewat js/xendit.js. -->
 
 </head>
 
@@ -549,7 +545,7 @@ document.getElementById("paymentTotal").textContent =
 
 <script type="module" src="js/payment.js"></script>
 
-<script src="js/midtrans.js"></script>
+<script src="js/xendit.js"></script>
 
 </body>
 

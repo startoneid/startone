@@ -63,42 +63,50 @@ yang bisa saya buatkan otomatis).
 
 ## ⚙️ PERLU SETUP AKUN (gratis, tapi wajib kamu lakukan sendiri)
 
-### 1. 💳 Pembayaran Otomatis (Midtrans)
+### 1. 💳 Pembayaran Otomatis (Xendit)
 
 Saat ini pembeli tetap bisa bayar manual pakai QRIS seperti biasa — fitur
-ini menambahkan **opsi tambahan** "Bayar Otomatis" (e-wallet, virtual
-account, kartu) yang langsung terverifikasi tanpa kamu cek manual satu-satu.
+ini menambahkan **opsi tambahan** "Bayar Otomatis" (QRIS, e-wallet seperti
+OVO/DANA/ShopeePay, virtual account bank, kartu) yang langsung
+terverifikasi tanpa kamu cek manual satu-satu.
+
+Kenapa Xendit? Karena bisa didaftar sebagai akun **Individual/Perorangan**
+tanpa perlu nomor telepon bisnis/badan usaha — cocok kalau kamu belum
+punya nomor bisnis terpisah.
 
 **Langkah setup:**
-1. Daftar gratis di **https://midtrans.com**
-2. Di dashboard, pilih mode **Sandbox** dulu untuk uji coba.
-3. Ambil **Server Key** dan **Client Key** di menu *Settings → Access Keys*.
-4. Buka dashboard project Cloudflare Pages kamu → **Settings → Environment
+1. Daftar gratis di **https://dashboard.xendit.co/register**
+2. Saat proses onboarding, pilih tipe akun **"Individual/Perorangan"**
+   (bukan "Business") — supaya tidak diminta nomor telepon bisnis.
+3. Setelah masuk dashboard, kamu otomatis berada di mode **Test/Sandbox**
+   dulu (aman untuk uji coba, belum transaksi uang asli).
+4. Ambil **Secret Key** di menu *Settings → Developers → API Keys*.
+5. Buka dashboard project Cloudflare Pages kamu → **Settings → Environment
    variables**, tambahkan:
-   - `MIDTRANS_SERVER_KEY` = (Server Key dari Midtrans)
-   - `MIDTRANS_IS_PRODUCTION` = `false` (ganti ke `true` kalau sudah siap live)
-5. Buka file `payment.html`, cari baris:
-   ```html
-   <script src="https://app.sandbox.midtrans.com/snap/snap.js"
-       data-client-key="SB-Mid-client-XXXXXXXXXXXXXXXX">
-   ```
-   Ganti `SB-Mid-client-XXXXXXXXXXXXXXXX` dengan **Client Key** asli kamu.
-6. Redeploy project di Cloudflare Pages.
-7. Di dashboard Midtrans, set **Payment Notification URL** ke:
-   `https://startone.pages.dev/api/midtrans-notification`
-8. Kalau sudah yakin semua jalan lancar di Sandbox, ganti ke akun Production
-   Midtrans + ganti Server/Client Key + `MIDTRANS_IS_PRODUCTION=true`.
+   - `XENDIT_SECRET_KEY` = (Secret Key dari Xendit, mode Test dulu)
+6. Redeploy project.
+7. Di dashboard Xendit: **Settings → Developers → Webhooks**, tambahkan:
+   - URL: `https://startone.pages.dev/api/xendit-notification`
+   - Event: **Invoice Paid**
+   
+   Lalu salin **Verification Token** yang muncul, dan tambahkan juga
+   sebagai environment variable di Cloudflare Pages:
+   - `XENDIT_CALLBACK_TOKEN` = (Verification Token dari Xendit)
+8. Redeploy project lagi.
+9. Kalau sudah yakin semua jalan lancar di mode Test, ajukan aktivasi akun
+   (KYC/verifikasi identitas) di dashboard Xendit untuk pindah ke mode
+   **Live**, lalu ganti `XENDIT_SECRET_KEY` dengan Secret Key mode Live.
 
 **Catatan penting:** setiap produk **wajib** diisi field "Link Download
 Produk" di Admin, karena sistem otomatis mengambil link ini saat pembayaran
-lewat Midtrans berhasil.
+lewat Xendit berhasil.
 
 ---
 
 ### 2. 📧 Email Konfirmasi Otomatis (Resend)
 
 Setelah order diverifikasi (baik manual oleh kamu, atau otomatis lewat
-Midtrans), pembeli akan menerima email berisi link download.
+Xendit), pembeli akan menerima email berisi link download.
 
 **Langkah setup:**
 1. Daftar gratis di **https://resend.com** (gratis untuk 3.000 email/bulan).
@@ -144,8 +152,8 @@ jadi tidak akan mengganggu pembeli sebelum kamu sempat setting captcha asli.
 
 | Variable | Dari mana | Wajib untuk fitur |
 |---|---|---|
-| `MIDTRANS_SERVER_KEY` | Dashboard Midtrans | Pembayaran otomatis |
-| `MIDTRANS_IS_PRODUCTION` | `true`/`false` | Pembayaran otomatis |
+| `XENDIT_SECRET_KEY` | Dashboard Xendit | Pembayaran otomatis |
+| `XENDIT_CALLBACK_TOKEN` | Dashboard Xendit (Webhooks) | Pembayaran otomatis |
 | `RESEND_API_KEY` | Dashboard Resend | Email otomatis |
 | `SENDER_EMAIL` | Domain email kamu | Email otomatis |
 
@@ -155,4 +163,4 @@ environment variable tambahan apa pun.
 ---
 
 Kalau ada langkah yang membingungkan atau butuh bantuan waktu setup akun
-Midtrans/Resend/Turnstile, tinggal tanya lagi ke saya kapan saja.
+Xendit/Resend/Turnstile, tinggal tanya lagi ke saya kapan saja.

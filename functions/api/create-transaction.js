@@ -1,28 +1,40 @@
 // ==============================================================
-// CLOUDFLARE PAGES FUNCTION — Buat Transaksi Midtrans Snap
+// CLOUDFLARE PAGES FUNCTION — Buat Invoice Xendit
 // ==============================================================
 // Endpoint: POST /api/create-transaction
 // Dipanggil dari halaman payment.html saat pembeli klik
-// "Bayar Otomatis". Fungsi ini membuat transaksi di Midtrans dan
-// mengembalikan Snap Token untuk memunculkan popup pembayaran
-// (bisa QRIS, e-wallet, kartu, transfer bank — semua otomatis
-// terverifikasi tanpa admin perlu cek manual).
+// "Bayar Otomatis". Fungsi ini membuat invoice pembayaran di Xendit
+// (bisa QRIS, e-wallet [OVO/DANA/ShopeePay/LinkAja], Virtual Account
+// bank, kartu kredit — semua otomatis terverifikasi tanpa admin
+// perlu cek manual) dan mengarahkan pembeli ke halaman pembayaran
+// hosted Xendit.
+//
+// KENAPA XENDIT (bukan Midtrans)?
+// Xendit bisa didaftar sebagai akun "Individual/Perorangan" tanpa
+// perlu nomor telepon bisnis/badan usaha — cocok untuk kamu yang
+// belum punya nomor bisnis terpisah.
 //
 // CARA SETUP (wajib sebelum tombol "Bayar Otomatis" aktif):
-// 1. Daftar akun di https://midtrans.com (gratis, tanpa biaya bulanan,
-//    hanya potongan per transaksi berhasil).
-// 2. Ambil "Server Key" dari Settings -> Access Keys (pakai Sandbox
-//    dulu untuk uji coba, baru pindah ke Production kalau sudah siap).
+// 1. Daftar gratis di https://dashboard.xendit.co/register
+//    Saat proses onboarding, pilih tipe akun "Individual/Perorangan"
+//    (bukan "Business") supaya tidak diminta nomor telepon bisnis.
+// 2. Setelah masuk dashboard, mulai di mode **Test/Sandbox** dulu:
+//    Settings -> Developers -> API Keys -> salin "Secret Key" (test mode).
 // 3. Di Cloudflare Pages dashboard project kamu:
 //    Settings -> Environment variables -> tambahkan:
-//       MIDTRANS_SERVER_KEY     = (Server Key dari Midtrans)
-//       MIDTRANS_IS_PRODUCTION  = false   (ganti "true" kalau sudah live)
+//       XENDIT_SECRET_KEY = (Secret Key dari Xendit, mode test dulu)
 // 4. Redeploy project.
-// 5. Di dashboard Midtrans, set juga "Payment Notification URL" ke:
-//       https://startone.pages.dev/api/midtrans-notification
-//    supaya status pembayaran otomatis ter-update di Firestore.
+// 5. Di dashboard Xendit: Settings -> Developers -> Webhooks, tambahkan:
+//       URL   : https://startone.pages.dev/api/xendit-notification
+//       Event : Invoice Paid
+//    lalu salin "Verification Token" dan tambahkan juga sebagai
+//    environment variable:
+//       XENDIT_CALLBACK_TOKEN = (Verification Token dari Xendit)
+// 6. Kalau sudah yakin semua jalan lancar di mode Test, ajukan aktivasi
+//    akun (KYC) di dashboard Xendit untuk pindah ke mode Live, lalu
+//    ganti XENDIT_SECRET_KEY dengan Secret Key mode Live.
 //
-// Selama MIDTRANS_SERVER_KEY belum diisi, endpoint ini akan
+// Selama XENDIT_SECRET_KEY belum diisi, endpoint ini akan
 // mengembalikan error yang jelas dan tombol otomatis di halaman
 // payment akan menyarankan pakai metode QRIS manual sebagai gantinya.
 // ==============================================================
@@ -30,52 +42,45 @@
 export async function onRequestPost({ request, env }) {
     try {
         const body = await request.json();
-        const { orderId, invoiceNumber, price, customerName, email, phone } = body;
+        const { orderId, invoiceNumber, price, customerName, email } = body;
 
         if (!orderId || !price) {
             return jsonResponse({ success: false, error: "Data transaksi tidak lengkap." }, 400);
         }
 
-        if (!env.MIDTRANS_SERVER_KEY) {
+        if (!env.XENDIT_SECRET_KEY) {
             return jsonResponse({
                 success: false,
-                error: "MIDTRANS_SERVER_KEY belum di-setup di Environment Variables Cloudflare Pages. Silakan gunakan metode QRIS manual untuk sementara."
+                error: "XENDIT_SECRET_KEY belum di-setup di Environment Variables Cloudflare Pages. Silakan gunakan metode QRIS manual untuk sementara."
             }, 200);
         }
 
-        const isProduction = env.MIDTRANS_IS_PRODUCTION === "true";
-        const midtransURL = isProduction
-            ? "https://app.midtrans.com/snap/v1/transactions"
-            : "https://app.sandbox.midtrans.com/snap/v1/transactions";
+        const authString = btoa(`${env.XENDIT_SECRET_KEY}:`);
+        const origin = new URL(request.url).origin;
 
-        const authString = btoa(`${env.MIDTRANS_SERVER_KEY}:`);
+        // external_id Xendit harus unik tiap percobaan transaksi
+        const externalId = `${invoiceNumber || orderId}-${Date.now()}`;
 
-        const nameParts = (customerName || "").split(" ");
-
-        const midtransBody = {
-            transaction_details: {
-                // order_id Midtrans harus unik & berbeda tiap percobaan transaksi,
-                // jadi kita tempel invoice + timestamp singkat.
-                order_id: `${invoiceNumber || orderId}-${Date.now()}`,
-                gross_amount: Math.round(Number(price))
+        const xenditBody = {
+            external_id: externalId,
+            amount: Math.round(Number(price)),
+            payer_email: email || undefined,
+            description: `Pembayaran StarTone - Invoice ${invoiceNumber || orderId}`,
+            customer: {
+                given_names: customerName || "Pelanggan"
             },
-            customer_details: {
-                first_name: nameParts[0] || "Pelanggan",
-                last_name: nameParts.slice(1).join(" ") || "",
-                email: email || undefined,
-                phone: phone || undefined
-            },
-            credit_card: { secure: true }
+            success_redirect_url: `${origin}/payment.html`,
+            failure_redirect_url: `${origin}/payment.html`,
+            currency: "IDR"
         };
 
-        const response = await fetch(midtransURL, {
+        const response = await fetch("https://api.xendit.co/v2/invoices", {
             method: "POST",
             headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": `Basic ${authString}`
+                "Authorization": `Basic ${authString}`,
+                "Content-Type": "application/json"
             },
-            body: JSON.stringify(midtransBody)
+            body: JSON.stringify(xenditBody)
         });
 
         const result = await response.json();
@@ -86,8 +91,8 @@ export async function onRequestPost({ request, env }) {
 
         return jsonResponse({
             success: true,
-            token: result.token,
-            redirect_url: result.redirect_url
+            invoice_url: result.invoice_url,
+            invoice_id: result.id
         });
 
     } catch (error) {

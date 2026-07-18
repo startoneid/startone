@@ -3,8 +3,8 @@
 // ==============================================================
 // Endpoint: POST /api/send-email
 // Dipanggil otomatis oleh Admin panel setelah order diverifikasi,
-// dan bisa juga dipanggil otomatis oleh webhook Midtrans (lihat
-// functions/api/midtrans-notification.js) untuk pembayaran otomatis.
+// dan bisa juga dipanggil otomatis oleh webhook Xendit (lihat
+// functions/api/xendit-notification.js) untuk pembayaran otomatis.
 //
 // CARA SETUP (wajib sebelum fitur ini aktif):
 // 1. Daftar gratis di https://resend.com
