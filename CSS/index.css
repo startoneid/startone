@@ -259,6 +259,15 @@ header.scrolled{
     height:100%;
     object-fit:cover;
     z-index:-2;
+    transform-origin:center center;
+    animation:heroBgZoom 22s ease-in-out infinite alternate;
+    will-change:transform;
+}
+
+/* Zoom in/out perlahan supaya latar hero terasa "hidup" tapi tetap stabil */
+@keyframes heroBgZoom{
+    0%{ transform:scale(1); }
+    100%{ transform:scale(1.12); }
 }
 
 .hero::before{
@@ -316,6 +325,55 @@ color:white;
 background:white;
 color:black;
 transform:translateY(-4px);
+}
+
+/* ===================== */
+/* HALAMAN SHOP (shop.html) */
+/* ===================== */
+.shop-page{
+    padding-top:120px;
+    min-height:100vh;
+}
+
+.shop-page-header{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.shop-page-logo{
+    display:inline-block;
+    font-family:'Sora','Plus Jakarta Sans',sans-serif;
+    font-size:22px;
+    font-weight:800;
+    color:#fff;
+    text-decoration:none;
+    margin-bottom:20px;
+    transition:transform .3s var(--ease);
+}
+
+.shop-page-logo:hover{
+    transform:scale(1.04);
+}
+
+.shop-page-logo span{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.shop-page-header .title{
+    margin-bottom:10px;
+}
+
+.shop-page-subtitle{
+    color:var(--text-muted);
+    max-width:600px;
+    margin:0 auto 30px;
+}
+
+@media (max-width:768px){
+    .shop-page{ padding-top:90px; }
 }
 
 /* ===================== */
@@ -964,14 +1022,38 @@ margin-top:60px;
     .shop-controls select,
     .wishlist-filter-btn{ flex:1; text-align:center; }
 
-    /* Featured Collection (2 Kolom) */
+    /* Featured Collection & Shop (2 Kolom) - kartu dikecilkan supaya
+       proporsinya sama seperti di Windows, tidak memanjang ke bawah */
     .grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 15px;
+        gap: 12px;
     }
-    .card-content { padding: 15px; }
-    .card h3 { font-size: 15px; }
-    .price { font-size: 16px; }
+    .card { border-radius: 14px; }
+    .card-img-wrap { border-radius: 14px 14px 0 0; }
+    .card img {
+        height: 120px;
+        border-radius: 14px 14px 0 0;
+    }
+    .card-content { padding: 12px; }
+    .card h3 {
+        font-size: 13px;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .card-content p {
+        font-size: 11px;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .price { font-size: 14px; margin: 8px 0; }
+    .buy { padding: 9px; font-size: 12px; border-radius: 8px; }
+    .wishlist-btn { width: 28px; height: 28px; font-size: 12px; top: 6px; right: 6px; }
+    .skeleton-card { height: 220px; }
 
     /* Why Choose Us (4 Kolom) */
     .features {

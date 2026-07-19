@@ -20,23 +20,10 @@ window.addEventListener("load", () => {
 });
 
 // ==============================
-// Toast Notification Utility
-// (dipakai juga oleh products.js lewat window.showToast)
-// ==============================
-
-function showToast(message, icon = "fa-solid fa-circle-check") {
-    const container = document.getElementById("toastContainer");
-    if (!container) return;
-
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.innerHTML = `<i class="${icon}"></i><span>${message}</span>`;
-    container.appendChild(toast);
-
-    setTimeout(() => toast.remove(), 3300);
-}
-window.showToast = showToast;
-
+// Toast Notification Utility & Buy Product
+// Sekarang ada di js/toast.js dan js/buy-product.js (dipakai
+// bersama oleh index.html dan shop.html) - tetap tersedia lewat
+// window.showToast / window.buyProduct.
 // ==============================
 // Header scroll state + Scroll progress bar
 // ==============================
@@ -117,42 +104,9 @@ window.addEventListener("scroll", () => {
 });
 
 // ==============================
-// Smooth Scroll Shop Now
+// Shop Now (tombol di Hero) sekarang berupa link biasa ke
+// shop.html, jadi tidak perlu JS scroll khusus di sini lagi.
 // ==============================
-
-const shopNowBtn = document.getElementById("shopNowBtn");
-
-if (shopNowBtn) {
-
-    shopNowBtn.addEventListener("click", function(e){
-
-        e.preventDefault();
-
-        document.getElementById("shop").scrollIntoView({
-
-            behavior: "smooth",
-            block: "start"
-
-        });
-
-    });
-
-}
-
-// ==============================
-// Buy Product
-// ==============================
-
-function buyProduct(name, price, id = "") {
-
-    localStorage.setItem("productName", name);
-    localStorage.setItem("productPrice", price);
-    localStorage.setItem("productId", id);
-
-    window.location.href = "terms.html";
-
-}
-window.buyProduct = buyProduct;
 
 // ==============================
 // Back To Top (dukungan tambahan jika elemen ada langsung di halaman)
@@ -230,35 +184,7 @@ document.addEventListener("click", (e) => {
 });
 
 // ==============================
-// Card Tilt (efek 3D ringan mengikuti posisi kursor)
-// Hanya aktif di layar yang punya mouse (bukan sentuh) & tidak reduced-motion
+// Card Tilt sekarang ada di js/card-tilt.js (dipakai bersama
+// oleh index.html dan shop.html).
 // ==============================
-
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-if (supportsHover && !prefersReducedMotion) {
-
-    document.addEventListener("mousemove", (e) => {
-        const card = e.target.closest(".card");
-        if (!card) return;
-
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const rotateY = ((x - centerX) / centerX) * 6;
-        const rotateX = ((centerY - y) / centerY) * 6;
-
-        card.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
-    });
-
-    document.addEventListener("mouseleave", (e) => {
-        const card = e.target.closest?.(".card");
-        if (card) card.style.transform = "";
-    }, true);
-}
 

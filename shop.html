@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shop All Presets | StarTone</title>
+
+<link rel="icon" href="icon/StarTone Circle.png" type="image/x-icon">
+<link rel="shortcut icon" href="icon/StarTone Circle.png">
+<link rel="apple-touch-icon" href="icon/StarTone Circle.png">
+<link rel="manifest" href="manifest.json">
+
+<meta name="description"
+content="Jelajahi seluruh koleksi preset Adobe Lightroom premium StarTone untuk Android, iPhone, Windows, dan Mac.">
+
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#28282B">
+
+<link rel="canonical" href="https://startone.pages.dev/shop.html">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+
+<link rel="stylesheet" href="CSS/index.css">
+
+</head>
+
+<body>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+    <div class="preloader-logo">STAR<span style="color:#FFD166">TONE</span></div>
+    <div class="preloader-bar"></div>
+</div>
+
+<!-- Scroll progress bar -->
+<div id="scrollProgress"></div>
+
+<section class="section shop-page" id="shopPage">
+
+<div class="shop-page-header" data-aos="fade-up">
+    <a href="index.html" class="shop-page-logo">STAR<span>TONE</span></a>
+    <h1 class="title section-title">Shop All Presets</h1>
+    <p class="shop-page-subtitle">Jelajahi seluruh koleksi preset Lightroom StarTone.</p>
+</div>
+
+<div class="shop-toolbar" data-aos="fade-up">
+    <div class="shop-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="shopProductSearch" placeholder="Cari preset (contoh: Japan, Cinematic)...">
+    </div>
+    <div class="shop-controls">
+        <select id="shopProductSort">
+            <option value="default">Urutan Bawaan</option>
+            <option value="price-asc">Harga Terendah</option>
+            <option value="price-desc">Harga Tertinggi</option>
+            <option value="name-asc">Nama A-Z</option>
+        </select>
+        <button class="wishlist-filter-btn" id="shopWishlistFilterBtn" type="button">
+            <i class="fa-solid fa-heart"></i> Favorit
+        </button>
+    </div>
+</div>
+
+<div class="category-pills" id="shopCategoryPills" data-aos="fade-up">
+    <button class="pill active" data-category="all" type="button">Semua</button>
+</div>
+
+<div class="grid" id="shopProductsGrid">
+    <!-- Produk dimuat otomatis dari database (Firestore) lewat js/shop.js -->
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+</div>
+
+</section>
+
+<!-- ===================== -->
+<!-- MODAL DETAIL & TIPS PRODUK -->
+<!-- ===================== -->
+<div class="product-modal" id="productModal">
+    <div class="product-modal-content">
+        <button class="product-modal-close" id="productModalClose" aria-label="Tutup">&times;</button>
+        <div id="productModalBody"></div>
+    </div>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<!-- Toast Notification Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+    if (typeof AOS !== "undefined") {
+        AOS.init({ duration: 900, once: true, offset: 60 });
+    }
+    window.addEventListener("load", () => {
+        const preloader = document.getElementById("preloader");
+        if (preloader) setTimeout(() => preloader.classList.add("loaded"), 250);
+    });
+    window.addEventListener("scroll", () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        const bar = document.getElementById("scrollProgress");
+        if (bar) bar.style.width = progress + "%";
+    });
+</script>
+
+<script src="js/toast.js"></script>
+<script src="js/buy-product.js"></script>
+<script src="js/card-tilt.js"></script>
+<script src="js/back-button.js"></script>
+
+<script type="module" src="js/shop.js"></script>
+
+<script src="js/footer.js"></script>
+
+<!-- Cloudflare Web Analytics -->
+ <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' 
+ data-cf-beacon='{"token": "f6bd4a5f65a34379b5fa8005d0aca53e"}'></script>
+ <!-- End Cloudflare Web Analytics -->
+
+</body>
+</html>

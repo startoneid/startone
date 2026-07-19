@@ -24,6 +24,7 @@ const FIREBASE_API_KEY = "AIzaSyCe_fBo7M-2kROpNPpMfnI6qbZPXfHj8dE";
 
 const STATIC_PAGES = [
     { path: "/", priority: "1.00" },
+    { path: "/shop.html", priority: "0.90" },
     { path: "/guide.html", priority: "0.80" },
     { path: "/tracking.html", priority: "0.60" },
     { path: "/terms.html", priority: "0.50" },
@@ -59,13 +60,13 @@ export async function onRequestGet() {
             const documents = data.documents || [];
 
             documents.forEach((doc) => {
-                // Setiap produk diarahkan ke halaman utama dengan anchor #shop
-                // karena detail produk ditampilkan lewat modal di halaman utama,
-                // bukan halaman terpisah per produk.
+                // Setiap produk diarahkan ke halaman Shop dengan anchor #shop-{id}
+                // karena detail produk ditampilkan lewat modal, bukan halaman
+                // terpisah per produk.
                 const idSegments = doc.name.split("/");
                 const docId = idSegments[idSegments.length - 1];
                 urls.push(
-                    `<url><loc>${SITE_URL}/#shop-${xmlEscape(docId)}</loc><lastmod>${today}</lastmod><priority>0.70</priority></url>`
+                    `<url><loc>${SITE_URL}/shop.html#shop-${xmlEscape(docId)}</loc><lastmod>${today}</lastmod><priority>0.70</priority></url>`
                 );
             });
         }

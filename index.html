@@ -124,7 +124,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <nav id="mainNav">
 
 <a href="#home">Home</a>
-<a href="#shop">Shop</a>
+<a href="guide.html">Panduan</a>
+<a href="shop.html">Shop</a>
 <a href="tracking.html">Tracking</a>
 <a href="guide.html#tutorial">Tutorial</a>
 <a href="#about">About</a>
@@ -151,7 +152,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <p>Temukan Karakter Warna Fotomu.</p>
 
-<a href="#shop" id="shopNowBtn" class="btn btn-primary">
+<a href="shop.html" id="shopNowBtn" class="btn btn-primary">
     Shop Now
 </a>
 
@@ -161,39 +162,23 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 </section>
 
-<section class="section" id="shop">
+<section class="section" id="featured">
 
 <h2 class="title section-title" data-aos="fade-up">
 Featured Collections
 </h2>
-
-<div class="shop-toolbar" data-aos="fade-up">
-    <div class="shop-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="productSearch" placeholder="Cari preset (contoh: Japan, Cinematic)...">
-    </div>
-    <div class="shop-controls">
-        <select id="productSort">
-            <option value="default">Urutan Bawaan</option>
-            <option value="price-asc">Harga Terendah</option>
-            <option value="price-desc">Harga Tertinggi</option>
-            <option value="name-asc">Nama A-Z</option>
-        </select>
-        <button class="wishlist-filter-btn" id="wishlistFilterBtn" type="button">
-            <i class="fa-solid fa-heart"></i> Favorit
-        </button>
-    </div>
-</div>
-
-<div class="category-pills" id="categoryPills" data-aos="fade-up">
-    <button class="pill active" data-category="all" type="button">Semua</button>
-</div>
 
 <div class="grid" id="productsGrid">
     <!-- Produk dimuat otomatis dari database (Firestore) lewat js/products.js -->
     <div class="skeleton-card"></div>
     <div class="skeleton-card"></div>
     <div class="skeleton-card"></div>
+</div>
+
+<div style="text-align:center;margin-top:40px;" data-aos="fade-up">
+    <a href="shop.html" class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,.3);">
+        Lihat Semua Produk di Shop <i class="fa-solid fa-arrow-right" style="margin-left:6px;"></i>
+    </a>
 </div>
 
 </section>
@@ -308,7 +293,7 @@ foto estetik dengan cepat.
 
 </div>
 
-<a href="#shop" class="btn btn-primary">Explore Presets</a>
+<a href="shop.html" class="btn btn-primary">Explore Presets</a>
 
 </div>
 
@@ -380,6 +365,10 @@ Hubungi kami melalui salah satu platform berikut.
 <div class="toast-container" id="toastContainer"></div>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script src="js/toast.js"></script>
+<script src="js/buy-product.js"></script>
+<script src="js/card-tilt.js"></script>
 
 <script src="js/index.js"></script>
 
