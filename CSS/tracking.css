@@ -62,3 +62,16 @@ button:hover{ transform:translateY(-3px); background:#ffffff; }
     .section-title h2{ font-size:24px; }
     .tutorial-card, .contact-card{ padding:25px 20px; }
 }
+/* Spinner loading kecil untuk status pencarian di halaman Tracking */
+.tracking-spinner{
+    width:16px;
+    height:16px;
+    border:2px solid rgba(255,255,255,.25);
+    border-top-color:#FFD166;
+    border-radius:50%;
+    display:inline-block;
+    animation:trackingSpin .7s linear infinite;
+}
+@keyframes trackingSpin{
+    to{ transform:rotate(360deg); }
+}

@@ -35,7 +35,7 @@
 <script type="module">
     // 1. Import SDK Firebase langsung dari CDN resmi
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     // 2. Konfigurasi Firebase milik StarTone
     const firebaseConfig = {
@@ -53,6 +53,25 @@
 
     const btn = document.getElementById("checkBtn");
 
+    function escapeHTML(str) {
+        const div = document.createElement("div");
+        div.textContent = str ?? "";
+        return div.innerHTML;
+    }
+
+    // Rate limit sederhana di sisi klien: mencegah klik/percobaan
+    // beruntun cepat (mis. script yang mencoba menebak-nebak invoice).
+    const RATE_LIMIT_KEY = "startone_last_track_check";
+    const RATE_LIMIT_SECONDS = 3;
+
+    function checkRateLimit() {
+        const last = Number(localStorage.getItem(RATE_LIMIT_KEY) || 0);
+        const diffSeconds = (Date.now() - last) / 1000;
+        if (diffSeconds < RATE_LIMIT_SECONDS) return false;
+        localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
+        return true;
+    }
+
     btn.onclick = async () => {
         const invoice = document.getElementById("invoice").value.trim();
         const email = document.getElementById("email").value.trim();
@@ -64,24 +83,33 @@
             return;
         }
 
-        result.innerHTML = "<p style='margin-top:20px;'>Mencari...</p>";
+        if (!checkRateLimit()) {
+            result.innerHTML = "<p style='color:#FFD166; margin-top:20px; font-weight:bold;'>⏳ Mohon tunggu sebentar sebelum mencoba lagi.</p>";
+            return;
+        }
+
+        btn.disabled = true;
+        const originalBtnText = btn.textContent;
+        btn.textContent = "Mencari...";
+
+        result.innerHTML = `
+            <div class="tracking-loading" style="margin-top:20px;display:flex;align-items:center;gap:10px;color:#bbb;">
+                <span class="tracking-spinner"></span> Mencari data pesananmu...
+            </div>
+        `;
 
         try {
-            // Query mencari data ke Firestore orders
-            const q = query(
-                collection(db, "orders"),
-                where("invoiceNumber", "==", invoice),
-                where("email", "==", email)
-            );
+            // Ambil 1 dokumen langsung lewat ID (invoice number), BUKAN query
+            // ke seluruh koleksi "orders". Ini mencegah data pesanan pelanggan
+            // lain ikut terbaca/terekspos di jaringan browser.
+            const orderSnap = await getDoc(doc(db, "orders", invoice));
 
-            const snap = await getDocs(q);
-
-            if (snap.empty) {
+            if (!orderSnap.exists() || orderSnap.data().email !== email) {
                 result.innerHTML = "<p style='color:#FF5555; margin-top:20px; font-weight:bold;'>❌ Order tidak ditemukan. Periksa kembali Invoice/Email Anda.</p>";
                 return;
             }
 
-            const data = snap.docs[0].data();
+            const data = orderSnap.data();
             let statusIcon = "🟡";
 
             if (data.status === "verified") statusIcon = "🟢";
@@ -89,23 +117,24 @@
 
             let download = "";
 
-            if (data.status === "verified") {
+            if (data.status === "verified" && data.downloadURL) {
                 download = `
                     <br><br>
-                    <a href="${data.downloadURL}" download style="display:inline-block; background:#FFD166; color:#222; padding:12px 25px; border-radius:10px; text-decoration:none; font-weight:bold; width:100%; text-align:center;">
+                    <a href="${escapeHTML(data.downloadURL)}" download style="display:inline-block; background:#FFD166; color:#222; padding:12px 25px; border-radius:10px; text-decoration:none; font-weight:bold; width:100%; text-align:center;">
                         ⬇️ Download Produk
                     </a>
                 `;
             }
 
             // Menampilkan komponen status pesanan yang bisa ditekan tombol downloadnya
+            // (semua data yang berasal dari input pengguna di-escape untuk mencegah XSS)
             result.innerHTML = `
                 <div class="card">
-                    <h2>${data.invoiceNumber}</h2>
-                    <p><b>Nama :</b> ${data.customerName}</p>
-                    <p><b>Produk :</b> ${data.product}</p>
-                    <p><b>Status :</b> ${statusIcon} ${data.status}</p>
-                    
+                    <h2>${escapeHTML(data.invoiceNumber)}</h2>
+                    <p><b>Nama :</b> ${escapeHTML(data.customerName)}</p>
+                    <p><b>Produk :</b> ${escapeHTML(data.product)}</p>
+                    <p><b>Status :</b> ${statusIcon} ${escapeHTML(data.status)}</p>
+
                     <div class="progress">
                         <div class="step">
                             ${data.status === "waiting" ? "🟡" : "🟢"} Checkout
@@ -126,6 +155,9 @@
         } catch (error) {
             console.error("Firebase Error:", error);
             result.innerHTML = "<p style='color:#FF5555; margin-top:20px;'>❌ Terjadi gangguan koneksi ke database.</p>";
+        } finally {
+            btn.disabled = false;
+            btn.textContent = originalBtnText;
         }
     };
 </script>

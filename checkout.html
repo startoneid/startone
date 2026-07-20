@@ -347,6 +347,11 @@ opacity:.9;
 
 <input
 type="text"
+id="firstName"
+name="firstName"
+minlength="1"
+maxlength="60"
+autocomplete="given-name"
 required>
 
 </div>
@@ -357,6 +362,11 @@ required>
 
 <input
 type="text"
+id="lastName"
+name="lastName"
+minlength="1"
+maxlength="60"
+autocomplete="family-name"
 required>
 
 </div>
@@ -367,12 +377,22 @@ required>
 
 <input
 type="email"
+id="customerEmail"
+name="customerEmail"
+autocomplete="email"
 required>
 
 <label>Nomor Telepon</label>
 
 <input
 type="tel"
+id="customerPhone"
+name="customerPhone"
+inputmode="numeric"
+pattern="[0-9+ -]{9,15}"
+title="Masukkan nomor telepon yang valid (9-15 digit)"
+placeholder="08xxxxxxxxxx"
+autocomplete="tel"
 required>
 
 <div class="summary">

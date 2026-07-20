@@ -1,0 +1,117 @@
+// ==============================================================
+// FIRESTORE SECURITY RULES — StarTone
+// ==============================================================
+// File ini TIDAK otomatis aktif hanya dengan berada di folder project.
+// Cloudflare Pages hanya meng-hosting file statis (HTML/CSS/JS), rules
+// Firestore harus di-deploy terpisah lewat salah satu cara berikut:
+//
+//   CARA 1 (paling gampang — lewat browser, tanpa install apa-apa):
+//   1. Buka https://console.firebase.google.com
+//   2. Pilih project "startone-d8aee"
+//   3. Menu kiri: Firestore Database -> tab "Rules"
+//   4. Hapus isi yang ada, copy-paste SELURUH isi file ini ke sana
+//   5. Klik "Publish"
+//
+//   CARA 2 (lewat terminal, kalau sudah familiar dengan Firebase CLI):
+//   1. npm install -g firebase-tools
+//   2. firebase login
+//   3. firebase deploy --only firestore:rules
+//      (butuh file firebase.json yang menunjuk ke firestore.rules ini)
+//
+// PENTING: Setelah publish, coba lagi seluruh alur (lihat produk di
+// Shop, checkout, tracking, dan panel Admin) untuk memastikan tidak
+// ada yang "Missing or insufficient permissions".
+// ==============================================================
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Ganti email di bawah ini kalau suatu saat email admin StarTone berubah.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "startone.id@gmail.com";
+    }
+
+    // ------------------------------------------------------------
+    // PRODUCTS — data produk yang publik (nama, harga, gambar, deskripsi).
+    // TIDAK berisi link download (link download ada di koleksi terpisah
+    // "productSecrets" di bawah supaya tidak bisa diakses sebelum bayar).
+    // ------------------------------------------------------------
+    match /products/{productId} {
+      allow read: if true;       // publik boleh baca (ditampilkan di halaman utama & Shop)
+      allow write: if isAdmin(); // hanya admin panel yang boleh tambah/ubah/hapus produk
+    }
+
+    // ------------------------------------------------------------
+    // PRODUCT SECRETS — link download tiap produk. HANYA admin yang
+    // boleh baca (dipakai saat verifikasi order manual di Admin panel).
+    // Pembeli menerima link download-nya sendiri lewat field
+    // "downloadURL" di dokumen order-nya masing-masing setelah
+    // diverifikasi, BUKAN dari sini.
+    // ------------------------------------------------------------
+    match /productSecrets/{productId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // ORDERS — ID dokumen = nomor invoice itu sendiri (dibuat lewat
+    // Cloudflare Function /api/next-invoice, bukan dari sisi klien).
+    //
+    // - "get" (ambil 1 order lewat ID persis, dipakai halaman Tracking
+    //   & Payment) diizinkan untuk siapa saja, karena nomor invoice
+    //   dibuat dengan akhiran acak (random suffix) sehingga tidak
+    //   praktis ditebak/di-enumerasi satu per satu.
+    // - "list" (mengambil BANYAK/SELURUH order sekaligus, seperti yang
+    //   dipakai tabel di Admin panel) HANYA boleh oleh admin — ini
+    //   yang mencegah data seluruh pelanggan (nama/email/HP/bukti
+    //   bayar) bisa di-dump oleh pengunjung biasa.
+    // ------------------------------------------------------------
+    match /orders/{invoiceId} {
+      allow get: if true;
+      allow list: if isAdmin();
+
+      // Membuat order baru (checkout) boleh dari publik, dengan
+      // validasi dasar supaya tidak bisa dipakai sembarangan untuk
+      // menulis data acak/merusak status pesanan orang lain.
+      allow create: if request.resource.data.invoiceNumber == invoiceId
+        && request.resource.data.status == "waiting"
+        && request.resource.data.price is number
+        && request.resource.data.price > 0
+        && request.resource.data.email is string
+        && request.resource.data.customerName is string;
+
+      // Update dokumen order yang SUDAH ADA: pembeli hanya boleh
+      // mengisi bukti pembayaran (status -> "waiting_verification"),
+      // sisanya (verifikasi/tolak/isi downloadURL) hanya admin.
+      allow update: if isAdmin()
+        || (
+          resource.data.status in ["waiting", "rejected"]
+          && request.resource.data.status == "waiting_verification"
+          && request.resource.data.paymentProof is string
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(["status", "paymentTime", "paymentProof"])
+        );
+
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // INVOICE COUNTERS — hanya berisi angka penghitung nomor urut
+    // invoice per hari (tidak ada data pribadi sama sekali), dipakai
+    // oleh Cloudflare Function /api/next-invoice. Dibuat terbuka
+    // (bukan admin-only) karena Function ini tidak login sebagai
+    // admin — risiko terburuknya cuma nomor urut "meloncat", bukan
+    // kebocoran data.
+    // ------------------------------------------------------------
+    match /invoiceCounters/{day} {
+      allow read, write: if true;
+    }
+
+    // Tutup akses ke semua koleksi lain yang tidak disebutkan di atas.
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

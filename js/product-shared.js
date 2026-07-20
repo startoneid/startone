@@ -16,7 +16,9 @@ import {
     collection,
     onSnapshot,
     query,
-    orderBy
+    orderBy,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export const WISHLIST_KEY = "startone_wishlist";
@@ -165,12 +167,17 @@ export function createProductModalController(modal, modalBody, modalCloseBtn) {
             <h4>Tips Penggunaan</h4>
             <p>${escapeHTML(product.tips || "Belum ada tips untuk produk ini.").replace(/\n/g, "<br>")}</p>
 
-            <button
-                class="btn btn-primary buy-modal-btn"
-                data-name="${escapeHTML(product.name)}"
-                data-price="${product.price}">
-                Buy Now
-            </button>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;">
+                <button
+                    class="btn btn-primary buy-modal-btn"
+                    data-name="${escapeHTML(product.name)}"
+                    data-price="${product.price}">
+                    Buy Now
+                </button>
+                <a href="product.html?id=${encodeURIComponent(product.id)}" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Halaman Produk
+                </a>
+            </div>
         `;
 
         modal.classList.add("active");
@@ -198,6 +205,17 @@ export function createProductModalController(modal, modalBody, modalCloseBtn) {
     });
 
     return { openProductModal, closeProductModal };
+}
+
+// ==============================================================
+// AMBIL 1 PRODUK LEWAT ID (dipakai oleh halaman detail product.html
+// supaya produk bisa dibuka lewat link langsung/dibagikan)
+// ==============================================================
+export async function getProductById(id) {
+    if (!id) return null;
+    const snap = await getDoc(doc(db, "products", id));
+    if (!snap.exists()) return null;
+    return { id: snap.id, ...snap.data() };
 }
 
 // ==============================================================

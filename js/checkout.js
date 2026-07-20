@@ -3,10 +3,9 @@ import { sendTelegramNotification } from "./telegram.js";
 import { db } from "./firebase.js";
 
 import {
-    collection,
-    addDoc,
-    serverTimestamp,
-    getDocs
+    doc,
+    setDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const form = document.getElementById("checkoutForm");
@@ -30,6 +29,37 @@ function checkRateLimit() {
     return true;
 }
 
+// ==============================================================
+// VALIDASI INPUT
+// Sebelumnya form hanya mengandalkan HTML5 required/type, sekarang
+// ditambah validasi eksplisit supaya data yang masuk ke database
+// lebih bersih dan tidak mudah dimanipulasi lewat DevTools.
+// ==============================================================
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_REGEX = /^[0-9+ -]{9,15}$/;
+
+function validateCheckoutInput({ firstName, lastName, email, phone, product, price }) {
+    if (!firstName || firstName.trim().length === 0) {
+        return "Nama depan wajib diisi.";
+    }
+    if (!lastName || lastName.trim().length === 0) {
+        return "Nama belakang wajib diisi.";
+    }
+    if (!email || !EMAIL_REGEX.test(email.trim())) {
+        return "Format email tidak valid.";
+    }
+    if (!phone || !PHONE_REGEX.test(phone.trim())) {
+        return "Format nomor telepon tidak valid (9-15 digit, boleh diawali +).";
+    }
+    if (!product || product.trim().length === 0) {
+        return "Produk tidak ditemukan. Silakan pilih produk kembali dari halaman Shop.";
+    }
+    if (!Number.isFinite(price) || price <= 0) {
+        return "Harga produk tidak valid. Silakan pilih produk kembali dari halaman Shop.";
+    }
+    return null; // valid
+}
+
 form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
@@ -51,90 +81,80 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    document.getElementById("loadingScreen").style.display = "flex";
-
-    const firstName = document.querySelectorAll("input")[0].value;
-    const lastName = document.querySelectorAll("input")[1].value;
-    const email = document.querySelectorAll("input")[2].value;
-    const phone = document.querySelectorAll("input")[3].value;
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const email = document.getElementById("customerEmail").value;
+    const phone = document.getElementById("customerPhone").value;
 
     const product = localStorage.getItem("productName");
     const price = Number(localStorage.getItem("productPrice"));
     const productId = localStorage.getItem("productId") || "";
-    // Membuat tanggal DDMMYYYY
-const today = new Date();
 
-const day = String(today.getDate()).padStart(2, "0");
-const month = String(today.getMonth() + 1).padStart(2, "0");
-const year = today.getFullYear();
+    // 4. Validasi data sebelum dikirim ke database
+    const validationError = validateCheckoutInput({ firstName, lastName, email, phone, product, price });
+    if (validationError) {
+        alert(validationError);
+        return;
+    }
 
-const dateString = `${day}${month}${year}`;
+    const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+    const loadingScreen = document.getElementById("loadingScreen");
+    if (loadingScreen) loadingScreen.style.display = "flex";
+    if (submitBtn) submitBtn.disabled = true;
 
     try {
 
-        // Mengambil seluruh order
-const snapshot = await getDocs(collection(db, "orders"));
+        // 5. Minta nomor invoice ke server (Cloudflare Function) alih-alih
+        //    membaca seluruh koleksi "orders" langsung dari browser.
+        //    Ini menutup celah kebocoran data pelanggan lain.
+        const invoiceRes = await fetch("/api/next-invoice", { method: "POST" });
+        const invoiceResult = await invoiceRes.json().catch(() => ({}));
 
-// Menghitung jumlah order hari ini
-let todayCount = 0;
+        if (!invoiceRes.ok || !invoiceResult.success || !invoiceResult.invoiceNumber) {
+            throw new Error(invoiceResult.error || "Gagal membuat nomor invoice. Silakan coba lagi.");
+        }
 
-snapshot.forEach(doc => {
+        const invoiceNumber = invoiceResult.invoiceNumber;
 
-    const data = doc.data();
+        // 6. Simpan order dengan ID dokumen = nomor invoice itu sendiri.
+        //    Ini membuat halaman Tracking bisa mengambil 1 order lewat ID
+        //    langsung (get), bukan query yang membutuhkan akses baca ke
+        //    seluruh koleksi (list) — lebih aman untuk data pelanggan lain.
+        await setDoc(doc(db, "orders", invoiceNumber), {
+            invoiceNumber,
+            customerName: firstName.trim() + " " + lastName.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            product,
+            productId,
+            price,
+            status: "waiting",
+            downloadReady: false,
+            downloadURL: "",
+            createdAt: serverTimestamp()
+        });
 
-    if (data.invoiceNumber &&
-        data.invoiceNumber.includes(dateString)) {
+        await sendTelegramNotification({
+            title: "🛒 ORDER BARU",
+            name: firstName.trim() + " " + lastName.trim(),
+            email: email.trim(),
+            product: product,
+            total: "Rp " + price.toLocaleString("id-ID"),
+            invoice: invoiceNumber
+        });
 
-        todayCount++;
+        localStorage.setItem("orderID", invoiceNumber);
+        localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
 
+        window.location.href = "payment.html";
+
+    } catch (error) {
+
+        console.error(error);
+        alert(error.message || "Terjadi kesalahan saat memproses order. Silakan coba lagi.");
+
+        if (loadingScreen) loadingScreen.style.display = "none";
+        if (submitBtn) submitBtn.disabled = false;
     }
 
 });
-
-// Nomor urut 4 digit
-const queueNumber =
-String(todayCount + 1).padStart(4, "0");
-
-// Invoice
-const invoiceNumber =
-`STR-${dateString}-${queueNumber}`;
-
-    const docRef = await addDoc(collection(db, "orders"), {
-        invoiceNumber,
-        customerName: firstName + " " + lastName,
-        email,
-        phone,
-        product,
-        productId,
-        price,
-        status: "waiting",
-        downloadReady: false,
-        downloadURL: "",
-        createdAt: serverTimestamp()
-    });
-
-await sendTelegramNotification({
-    title: "🛒 ORDER BARU",
-    name: firstName + " " + lastName,
-    email: email,
-    product: product,
-    total: "Rp " + price.toLocaleString("id-ID"),
-    invoice: invoiceNumber
-});
-
-    localStorage.setItem("orderID", docRef.id);
-    localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
-
-    alert("Order berhasil disimpan");
-window.location.href = "payment.html";
-
-} catch (error) {
-
-    console.error(error);
-
-    alert(error.message);
-
-}
-
-});
-

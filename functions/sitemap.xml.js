@@ -60,13 +60,12 @@ export async function onRequestGet() {
             const documents = data.documents || [];
 
             documents.forEach((doc) => {
-                // Setiap produk diarahkan ke halaman Shop dengan anchor #shop-{id}
-                // karena detail produk ditampilkan lewat modal, bukan halaman
-                // terpisah per produk.
+                // Setiap produk sekarang punya halaman detail sendiri yang bisa
+                // di-crawl & dibagikan langsung: product.html?id={id}
                 const idSegments = doc.name.split("/");
                 const docId = idSegments[idSegments.length - 1];
                 urls.push(
-                    `<url><loc>${SITE_URL}/shop.html#shop-${xmlEscape(docId)}</loc><lastmod>${today}</lastmod><priority>0.70</priority></url>`
+                    `<url><loc>${SITE_URL}/product.html?id=${xmlEscape(docId)}</loc><lastmod>${today}</lastmod><priority>0.70</priority></url>`
                 );
             });
         }

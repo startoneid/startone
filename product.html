@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Detail Produk | StarTone</title>
+
+<link rel="icon" href="icon/StarTone Circle.png" type="image/x-icon">
+<link rel="shortcut icon" href="icon/StarTone Circle.png">
+<link rel="apple-touch-icon" href="icon/StarTone Circle.png">
+<link rel="manifest" href="manifest.json">
+
+<meta name="description" content="Detail preset Adobe Lightroom premium StarTone.">
+<meta property="og:title" content="StarTone Preset">
+<meta property="og:description" content="Detail preset Adobe Lightroom premium StarTone.">
+<meta property="og:image" content="">
+<meta property="og:type" content="product">
+
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#28282B">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="CSS/index.css">
+
+<style>
+.product-detail-page{
+    padding:120px 7% 60px;
+    max-width:1100px;
+    margin:0 auto;
+    min-height:100vh;
+}
+.product-detail-loading, .product-detail-not-found{
+    text-align:center;
+    padding:80px 20px;
+    color:var(--text-muted);
+}
+.product-detail-not-found i{ font-size:40px; color:#FFD166; margin-bottom:15px; display:block; }
+.product-detail-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+    align-items:start;
+}
+.product-detail-image img{
+    width:100%;
+    border-radius:18px;
+    object-fit:cover;
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
+.product-detail-info h1{ font-family:'Sora',sans-serif; font-size:32px; margin:14px 0 6px; }
+.product-detail-info .price{ font-size:26px; font-weight:700; color:#FFD166; margin-bottom:14px; }
+.product-detail-info .short-desc{ color:var(--text-muted); margin-bottom:10px; }
+.product-detail-info .compat{ color:var(--text-muted); font-size:14px; margin-bottom:20px; }
+.product-detail-info h3{ margin-top:28px; margin-bottom:8px; font-size:18px; }
+.product-detail-info p{ color:#ccc; line-height:1.7; }
+.product-detail-actions{ display:flex; gap:12px; margin:20px 0; flex-wrap:wrap; }
+.product-detail-actions .btn-outline{ color:#fff; border-color:rgba(255,255,255,.3); }
+@media (max-width:900px){
+    .product-detail-grid{ grid-template-columns:1fr; gap:25px; }
+    .product-detail-page{ padding-top:90px; }
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="productDetailLoading" class="product-detail-loading">
+    <p>Memuat produk...</p>
+</div>
+
+<div id="productDetailNotFound" class="product-detail-not-found" style="display:none;">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <h2>Produk tidak ditemukan</h2>
+    <p>Produk ini mungkin sudah dihapus atau link-nya salah.</p>
+    <a href="shop.html" class="btn btn-primary" style="margin-top:15px;display:inline-block;">Lihat Semua Produk</a>
+</div>
+
+<section class="product-detail-page" id="productDetailContent" style="display:none;"></section>
+
+<div id="footer-placeholder"></div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/toast.js"></script>
+<script src="js/buy-product.js"></script>
+<script src="js/back-button.js"></script>
+
+<script type="module" src="js/product-detail.js"></script>
+
+<script src="js/footer.js"></script>
+
+<!-- Cloudflare Web Analytics -->
+ <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' 
+ data-cf-beacon='{"token": "f6bd4a5f65a34379b5fa8005d0aca53e"}'></script>
+ <!-- End Cloudflare Web Analytics -->
+
+</body>
+</html>

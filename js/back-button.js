@@ -72,9 +72,18 @@
         document.body.appendChild(btn);
 
         btn.addEventListener("click", () => {
-            if (window.history.length > 1) {
+            const cameFromSameSite = document.referrer &&
+                new URL(document.referrer).host === window.location.host;
+
+            if (cameFromSameSite && window.history.length > 1) {
+                // Aman kembali lewat history browser karena halaman sebelumnya
+                // masih bagian dari situs StarTone.
                 window.history.back();
             } else {
+                // Kalau pengunjung datang langsung dari luar (mis. hasil
+                // pencarian Google) atau tidak ada riwayat sebelumnya,
+                // tombol "kembali" seharusnya membawa ke beranda StarTone,
+                // bukan keluar ke situs asal sebelumnya.
                 window.location.href = "index.html";
             }
         });
