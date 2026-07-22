@@ -18,16 +18,13 @@ import {
     cardHTML,
     attachGridEvents,
     createProductModalController,
-    subscribeToProducts,
-    getRecentlyViewed
+    subscribeToProducts
 } from "./product-shared.js";
 
 const grid = document.getElementById("productsGrid");
 const modal = document.getElementById("productModal");
 const modalBody = document.getElementById("productModalBody");
 const modalCloseBtn = document.getElementById("productModalClose");
-const recentlyViewedSection = document.getElementById("recentlyViewedSection");
-const recentlyViewedGrid = document.getElementById("recentlyViewedGrid");
 
 // Cache lokal supaya saat kartu diklik kita tidak perlu fetch ulang
 let productsCache = [];
@@ -58,32 +55,11 @@ function renderProducts() {
 }
 
 // ==============================================================
-// RECENTLY VIEWED
-// ==============================================================
-function renderRecentlyViewed() {
-    if (!recentlyViewedGrid || !recentlyViewedSection) return;
-
-    const ids = getRecentlyViewed();
-    const items = ids
-        .map(id => productsCache.find(p => p.id === id))
-        .filter(Boolean);
-
-    if (items.length === 0) {
-        recentlyViewedSection.style.display = "none";
-        return;
-    }
-
-    recentlyViewedSection.style.display = "";
-    recentlyViewedGrid.innerHTML = items.map((p) => cardHTML(p, 0)).join("");
-}
-
-// ==============================================================
 // REALTIME LISTENER
 // ==============================================================
 subscribeToProducts((products) => {
     productsCache = products;
     renderProducts();
-    renderRecentlyViewed();
 }, () => {
     if (grid) {
         grid.innerHTML = `
@@ -98,11 +74,6 @@ subscribeToProducts((products) => {
 // KLIK KARTU (favorit, buy now, modal) - grid utama & recently viewed
 // ==============================================================
 attachGridEvents(grid, {
-    getProductById: (id) => productsCache.find(p => p.id === id),
-    onOpenModal: openProductModal
-});
-
-attachGridEvents(recentlyViewedGrid, {
     getProductById: (id) => productsCache.find(p => p.id === id),
     onOpenModal: openProductModal
 });

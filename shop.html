@@ -35,6 +35,8 @@ content="Jelajahi seluruh koleksi preset Adobe Lightroom premium StarTone untuk 
 
 <body>
 
+<a href="#main" class="skip-link">Lewati ke konten utama</a>
+
 <!-- Preloader -->
 <div class="preloader" id="preloader">
     <div class="preloader-logo">STAR<span style="color:#FFD166">TONE</span></div>
@@ -44,35 +46,97 @@ content="Jelajahi seluruh koleksi preset Adobe Lightroom premium StarTone untuk 
 <!-- Scroll progress bar -->
 <div id="scrollProgress"></div>
 
-<section class="section shop-page" id="shopPage">
+<div class="nav-overlay" id="navOverlay"></div>
 
-<div class="shop-page-header" data-aos="fade-up">
-    <a href="index.html" class="shop-page-logo">STAR<span>TONE</span></a>
-    <h1 class="title section-title">Shop All Presets</h1>
-    <p class="shop-page-subtitle">Jelajahi seluruh koleksi preset Lightroom StarTone.</p>
-</div>
+<header id="siteHeader">
 
-<div class="shop-toolbar" data-aos="fade-up">
-    <div class="shop-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="shopProductSearch" placeholder="Cari preset (contoh: Japan, Cinematic)...">
+<a href="index.html" class="logo">STAR<span>TONE</span></a>
+
+<nav id="mainNav">
+
+<a href="index.html">Home</a>
+<a href="guide.html">Panduan</a>
+<a href="shop.html" class="active-link">Shop</a>
+<a href="tracking.html">Tracking</a>
+<a href="guide.html#tutorial">Tutorial</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+
+</nav>
+
+<button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+</button>
+
+</header>
+
+<main id="main" class="shop-page">
+
+<!-- ===================== -->
+<!-- HERO -->
+<!-- ===================== -->
+<section class="shop-hero">
+    <div class="shop-hero-bg" style="background-image:url('background/bgmain.jpg');"></div>
+
+    <div class="shop-page-header" data-aos="fade-up">
+        <h1 class="title section-title">Shop All Presets</h1>
+        <p class="shop-page-subtitle">Jelajahi seluruh koleksi preset Lightroom StarTone, dari tone cinematic hingga travel yang estetik.</p>
+
+        <div class="shop-stats-strip">
+            <div class="shop-stat-pill">
+                <i class="fa-solid fa-bolt"></i>
+                <div>
+                    <strong>Instant</strong>
+                    <span>Download</span>
+                </div>
+            </div>
+            <div class="shop-stat-pill">
+                <i class="fa-solid fa-star"></i>
+                <div>
+                    <strong>4.9★</strong>
+                    <span>Rating Pengguna</span>
+                </div>
+            </div>
+            <div class="shop-stat-pill">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <div>
+                    <strong>All Devices</strong>
+                    <span>Mobile &amp; PC</span>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="shop-controls">
-        <select id="shopProductSort">
-            <option value="default">Urutan Bawaan</option>
-            <option value="price-asc">Harga Terendah</option>
-            <option value="price-desc">Harga Tertinggi</option>
-            <option value="name-asc">Nama A-Z</option>
-        </select>
-        <button class="wishlist-filter-btn" id="shopWishlistFilterBtn" type="button">
-            <i class="fa-solid fa-heart"></i> Favorit
-        </button>
+</section>
+
+<section class="section" style="padding-top:0;">
+
+<div class="shop-toolbar-panel" data-aos="fade-up">
+
+    <div class="shop-toolbar">
+        <div class="shop-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="shopProductSearch" placeholder="Cari preset (contoh: Japan, Cinematic)...">
+        </div>
+        <div class="shop-controls">
+            <select id="shopProductSort">
+                <option value="default">Urutan Bawaan</option>
+                <option value="price-asc">Harga Terendah</option>
+                <option value="price-desc">Harga Tertinggi</option>
+                <option value="name-asc">Nama A-Z</option>
+            </select>
+            <button class="wishlist-filter-btn" id="shopWishlistFilterBtn" type="button">
+                <i class="fa-solid fa-heart"></i> Favorit
+            </button>
+        </div>
     </div>
+
+    <div class="category-pills" id="shopCategoryPills">
+        <button class="pill active" data-category="all" type="button">Semua</button>
+    </div>
+
 </div>
 
-<div class="category-pills" id="shopCategoryPills" data-aos="fade-up">
-    <button class="pill active" data-category="all" type="button">Semua</button>
-</div>
+<p class="shop-results-count" id="shopResultsCount"></p>
 
 <div class="grid" id="shopProductsGrid">
     <!-- Produk dimuat otomatis dari database (Firestore) lewat js/shop.js -->
@@ -82,6 +146,8 @@ content="Jelajahi seluruh koleksi preset Adobe Lightroom premium StarTone untuk 
 </div>
 
 </section>
+
+</main>
 
 <!-- ===================== -->
 <!-- MODAL DETAIL & TIPS PRODUK -->
@@ -99,27 +165,11 @@ content="Jelajahi seluruh koleksi preset Adobe Lightroom premium StarTone untuk 
 <div class="toast-container" id="toastContainer"></div>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script>
-    if (typeof AOS !== "undefined") {
-        AOS.init({ duration: 900, once: true, offset: 60 });
-    }
-    window.addEventListener("load", () => {
-        const preloader = document.getElementById("preloader");
-        if (preloader) setTimeout(() => preloader.classList.add("loaded"), 250);
-    });
-    window.addEventListener("scroll", () => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        const bar = document.getElementById("scrollProgress");
-        if (bar) bar.style.width = progress + "%";
-    });
-</script>
 
 <script src="js/toast.js"></script>
 <script src="js/buy-product.js"></script>
 <script src="js/card-tilt.js"></script>
-<script src="js/back-button.js"></script>
+<script src="js/index.js"></script>
 
 <script type="module" src="js/shop.js"></script>
 

@@ -88,11 +88,14 @@ export function addRecentlyViewed(id) {
 // ==============================================================
 export function cardHTML(p, index = 0) {
     const wished = isWishlisted(p.id);
+    const category = (p.category || "").trim();
 
     return `
     <div class="card" data-id="${p.id}" style="animation-delay:${Math.min(index, 6) * 60}ms">
         <div class="card-img-wrap">
             <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" loading="lazy">
+            <div class="card-img-scrim"></div>
+            ${category ? `<span class="card-tag">${escapeHTML(category)}</span>` : ""}
             <button class="wishlist-btn ${wished ? "active" : ""}" data-id="${p.id}" aria-label="Favorit" type="button">
                 <i class="fa-solid fa-heart"></i>
             </button>
@@ -100,14 +103,19 @@ export function cardHTML(p, index = 0) {
         <div class="card-content">
             <h3>${escapeHTML(p.name)}</h3>
             <p>${escapeHTML(p.shortDesc)}</p>
-            <div class="price">${formatPrice(p.price)}</div>
-            <button
-                class="buy"
-                data-name="${escapeHTML(p.name)}"
-                data-price="${p.price}"
-                data-id="${p.id}">
-                Buy Now
-            </button>
+            <div class="card-footer">
+                <div class="card-price">
+                    <span class="card-price-label">Harga</span>
+                    <span class="price">${formatPrice(p.price)}</span>
+                </div>
+                <button
+                    class="buy"
+                    data-name="${escapeHTML(p.name)}"
+                    data-price="${p.price}"
+                    data-id="${p.id}">
+                    <span>Buy</span><i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
         </div>
     </div>
     `;

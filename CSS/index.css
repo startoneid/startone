@@ -330,14 +330,44 @@ transform:translateY(-4px);
 /* ===================== */
 /* HALAMAN SHOP (shop.html) */
 /* ===================== */
-.shop-page{
+.shop-page, .page-shell{
     padding-top:120px;
     min-height:100vh;
 }
 
+/* Hero banner Shop: latar foto + overlay, menggantikan header polos
+   supaya halaman Shop terasa sekelas etalase produk, bukan daftar biasa */
+.shop-hero{
+    position:relative;
+    text-align:center;
+    padding:60px 10% 50px;
+    overflow:hidden;
+}
+
+.shop-hero-bg{
+    position:absolute;
+    inset:0;
+    background-size:cover;
+    background-position:center;
+    opacity:.28;
+    filter:saturate(1.1);
+}
+
+.shop-hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(40,40,43,.55) 0%, rgba(40,40,43,.97) 92%);
+}
+
+.shop-hero > *{
+    position:relative;
+    z-index:1;
+}
+
 .shop-page-header{
     text-align:center;
-    margin-bottom:20px;
+    margin-bottom:0;
 }
 
 .shop-page-logo{
@@ -372,13 +402,60 @@ transform:translateY(-4px);
     margin:0 auto 30px;
 }
 
+/* Strip statistik singkat untuk menambah kredibilitas & mengurangi kesan polos */
+.shop-stats-strip{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin-top:6px;
+}
+
+.shop-stat-pill{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:14px 22px;
+}
+
+.shop-stat-pill i{
+    color:var(--accent);
+    font-size:18px;
+}
+
+.shop-stat-pill strong{
+    display:block;
+    font-size:16px;
+    line-height:1.2;
+}
+
+.shop-stat-pill span{
+    display:block;
+    font-size:11.5px;
+    color:var(--text-muted);
+}
+
 @media (max-width:768px){
-    .shop-page{ padding-top:90px; }
+    .shop-page, .page-shell{ padding-top:90px; }
+    .shop-hero{ padding:40px 6% 30px; }
 }
 
 /* ===================== */
 /* SHOP TOOLBAR: SEARCH + SORT + WISHLIST FILTER */
 /* ===================== */
+.shop-toolbar-panel{
+    background:var(--bg-alt);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:24px;
+    padding:24px;
+    margin-top:-30px;
+    position:relative;
+    z-index:2;
+    box-shadow:0 20px 45px rgba(0,0,0,.3);
+}
+
 .shop-toolbar{
     display:flex;
     flex-wrap:wrap;
@@ -456,8 +533,18 @@ transform:translateY(-4px);
     display:flex;
     flex-wrap:wrap;
     gap:10px;
-    margin-bottom:30px;
+    margin-bottom:0;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,.06);
 }
+
+.shop-results-count{
+    color:var(--text-muted);
+    font-size:13.5px;
+    margin:26px 2px 0;
+}
+
+.shop-results-count b{ color:#fff; }
 
 .pill{
     padding:9px 20px;
@@ -584,12 +671,13 @@ margin-bottom:50px;
 }
 
 .card{
-background:#35363A;
+background:linear-gradient(165deg,#3b3c41,#2e2f33);
 color:white;
 border-radius:20px;
 overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,.15);
-transition:transform .4s var(--ease), box-shadow .4s var(--ease);
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
 display:flex;
 flex-direction:column;
 height:100%;
@@ -606,7 +694,8 @@ animation:cardIn .6s var(--ease) forwards;
 
 .card:hover{
 transform:translateY(-10px);
-box-shadow:0 22px 45px rgba(0,0,0,.35);
+box-shadow:0 22px 45px rgba(0,0,0,.4);
+border-color:rgba(255,209,102,.3);
 }
 
 .card-img-wrap{
@@ -626,6 +715,32 @@ box-shadow:0 22px 45px rgba(0,0,0,.35);
 
 .card:hover img{
     transform:scale(1.08);
+}
+
+/* Scrim halus di bawah gambar supaya tag kategori & transisi ke konten terasa lebih dalam/rapi */
+.card-img-scrim{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(23,23,25,.75) 100%);
+    pointer-events:none;
+}
+
+.card-tag{
+    position:absolute;
+    top:14px;
+    left:14px;
+    padding:6px 14px;
+    border-radius:30px;
+    background:rgba(20,20,22,.55);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.18);
+    color:var(--accent);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    z-index:2;
 }
 
 .wishlist-btn{
@@ -688,41 +803,88 @@ box-shadow:0 22px 45px rgba(0,0,0,.35);
 }
 
 .card-content{
-padding:25px;
+padding:22px 24px 24px;
 display:flex;
 flex-direction:column;
 flex:1;
 }
 
 .card h3{
-margin-bottom:10px;
+margin-bottom:8px;
+font-size:19px;
+}
+
+.card-content > p{
+    color:var(--text-muted);
+    font-size:14px;
+    line-height:1.6;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    margin-bottom:18px;
+}
+
+.card-footer{
+    margin-top:auto;
+    padding-top:16px;
+    border-top:1px solid rgba(255,255,255,.08);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.card-price{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    min-width:0;
+}
+
+.card-price-label{
+    font-size:11px;
+    color:var(--text-muted);
+    text-transform:uppercase;
+    letter-spacing:.05em;
 }
 
 .price{
-font-size:24px;
+font-size:21px;
 color:#ffffff;
 font-weight:700;
-margin:15px 0;
+white-space:nowrap;
 }
 
 .buy{
-margin-top:auto;
-display:block;
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:#FFD166;
-color:#222;
-font-size:16px;
-font-weight:600;
-cursor:pointer;
-transition:.3s;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 20px;
+    border:none;
+    border-radius:12px;
+    background:var(--accent);
+    color:#222;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:transform .3s var(--ease), background .3s var(--ease), box-shadow .3s var(--ease);
+    flex-shrink:0;
+}
+
+.buy i{
+    font-size:12px;
+    transition:transform .3s var(--ease);
 }
 
 .buy:hover{
 transform:translateY(-3px);
 background:white;
+box-shadow:0 10px 22px rgba(255,209,102,.3);
+}
+
+.buy:hover i{
+    transform:translateX(3px);
 }
 
 .features{
@@ -783,70 +945,236 @@ font-size:30px;
 margin-top:8px;
 }
 
-.contact{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 60px;
-    justify-items: center;
+/* ===================== */
+/* HALAMAN ABOUT US (about.html) */
+/* ===================== */
+.about-story{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:70px;
+    align-items:center;
+    max-width:1200px;
+    margin:0 auto;
 }
 
-.contact-info{
-    max-width: 700px;
-    text-align: center;
+.about-eyebrow{
+    color:var(--accent);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+    display:block;
 }
 
-.contact-info h3{
-font-size:35px;
-margin-bottom:20px;
+.about-gallery{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:16px;
 }
 
-.contact-info p{
-color:#bbb;
-line-height:1.8;
-margin-bottom:30px;
+.about-gallery img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:18px;
+    box-shadow:0 20px 45px rgba(0,0,0,.4);
+    display:block;
 }
 
-.contact-item{
-display:flex;
-align-items:center;
-margin-bottom:20px;
-font-size:18px;
+.about-gallery-main{
+    grid-row:span 2;
+    height:100%;
 }
 
-.contact-item i{
-width:50px;
-height:50px;
-background:#35363A;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-margin-right:15px;
-color:#FFD166;
+.about-gallery-main img{ height:100%; min-height:280px; }
+.about-gallery-side img{ height:132px; margin-bottom:16px; }
+.about-gallery-side img:last-child{ margin-bottom:0; }
+
+.about-cta{
+    max-width:900px;
+    margin:0 auto;
+    text-align:center;
+    background:linear-gradient(135deg, rgba(255,209,102,.12), rgba(255,158,109,.06));
+    border:1px solid rgba(255,209,102,.25);
+    border-radius:28px;
+    padding:60px 40px;
 }
 
-.contact-form{
-background:#35363A;
-padding:40px;
-border-radius:20px;
+.about-cta h2{
+    font-size:32px;
+    margin-bottom:14px;
 }
 
-.contact-form input,
-.contact-form textarea{
-width:100%;
-padding:18px;
-margin-bottom:20px;
-background:#28282B;
-border:none;
-border-radius:10px;
-color:white;
-font-size:16px;
+.about-cta p{
+    color:var(--text-muted);
+    max-width:560px;
+    margin:0 auto 28px;
+    line-height:1.7;
 }
 
-.contact-form textarea{
-height:170px;
-resize:none;
+/* ===================== */
+/* HALAMAN CONTACT US (contact.html) */
+/* ===================== */
+.page-hero{
+    position:relative;
+    padding:150px 10% 90px;
+    text-align:center;
+    overflow:hidden;
 }
+
+.page-hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(255,209,102,.10), transparent 45%),
+        radial-gradient(circle at 85% 15%, rgba(255,158,109,.10), transparent 45%);
+    pointer-events:none;
+}
+
+.page-hero-eyebrow{
+    display:inline-block;
+    padding:7px 18px;
+    border-radius:30px;
+    border:1px solid rgba(255,209,102,.35);
+    color:var(--accent);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    margin-bottom:22px;
+}
+
+.page-hero h1{
+    font-size:46px;
+    margin-bottom:16px;
+}
+
+.page-hero p{
+    color:var(--text-muted);
+    max-width:600px;
+    margin:0 auto;
+    font-size:17px;
+    line-height:1.7;
+}
+
+/* Perforasi filmstrip tipis sebagai aksen tanda tangan visual StarTone,
+   mengaitkan halaman dengan dunia editing foto & preset */
+.filmstrip-divider{
+    height:14px;
+    max-width:340px;
+    margin:34px auto 0;
+    background-image:radial-gradient(circle, rgba(255,255,255,.25) 2.5px, transparent 2.6px);
+    background-size:20px 14px;
+    background-repeat:repeat-x;
+    background-position:center;
+    opacity:.7;
+}
+
+.contact-methods{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:24px;
+}
+
+.contact-method-card{
+    background:linear-gradient(165deg,#3b3c41,#2e2f33);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:20px;
+    padding:34px 26px;
+    text-align:center;
+    transition:transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+}
+
+.contact-method-card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(255,209,102,.35);
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
+}
+
+.contact-method-icon{
+    width:64px;
+    height:64px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    background:rgba(255,209,102,.1);
+    color:var(--accent);
+}
+
+.contact-method-card h3{
+    font-size:19px;
+    margin-bottom:10px;
+}
+
+.contact-method-card p{
+    color:var(--text-muted);
+    font-size:13.5px;
+    line-height:1.6;
+    margin-bottom:22px;
+    min-height:44px;
+}
+
+.contact-method-value{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background:rgba(255,255,255,.05);
+    border-radius:12px;
+    padding:12px 14px;
+    margin-bottom:16px;
+    font-size:13.5px;
+    word-break:break-word;
+}
+
+.contact-method-value span{
+    flex:1;
+    text-align:left;
+    overflow-wrap:anywhere;
+}
+
+.contact-method-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    padding:13px 16px;
+    border-radius:12px;
+    background:var(--accent);
+    color:#222;
+    font-weight:700;
+    font-size:14px;
+    text-decoration:none;
+    transition:transform .3s var(--ease), background .3s var(--ease);
+}
+
+.contact-method-btn:hover{
+    background:white;
+    transform:translateY(-3px);
+}
+
+.contact-note{
+    max-width:700px;
+    margin:60px auto 0;
+    text-align:center;
+    padding:26px 30px;
+    border-radius:18px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.07);
+    color:var(--text-muted);
+    font-size:14.5px;
+    line-height:1.8;
+}
+
+.contact-note b{ color:#fff; }
 
 .feature{
     background:#ffffff;   
@@ -960,6 +1288,9 @@ margin-top:60px;
 @media (max-width: 1024px) {
     .grid { grid-template-columns: repeat(2, 1fr); }
     .about { gap: 30px; }
+    .contact-methods { grid-template-columns: repeat(2, 1fr); }
+    .about-gallery { grid-template-columns: repeat(2, 1fr); }
+    .shop-stats-strip { flex-wrap: wrap; }
 }
 
 @media (max-width: 768px) {
@@ -1017,6 +1348,9 @@ margin-top:60px;
     .logo { font-size: 19px; }
 
     /* Toolbar & Fitur Tambahan */
+    .shop-toolbar-panel{ margin-top:-18px; border-radius:18px; padding:16px; }
+    .shop-stats-strip{ flex-wrap:wrap; gap:10px; }
+    .shop-stat-pill{ padding:10px 14px; flex:1; min-width:120px; }
     .shop-toolbar{ flex-direction:column; align-items:stretch; }
     .shop-controls{ justify-content:stretch; }
     .shop-controls select,
@@ -1034,6 +1368,7 @@ margin-top:60px;
         height: 120px;
         border-radius: 14px 14px 0 0;
     }
+    .card-tag { top: 8px; left: 8px; padding: 4px 10px; font-size: 9px; }
     .card-content { padding: 12px; }
     .card h3 {
         font-size: 13px;
@@ -1042,18 +1377,18 @@ margin-top:60px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .card-content p {
+    .card-content > p {
         font-size: 11px;
         line-height: 1.4;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        margin-bottom: 10px;
     }
-    .price { font-size: 14px; margin: 8px 0; }
-    .buy { padding: 9px; font-size: 12px; border-radius: 8px; }
+    .card-footer { padding-top: 8px; gap: 6px; }
+    .card-price-label { font-size: 9px; }
+    .price { font-size: 14px; }
+    .buy { padding: 8px 10px; font-size: 11px; border-radius: 8px; gap: 4px; }
+    .buy i { font-size: 10px; }
     .wishlist-btn { width: 28px; height: 28px; font-size: 12px; top: 6px; right: 6px; }
-    .skeleton-card { height: 220px; }
+    .skeleton-card { height: 240px; }
 
     /* Why Choose Us (4 Kolom) */
     .features {
@@ -1098,6 +1433,17 @@ margin-top:60px;
     .hero h1 { font-size: 2.2rem; }
     .hero p { font-size: 1rem; }
     .section { padding: 60px 4%; }
+
+    /* Halaman About / Contact / Shop (page-hero & turunannya) */
+    .page-hero { padding: 120px 6% 60px; }
+    .page-hero h1 { font-size: 30px; }
+    .page-hero p { font-size: 14.5px; }
+    .contact-methods { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .contact-method-card { padding: 24px 18px; }
+    .about-gallery { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .about-story { grid-template-columns: 1fr !important; gap: 30px; }
+    .shop-stats-strip { gap: 10px; }
+    .shop-stat-pill { padding: 12px 16px; }
 }
 
 @media (max-width: 480px) {
@@ -1110,6 +1456,11 @@ margin-top:60px;
     .about-content p { font-size: 11px; }
     .stat h2 { font-size: 16px; }
     .stat p { font-size: 10px; }
+
+    .page-hero { padding: 100px 5% 50px; }
+    .page-hero h1 { font-size: 24px; }
+    .contact-methods { grid-template-columns: 1fr; }
+    .about-gallery { grid-template-columns: 1fr 1fr; }
 }
 
 /* =====================================================

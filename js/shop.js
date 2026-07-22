@@ -14,7 +14,8 @@ import {
     attachGridEvents,
     createProductModalController,
     subscribeToProducts,
-    getWishlist
+    getWishlist,
+    escapeHTML
 } from "./product-shared.js";
 
 const grid = document.getElementById("shopProductsGrid");
@@ -25,6 +26,7 @@ const searchInput = document.getElementById("shopProductSearch");
 const sortSelect = document.getElementById("shopProductSort");
 const wishlistFilterBtn = document.getElementById("shopWishlistFilterBtn");
 const categoryPills = document.getElementById("shopCategoryPills");
+const resultsCount = document.getElementById("shopResultsCount");
 
 let productsCache = [];
 let currentSearch = "";
@@ -81,6 +83,12 @@ function renderProducts() {
     if (!grid) return;
 
     const products = getVisibleProducts();
+
+    if (resultsCount) {
+        resultsCount.innerHTML = products.length
+            ? `Menampilkan <b>${products.length}</b> preset${wishlistOnly ? " favorit" : ""}${currentCategory !== "all" ? ` di kategori <b>${escapeHTML(currentCategory)}</b>` : ""}`
+            : "";
+    }
 
     if (products.length === 0) {
         grid.innerHTML = `
