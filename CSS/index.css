@@ -1,5 +1,5 @@
 :root{
-    --bg:#28282B;
+    --bg:#090909;
     --bg-alt:#35363A;
     --accent:#FFD166;
     --accent-2:#ff9e6d;
@@ -38,7 +38,7 @@ h1,h2,h3,h4,.logo{
 ::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
 
 body{
-background:#28282B;
+background:#090909;
 color:white;
 opacity:0;
 animation:bodyFadeIn .6s var(--ease) forwards;
@@ -141,7 +141,7 @@ header{
     justify-content:space-between;
     align-items:center;
     padding:20px 10%;
-    background:rgba(40,40,43,.85);
+    background:rgba(9,9,9,.85);
     backdrop-filter:blur(25px);
     -webkit-backdrop-filter:blur(25px);
     border-bottom:1px solid rgba(255,255,255,.08);
@@ -153,7 +153,16 @@ header{
 .logo{
 font-size:28px;
 font-weight:800;
+color:#ffffff;
+text-decoration:none;
 transition:transform .3s var(--ease);
+}
+
+.logo:visited,
+.logo:hover,
+.logo:active{
+    color:#ffffff;
+    text-decoration:none;
 }
 
 .logo:hover{
@@ -357,7 +366,7 @@ transform:translateY(-4px);
     content:"";
     position:absolute;
     inset:0;
-    background:linear-gradient(180deg, rgba(40,40,43,.55) 0%, rgba(40,40,43,.97) 92%);
+    background:linear-gradient(180deg, rgba(9,9,9,.55) 0%, rgba(9,9,9,.97) 92%);
 }
 
 .shop-hero > *{
@@ -400,41 +409,6 @@ transform:translateY(-4px);
     color:var(--text-muted);
     max-width:600px;
     margin:0 auto 30px;
-}
-
-/* Strip statistik singkat untuk menambah kredibilitas & mengurangi kesan polos */
-.shop-stats-strip{
-    display:flex;
-    justify-content:center;
-    gap:16px;
-    margin-top:6px;
-}
-
-.shop-stat-pill{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;
-    padding:14px 22px;
-}
-
-.shop-stat-pill i{
-    color:var(--accent);
-    font-size:18px;
-}
-
-.shop-stat-pill strong{
-    display:block;
-    font-size:16px;
-    line-height:1.2;
-}
-
-.shop-stat-pill span{
-    display:block;
-    font-size:11.5px;
-    color:var(--text-muted);
 }
 
 @media (max-width:768px){
@@ -653,7 +627,7 @@ transform:translateY(-4px);
 
 .section{
 padding:90px 10%;
-background:#28282B;
+background:var(--bg);
 color:white;
 }
 
@@ -948,49 +922,6 @@ margin-top:8px;
 /* ===================== */
 /* HALAMAN ABOUT US (about.html) */
 /* ===================== */
-.about-story{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:70px;
-    align-items:center;
-    max-width:1200px;
-    margin:0 auto;
-}
-
-.about-eyebrow{
-    color:var(--accent);
-    font-size:12.5px;
-    font-weight:700;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    margin-bottom:14px;
-    display:block;
-}
-
-.about-gallery{
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:16px;
-}
-
-.about-gallery img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    border-radius:18px;
-    box-shadow:0 20px 45px rgba(0,0,0,.4);
-    display:block;
-}
-
-.about-gallery-main{
-    grid-row:span 2;
-    height:100%;
-}
-
-.about-gallery-main img{ height:100%; min-height:280px; }
-.about-gallery-side img{ height:132px; margin-bottom:16px; }
-.about-gallery-side img:last-child{ margin-bottom:0; }
-
 .about-cta{
     max-width:900px;
     margin:0 auto;
@@ -1016,62 +947,6 @@ margin-top:8px;
 /* ===================== */
 /* HALAMAN CONTACT US (contact.html) */
 /* ===================== */
-.page-hero{
-    position:relative;
-    padding:150px 10% 90px;
-    text-align:center;
-    overflow:hidden;
-}
-
-.page-hero::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-        radial-gradient(circle at 15% 20%, rgba(255,209,102,.10), transparent 45%),
-        radial-gradient(circle at 85% 15%, rgba(255,158,109,.10), transparent 45%);
-    pointer-events:none;
-}
-
-.page-hero-eyebrow{
-    display:inline-block;
-    padding:7px 18px;
-    border-radius:30px;
-    border:1px solid rgba(255,209,102,.35);
-    color:var(--accent);
-    font-size:12.5px;
-    font-weight:700;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    margin-bottom:22px;
-}
-
-.page-hero h1{
-    font-size:46px;
-    margin-bottom:16px;
-}
-
-.page-hero p{
-    color:var(--text-muted);
-    max-width:600px;
-    margin:0 auto;
-    font-size:17px;
-    line-height:1.7;
-}
-
-/* Perforasi filmstrip tipis sebagai aksen tanda tangan visual StarTone,
-   mengaitkan halaman dengan dunia editing foto & preset */
-.filmstrip-divider{
-    height:14px;
-    max-width:340px;
-    margin:34px auto 0;
-    background-image:radial-gradient(circle, rgba(255,255,255,.25) 2.5px, transparent 2.6px);
-    background-size:20px 14px;
-    background-repeat:repeat-x;
-    background-position:center;
-    opacity:.7;
-}
-
 .contact-methods{
     max-width:1100px;
     margin:0 auto;
@@ -1086,6 +961,10 @@ margin-top:8px;
     border-radius:20px;
     padding:34px 26px;
     text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    height:100%;
     transition:transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
 }
 
@@ -1126,6 +1005,7 @@ margin-top:8px;
     align-items:center;
     justify-content:center;
     gap:8px;
+    width:100%;
     background:rgba(255,255,255,.05);
     border-radius:12px;
     padding:12px 14px;
@@ -1153,6 +1033,7 @@ margin-top:8px;
     font-weight:700;
     font-size:14px;
     text-decoration:none;
+    margin-top:auto;
     transition:transform .3s var(--ease), background .3s var(--ease);
 }
 
@@ -1160,21 +1041,6 @@ margin-top:8px;
     background:white;
     transform:translateY(-3px);
 }
-
-.contact-note{
-    max-width:700px;
-    margin:60px auto 0;
-    text-align:center;
-    padding:26px 30px;
-    border-radius:18px;
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.07);
-    color:var(--text-muted);
-    font-size:14.5px;
-    line-height:1.8;
-}
-
-.contact-note b{ color:#fff; }
 
 .feature{
     background:#ffffff;   
@@ -1289,8 +1155,6 @@ margin-top:60px;
     .grid { grid-template-columns: repeat(2, 1fr); }
     .about { gap: 30px; }
     .contact-methods { grid-template-columns: repeat(2, 1fr); }
-    .about-gallery { grid-template-columns: repeat(2, 1fr); }
-    .shop-stats-strip { flex-wrap: wrap; }
 }
 
 @media (max-width: 768px) {
@@ -1349,8 +1213,6 @@ margin-top:60px;
 
     /* Toolbar & Fitur Tambahan */
     .shop-toolbar-panel{ margin-top:-18px; border-radius:18px; padding:16px; }
-    .shop-stats-strip{ flex-wrap:wrap; gap:10px; }
-    .shop-stat-pill{ padding:10px 14px; flex:1; min-width:120px; }
     .shop-toolbar{ flex-direction:column; align-items:stretch; }
     .shop-controls{ justify-content:stretch; }
     .shop-controls select,
@@ -1434,16 +1296,9 @@ margin-top:60px;
     .hero p { font-size: 1rem; }
     .section { padding: 60px 4%; }
 
-    /* Halaman About / Contact / Shop (page-hero & turunannya) */
-    .page-hero { padding: 120px 6% 60px; }
-    .page-hero h1 { font-size: 30px; }
-    .page-hero p { font-size: 14.5px; }
+    /* Halaman About / Contact / Shop */
     .contact-methods { grid-template-columns: 1fr 1fr; gap: 16px; }
     .contact-method-card { padding: 24px 18px; }
-    .about-gallery { grid-template-columns: 1fr 1fr; gap: 12px; }
-    .about-story { grid-template-columns: 1fr !important; gap: 30px; }
-    .shop-stats-strip { gap: 10px; }
-    .shop-stat-pill { padding: 12px 16px; }
 }
 
 @media (max-width: 480px) {
@@ -1457,10 +1312,7 @@ margin-top:60px;
     .stat h2 { font-size: 16px; }
     .stat p { font-size: 10px; }
 
-    .page-hero { padding: 100px 5% 50px; }
-    .page-hero h1 { font-size: 24px; }
     .contact-methods { grid-template-columns: 1fr; }
-    .about-gallery { grid-template-columns: 1fr 1fr; }
 }
 
 /* =====================================================
