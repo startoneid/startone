@@ -188,26 +188,3 @@ document.addEventListener("click", (e) => {
 // oleh index.html dan shop.html).
 // ==============================
 
-// ==============================
-// Parallax Hero Background
-// ==============================
-
-const heroBgWrap = document.getElementById("heroBgWrap");
-
-if (heroBgWrap) {
-    let ticking = false;
-
-    const updateParallax = () => {
-        const offset = window.scrollY * 0.25;
-        heroBgWrap.style.transform = `translate3d(0, ${offset}px, 0)`;
-        ticking = false;
-    };
-
-    window.addEventListener("scroll", () => {
-        if (!ticking) {
-            window.requestAnimationFrame(updateParallax);
-            ticking = true;
-        }
-    }, { passive: true });
-}
-
