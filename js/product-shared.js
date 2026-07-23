@@ -99,6 +99,9 @@ export function cardHTML(p, index = 0) {
             <button class="wishlist-btn ${wished ? "active" : ""}" data-id="${p.id}" aria-label="Favorit" type="button">
                 <i class="fa-solid fa-heart"></i>
             </button>
+            <button class="card-quickview" type="button">
+                <i class="fa-solid fa-eye"></i> Lihat Detail
+            </button>
         </div>
         <div class="card-content">
             <h3>${escapeHTML(p.name)}</h3>

@@ -47,6 +47,81 @@ animation:bodyFadeIn .6s var(--ease) forwards;
 @keyframes bodyFadeIn{ to{ opacity:1; } }
 
 /* ===================== */
+/* LIVING BACKGROUND (bg-fx) */
+/* Lapisan latar hidup: mesh gradient, aurora, noise & partikel,
+   semuanya bergerak sangat pelan supaya tidak mengganggu konten. */
+/* ===================== */
+.bg-fx{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.bg-fx__mesh{
+    position:absolute;
+    inset:-15%;
+    background:
+        radial-gradient(circle at 18% 25%, rgba(255,209,102,.11), transparent 42%),
+        radial-gradient(circle at 82% 20%, rgba(255,158,109,.09), transparent 45%),
+        radial-gradient(circle at 30% 82%, rgba(120,140,255,.07), transparent 48%),
+        radial-gradient(circle at 78% 78%, rgba(255,209,102,.06), transparent 45%);
+    filter:blur(70px);
+    animation:meshDrift 46s ease-in-out infinite alternate;
+    will-change:transform;
+}
+
+@keyframes meshDrift{
+    0%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(3%,-3%) scale(1.06); }
+    100%{ transform:translate(-3%,2%) scale(1); }
+}
+
+.bg-fx__aurora{
+    position:absolute;
+    top:-25%;
+    left:-20%;
+    width:140%;
+    height:65%;
+    background:linear-gradient(120deg, rgba(255,209,102,.07), rgba(255,158,109,.05) 45%, rgba(120,140,255,.05) 75%);
+    filter:blur(95px);
+    opacity:.8;
+    animation:auroraMove 60s ease-in-out infinite alternate;
+    will-change:transform;
+}
+
+@keyframes auroraMove{
+    0%{ transform:translateX(0) rotate(0deg); }
+    100%{ transform:translateX(5%) rotate(2.5deg); }
+}
+
+.bg-fx__noise{
+    position:absolute;
+    inset:0;
+    opacity:.035;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.bg-fx__particle{
+    position:absolute;
+    bottom:-10%;
+    border-radius:50%;
+    filter:blur(2px);
+    background:rgba(255,209,102,.3);
+    opacity:0;
+    animation:particleFloat linear infinite;
+}
+
+@keyframes particleFloat{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    8%{ opacity:.5; }
+    92%{ opacity:.4; }
+    100%{ transform:translateY(-115vh) translateX(30px); opacity:0; }
+}
+
+/* ===================== */
 /* PRELOADER */
 /* ===================== */
 .preloader{
@@ -260,6 +335,18 @@ header.scrolled{
     color:white;
 }
 
+/* Wrapper terpisah dipakai untuk efek parallax (digeser via JS saat scroll),
+   sementara zoom lambat tetap berjalan di elemen <img> itu sendiri */
+.hero-bg-wrap{
+    position:absolute;
+    top:-8%;
+    left:0;
+    width:100%;
+    height:116%;
+    z-index:-4;
+    will-change:transform;
+}
+
 .hero-bg{
     position:absolute;
     top:0;
@@ -267,7 +354,6 @@ header.scrolled{
     width:100%;
     height:100%;
     object-fit:cover;
-    z-index:-2;
     transform-origin:center center;
     animation:heroBgZoom 22s ease-in-out infinite alternate;
     will-change:transform;
@@ -279,6 +365,29 @@ header.scrolled{
     100%{ transform:scale(1.12); }
 }
 
+/* Gradient warna yang bergerak sangat pelan di atas foto, menyatu dengan
+   overlay gelap supaya tone brand tetap terasa hidup tanpa menutupi foto */
+.hero-gradient-fx{
+    position:absolute;
+    inset:0;
+    z-index:-3;
+    background:linear-gradient(120deg,
+        rgba(255,209,102,.28),
+        rgba(255,158,109,.2) 35%,
+        rgba(120,140,255,.16) 65%,
+        rgba(255,209,102,.28));
+    background-size:320% 320%;
+    mix-blend-mode:overlay;
+    opacity:.85;
+    animation:heroGradientMove 26s ease-in-out infinite alternate;
+}
+
+@keyframes heroGradientMove{
+    0%{ background-position:0% 50%; }
+    50%{ background-position:100% 50%; }
+    100%{ background-position:0% 50%; }
+}
+
 .hero::before{
     content:"";
     position:absolute;
@@ -287,8 +396,71 @@ header.scrolled{
         rgba(0,0,0,.75),
         rgba(0,0,0,.45)
     );
-    z-index:-1;
+    z-index:-2;
 }
+
+/* Bola-bola blur mengambang perlahan untuk menambah kedalaman visual hero */
+.hero-blur-circle{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(55px);
+    z-index:-1;
+    pointer-events:none;
+    opacity:.5;
+}
+
+.hero-blur-circle--1{
+    width:260px;
+    height:260px;
+    top:12%;
+    left:8%;
+    background:rgba(255,209,102,.5);
+    animation:heroCircleFloat 16s ease-in-out infinite;
+}
+
+.hero-blur-circle--2{
+    width:220px;
+    height:220px;
+    bottom:14%;
+    right:10%;
+    background:rgba(255,158,109,.45);
+    animation:heroCircleFloat 20s ease-in-out infinite reverse;
+}
+
+.hero-blur-circle--3{
+    width:160px;
+    height:160px;
+    top:55%;
+    right:26%;
+    background:rgba(120,140,255,.35);
+    animation:heroCircleFloat 24s ease-in-out infinite;
+    animation-delay:2s;
+}
+
+@keyframes heroCircleFloat{
+    0%,100%{ transform:translate(0,0); }
+    50%{ transform:translate(24px,-34px); }
+}
+
+.hero-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 20px;
+    border-radius:30px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,209,102,.4);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    color:var(--accent);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:22px;
+}
+
+.hero-badge i{ font-size:11px; }
 
 .hero h1{
 font-size:60px;
@@ -627,8 +799,10 @@ transform:translateY(-4px);
 
 .section{
 padding:90px 10%;
-background:var(--bg);
+background:transparent;
 color:white;
+position:relative;
+z-index:1;
 }
 
 .title{
@@ -648,7 +822,6 @@ margin-bottom:50px;
 background:linear-gradient(165deg,#3b3c41,#2e2f33);
 color:white;
 border-radius:20px;
-overflow:hidden;
 border:1px solid rgba(255,255,255,.06);
 box-shadow:0 10px 25px rgba(0,0,0,.2);
 transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
@@ -664,6 +837,23 @@ animation:cardIn .6s var(--ease) forwards;
 
 @keyframes cardIn{
     to{ opacity:1; transform:translateY(0); }
+}
+
+/* Glow halo lembut di belakang kartu, muncul saat hover untuk kesan premium */
+.card::before{
+    content:"";
+    position:absolute;
+    inset:-14px;
+    z-index:-1;
+    border-radius:28px;
+    background:linear-gradient(135deg, rgba(255,209,102,.45), rgba(255,158,109,.35));
+    filter:blur(26px);
+    opacity:0;
+    transition:opacity .5s var(--ease);
+}
+
+.card:hover::before{
+    opacity:.6;
 }
 
 .card:hover{
@@ -697,6 +887,42 @@ border-color:rgba(255,209,102,.3);
     inset:0;
     background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(23,23,25,.75) 100%);
     pointer-events:none;
+    transition:background .4s var(--ease);
+}
+
+.card:hover .card-img-scrim{
+    background:linear-gradient(180deg, rgba(9,9,9,.15) 0%, rgba(9,9,9,.85) 100%);
+}
+
+/* Tombol "Lihat Detail" muncul di tengah gambar saat kartu di-hover */
+.card-quickview{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(.85);
+    z-index:3;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 22px;
+    border:1px solid rgba(255,255,255,.3);
+    border-radius:30px;
+    background:rgba(15,15,17,.55);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    color:#fff;
+    font-size:13px;
+    font-weight:600;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .35s var(--ease), transform .35s var(--ease);
+}
+
+.card:hover .card-quickview{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+    pointer-events:auto;
 }
 
 .card-tag{
