@@ -1,4 +1,5 @@
 import { db } from "./firebase.js";
+import { sendTelegramNotification } from "./telegram.js";
 
 import {
 doc,
@@ -27,6 +28,10 @@ const orderRef = doc(db, "orders", orderID);
 const statusText = document.getElementById("paymentStatus");
 const downloadBtn = document.getElementById("downloadBtn");
 const paidBtn = document.getElementById("paidBtn");
+
+// Menyimpan data order terbaru (dari onSnapshot) supaya bisa dipakai
+// untuk mengisi notifikasi Telegram saat pembeli menekan "Saya Sudah Bayar".
+let currentOrderData = null;
 
 window.iHavePaid = async () => {
 
@@ -78,6 +83,18 @@ window.iHavePaid = async () => {
 
         });
 
+        // Kirim notifikasi Telegram ke admin begitu pembeli menekan
+        // "Saya Sudah Bayar" dan bukti pembayaran berhasil diupload.
+        sendTelegramNotification({
+            title: "💰 KONFIRMASI PEMBAYARAN",
+            name: currentOrderData?.customerName || "-",
+            email: currentOrderData?.email || "-",
+            product: currentOrderData?.product || "-",
+            total: "Rp " + Number(currentOrderData?.price || 0).toLocaleString("id-ID"),
+            invoice: currentOrderData?.invoiceNumber || orderID,
+            proof: result.secure_url
+        });
+
         alert("Bukti pembayaran berhasil dikirim!");
 
     } catch (err) {
@@ -99,6 +116,8 @@ onSnapshot(orderRef,(snapshot)=>{
 const data = snapshot.data();
 
 if(!data) return;
+
+currentOrderData = data;
 
 document.getElementById("invoiceNumber").textContent =
 data.invoiceNumber || "-";

@@ -38,8 +38,8 @@ h1,h2,h3,h4,.logo{
 ::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
 
 body{
-background:#090909;
-color:white;
+background:var(--bg);
+color:var(--text);
 opacity:0;
 animation:bodyFadeIn .6s var(--ease) forwards;
 }
@@ -208,6 +208,31 @@ nav a.active-link::after{
 
 nav a.active-link{
     color:var(--accent);
+}
+
+/* Ikon Pengaturan (gear) di navigasi - hanya ikon di Windows/desktop,
+   teks "Pengaturan" muncul lagi khusus di menu hamburger (mobile) */
+.settings-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+}
+
+.settings-link:hover{
+    color:var(--accent);
+}
+
+.settings-link i{
+    font-size:18px;
+    transition:transform .4s var(--ease);
+}
+
+.settings-link:hover i{
+    transform:rotate(90deg);
+}
+
+.settings-text{
+    display:none;
 }
 
 /* Hamburger (mobile nav toggle) */
@@ -799,6 +824,25 @@ font-size:19px;
     margin-bottom:18px;
 }
 
+.card-sold{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    width:fit-content;
+    margin-bottom:14px;
+    padding:4px 10px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--accent);
+    background:rgba(255,209,102,.12);
+    border:1px solid rgba(255,209,102,.25);
+    border-radius:20px;
+}
+
+.card-sold i{
+    font-size:11px;
+}
+
 .card-footer{
     margin-top:auto;
     padding-top:16px;
@@ -1194,6 +1238,14 @@ margin-top:60px;
         border-bottom:1px solid rgba(255,255,255,.06);
     }
 
+    .settings-link{
+        justify-content:flex-start;
+    }
+
+    .settings-text{
+        display:inline;
+    }
+
     .nav-overlay{
         position:fixed;
         inset:0;
@@ -1244,6 +1296,7 @@ margin-top:60px;
         line-height: 1.4;
         margin-bottom: 10px;
     }
+    .card-sold { font-size: 10px; padding: 3px 8px; margin-bottom: 8px; }
     .card-footer { padding-top: 8px; gap: 6px; }
     .card-price-label { font-size: 9px; }
     .price { font-size: 14px; }
@@ -1418,6 +1471,124 @@ margin-top:60px;
     .product-modal-content img{ height:180px; }
 }
 
+/* =====================================================
+   ULASAN PELANGGAN (REVIEWS)
+===================================================== */
+
+.reviews-heading{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:40px;
+}
+
+.reviews-heading .section-title{
+    margin-bottom:0;
+}
+
+.reviews-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+}
+
+.review-card{
+    background:var(--bg-alt);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;
+    padding:22px;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.review-card-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:14px;
+}
+
+.review-avatar{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#28282B;
+    font-weight:800;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+
+.review-card-top h4{
+    font-size:16px;
+    margin-bottom:2px;
+}
+
+.review-product{
+    font-size:12px;
+    color:var(--text-muted);
+}
+
+.review-stars{
+    color:var(--accent);
+    font-size:15px;
+    letter-spacing:3px;
+}
+
+.review-modal-content label{
+    display:block;
+    margin:16px 0 8px;
+    font-size:14px;
+    font-weight:600;
+    color:#ddd;
+}
+
+.review-modal-content input[type="text"]{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,.1);
+    background:var(--bg);
+    color:#fff;
+    font-size:14px;
+}
+
+.review-modal-content input[type="text"]:focus{
+    outline:none;
+    border-color:var(--accent);
+}
+
+.star-rating{
+    display:flex;
+    gap:10px;
+    font-size:28px;
+    color:var(--accent);
+}
+
+.star-rating i{
+    cursor:pointer;
+    transition:transform .2s var(--ease);
+}
+
+.star-rating i:hover,
+.star-rating i.active{
+    transform:scale(1.15);
+}
+
+@media (max-width: 1024px) {
+    .reviews-grid{ grid-template-columns:repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .reviews-heading{ margin-bottom:24px; }
+    .reviews-grid{ grid-template-columns:1fr; gap:16px; }
+    .review-card{ padding:18px; }
+}
+
 /* ===================== */
 /* AKSESIBILITAS: HORMATI PREFERENSI "REDUCED MOTION" */
 /* ===================== */
@@ -1428,4 +1599,206 @@ margin-top:60px;
         transition-duration:.001ms !important;
         scroll-behavior:auto !important;
     }
+}
+/* =====================================================================
+   MODE TAMPILAN: GELAP (default) / TERANG
+   Diatur lewat halaman Pengaturan (settings.html) & js/theme.js, yang
+   menambahkan atribut data-theme="light" pada <html> serta menyimpan
+   pilihan pengguna di localStorage supaya tetap konsisten antar halaman.
+===================================================================== */
+
+html[data-theme="light"]{
+    --bg:#FFFFFF;
+    --bg-alt:#D8DEEC;
+    --accent:#00BFFF;
+    --accent-2:#B4CFEC;
+    --text:#000080;
+    --text-muted:#5b6b9e;
+}
+
+/* Latar & teks dasar */
+html[data-theme="light"] body{
+    background:var(--bg);
+    color:var(--text);
+}
+
+html[data-theme="light"] .section{
+    background:var(--bg);
+    color:var(--text);
+}
+
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] .logo,
+html[data-theme="light"] .logo span,
+html[data-theme="light"] .title{
+    color:var(--text);
+    -webkit-text-fill-color:unset;
+}
+
+html[data-theme="light"] .logo span{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* Header & navigasi */
+html[data-theme="light"] header{
+    background:rgba(255,255,255,.9);
+    border-bottom:1px solid rgba(0,0,128,.1);
+    box-shadow:0 8px 30px rgba(0,0,128,.08);
+}
+
+html[data-theme="light"] header.scrolled{
+    box-shadow:0 8px 30px rgba(0,0,128,.12);
+}
+
+html[data-theme="light"] nav a{
+    color:var(--text);
+}
+
+html[data-theme="light"] nav a:hover,
+html[data-theme="light"] nav a.active-link{
+    color:var(--accent);
+}
+
+html[data-theme="light"] .hamburger span{
+    background:var(--text);
+}
+
+html[data-theme="light"] .nav-overlay,
+html[data-theme="light"] nav{
+    background:rgba(255,255,255,.98);
+}
+
+/* Efek dekoratif latar (mesh/aurora/noise/partikel) diredupkan supaya
+   tidak bentrok dengan latar terang */
+html[data-theme="light"] .bg-fx__mesh,
+html[data-theme="light"] .bg-fx__aurora,
+html[data-theme="light"] .bg-fx__noise,
+html[data-theme="light"] .bg-fx__particle,
+html[data-theme="light"] .hero-blur-circle,
+html[data-theme="light"] .hero-gradient-fx{
+    opacity:.25;
+}
+
+/* Tombol */
+html[data-theme="light"] .btn-primary{
+    background:var(--accent);
+    color:#ffffff;
+}
+
+html[data-theme="light"] .btn-outline{
+    color:var(--text);
+    border-color:rgba(0,0,128,.3);
+}
+
+/* Kartu produk & ulasan */
+html[data-theme="light"] .card,
+html[data-theme="light"] .review-card,
+html[data-theme="light"] .contact-method-card,
+html[data-theme="light"] .product-modal-content,
+html[data-theme="light"] .shop-toolbar-panel{
+    background:var(--bg-alt);
+    color:var(--text);
+    border-color:rgba(0,0,128,.1);
+}
+
+html[data-theme="light"] .shop-search input,
+html[data-theme="light"] .shop-controls select{
+    background:#ffffff;
+    color:var(--text);
+    border-color:rgba(0,0,128,.15);
+}
+
+html[data-theme="light"] .wishlist-filter-btn{
+    background:#ffffff;
+    color:var(--text);
+    border-color:rgba(0,0,128,.15);
+}
+
+html[data-theme="light"] .pill{
+    color:var(--text-muted);
+    border-color:rgba(0,0,128,.15);
+}
+
+html[data-theme="light"] .pill.active{
+    background:var(--accent);
+    color:#ffffff;
+    border-color:var(--accent);
+}
+
+html[data-theme="light"] .shop-results-count b{
+    color:var(--text);
+}
+
+html[data-theme="light"] .card-content > p,
+html[data-theme="light"] .card-price-label,
+html[data-theme="light"] .review-product,
+html[data-theme="light"] .product-modal-content p{
+    color:var(--text-muted);
+}
+
+html[data-theme="light"] .price,
+html[data-theme="light"] .card h3{
+    color:var(--text);
+}
+
+html[data-theme="light"] .card-sold{
+    color:#0077b3;
+    background:rgba(0,191,255,.12);
+    border-color:rgba(0,191,255,.3);
+}
+
+/* Form ulasan */
+html[data-theme="light"] .review-modal-content input[type="text"]{
+    background:#ffffff;
+    color:var(--text);
+    border-color:rgba(0,0,128,.15);
+}
+
+html[data-theme="light"] .review-modal-content label{
+    color:var(--text);
+}
+
+/* Footer */
+html[data-theme="light"] .footer{
+    background:var(--bg-alt);
+    color:var(--text);
+}
+
+html[data-theme="light"] .footer p,
+html[data-theme="light"] .footer li,
+html[data-theme="light"] .footer a{
+    color:var(--text-muted);
+}
+
+html[data-theme="light"] .copyright{
+    color:var(--text-muted);
+    border-top-color:rgba(0,0,128,.1);
+}
+
+/* Kotak fitur/statistik/about */
+html[data-theme="light"] .feature,
+html[data-theme="light"] .stat{
+    color:var(--text);
+    background:var(--bg-alt);
+    border:1px solid rgba(0,0,128,.08);
+}
+
+html[data-theme="light"] .contact-method-value{
+    background:rgba(0,0,128,.05);
+    color:var(--text);
+}
+
+html[data-theme="light"] .toast{
+    background:var(--bg-alt);
+    color:var(--text);
+}
+
+html[data-theme="light"] .skeleton-card{
+    background:var(--bg-alt);
 }

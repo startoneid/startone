@@ -7,6 +7,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<script src="js/theme.js"></script>
+
 <title>StarTone | Home</title>
 <!-- ===================== -->
 <!-- FAVICON -->
@@ -142,6 +144,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <a href="guide.html#tutorial">Tutorial</a>
 <a href="about.html">About</a>
 <a href="contact.html">Contact</a>
+<a href="settings.html" class="settings-link" aria-label="Pengaturan">
+    <i class="fa-solid fa-gear"></i>
+    <span class="settings-text">Pengaturan</span>
+</a>
 
 </nav>
 
@@ -213,6 +219,63 @@ Featured Collections
     </div>
 </div>
 
+<!-- ===================== -->
+<!-- ULASAN PELANGGAN -->
+<!-- ===================== -->
+<section class="section" id="reviews">
+
+<div class="reviews-heading" data-aos="fade-up">
+    <h2 class="title section-title">Ulasan Pelanggan</h2>
+    <button type="button" class="btn btn-primary" id="openReviewModalBtn">
+        <i class="fa-solid fa-pen"></i> Tulis Ulasan
+    </button>
+</div>
+
+<div class="reviews-grid" id="reviewsGrid">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+</div>
+
+</section>
+
+<!-- ===================== -->
+<!-- MODAL FORM ULASAN -->
+<!-- ===================== -->
+<div class="product-modal" id="reviewModal">
+    <div class="product-modal-content review-modal-content">
+        <button class="product-modal-close" id="reviewModalClose" aria-label="Tutup">&times;</button>
+
+        <h2>Tulis Ulasan</h2>
+        <p>Bagikan pengalamanmu memakai preset StarTone.</p>
+
+        <form id="reviewForm">
+
+            <label for="reviewName">Nama</label>
+            <input type="text" id="reviewName" placeholder="Nama kamu" maxlength="60" required>
+
+            <label for="reviewProduct">Produk yang Dibeli</label>
+            <input type="text" id="reviewProduct" placeholder="Contoh: Summer Tone" maxlength="100" required>
+
+            <label>Beri Bintang</label>
+            <div class="star-rating" id="starRating">
+                <i class="fa-regular fa-star" data-value="1"></i>
+                <i class="fa-regular fa-star" data-value="2"></i>
+                <i class="fa-regular fa-star" data-value="3"></i>
+                <i class="fa-regular fa-star" data-value="4"></i>
+                <i class="fa-regular fa-star" data-value="5"></i>
+            </div>
+            <input type="hidden" id="reviewRating" value="0">
+
+            <button type="submit" class="btn btn-primary" id="reviewSubmitBtn" style="width:100%;margin-top:10px;">
+                Kirim Ulasan
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
 <div id="footer-placeholder"></div>
 
 <!-- Toast Notification Container -->
@@ -227,6 +290,8 @@ Featured Collections
 <script src="js/index.js"></script>
 
 <script type="module" src="js/products.js"></script>
+
+<script type="module" src="js/reviews.js"></script>
 
 <script src="js/footer.js"></script>
 

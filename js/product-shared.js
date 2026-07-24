@@ -103,6 +103,7 @@ export function cardHTML(p, index = 0) {
         <div class="card-content">
             <h3>${escapeHTML(p.name)}</h3>
             <p>${escapeHTML(p.shortDesc)}</p>
+            <span class="card-sold"><i class="fa-solid fa-fire"></i> ${Number(p.itemsSold || 0).toLocaleString("id-ID")} Terjual</span>
             <div class="card-footer">
                 <div class="card-price">
                     <span class="card-price-label">Harga</span>
