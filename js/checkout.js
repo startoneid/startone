@@ -1,5 +1,3 @@
-import { sendTelegramNotification } from "./telegram.js";
-
 import { db } from "./firebase.js";
 
 import {
@@ -132,15 +130,6 @@ form.addEventListener("submit", async (e) => {
             downloadReady: false,
             downloadURL: "",
             createdAt: serverTimestamp()
-        });
-
-        await sendTelegramNotification({
-            title: "🛒 ORDER BARU",
-            name: firstName.trim() + " " + lastName.trim(),
-            email: email.trim(),
-            product: product,
-            total: "Rp " + price.toLocaleString("id-ID"),
-            invoice: invoiceNumber
         });
 
         localStorage.setItem("orderID", invoiceNumber);

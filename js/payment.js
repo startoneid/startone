@@ -85,10 +85,15 @@ window.iHavePaid = async () => {
 
         // Kirim notifikasi Telegram ke admin begitu pembeli menekan
         // "Saya Sudah Bayar" dan bukti pembayaran berhasil diupload.
+        // Menggunakan format notifikasi "ORDER BARU" (nama, email, nomor
+        // telepon, produk, total, invoice) karena notif order-baru saat
+        // checkout sudah dihapus — jadi ini jadi satu-satunya notif Telegram
+        // yang dikirim per order, begitu bukti pembayaran masuk.
         sendTelegramNotification({
-            title: "💰 KONFIRMASI PEMBAYARAN",
+            title: "🛒 ORDER BARU",
             name: currentOrderData?.customerName || "-",
             email: currentOrderData?.email || "-",
+            phone: currentOrderData?.phone || "-",
             product: currentOrderData?.product || "-",
             total: "Rp " + Number(currentOrderData?.price || 0).toLocaleString("id-ID"),
             invoice: currentOrderData?.invoiceNumber || orderID,

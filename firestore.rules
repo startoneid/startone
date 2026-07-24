@@ -125,10 +125,13 @@ service cloud.firestore {
         && request.resource.data.product is string
         && request.resource.data.product.size() > 0
         && request.resource.data.product.size() <= 100
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 300
         && request.resource.data.rating is int
         && request.resource.data.rating >= 1
         && request.resource.data.rating <= 5
-        && request.resource.data.keys().hasOnly(["name", "product", "rating", "createdAt"]);
+        && request.resource.data.keys().hasOnly(["name", "product", "message", "rating", "createdAt"]);
 
       allow update, delete: if isAdmin();
     }

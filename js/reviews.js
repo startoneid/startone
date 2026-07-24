@@ -32,6 +32,7 @@ const openReviewModalBtn = document.getElementById("openReviewModalBtn");
 const reviewForm = document.getElementById("reviewForm");
 const reviewNameInput = document.getElementById("reviewName");
 const reviewProductInput = document.getElementById("reviewProduct");
+const reviewMessageInput = document.getElementById("reviewMessage");
 const reviewRatingInput = document.getElementById("reviewRating");
 const reviewSubmitBtn = document.getElementById("reviewSubmitBtn");
 const starRating = document.getElementById("starRating");
@@ -120,6 +121,7 @@ function reviewCardHTML(review) {
             </div>
         </div>
         <div class="review-stars">${starsHTML(review.rating)}</div>
+        ${review.message ? `<p class="review-message">${escapeHTML(review.message)}</p>` : ""}
     </div>
     `;
 }
@@ -167,6 +169,7 @@ reviewForm?.addEventListener("submit", async (e) => {
 
     const name = reviewNameInput.value.trim();
     const product = reviewProductInput.value.trim();
+    const message = reviewMessageInput.value.trim();
     const rating = Number(reviewRatingInput.value);
 
     if (!name) {
@@ -175,6 +178,10 @@ reviewForm?.addEventListener("submit", async (e) => {
     }
     if (!product) {
         alert("Nama produk yang dibeli wajib diisi.");
+        return;
+    }
+    if (!message) {
+        alert("Pesan/komentar ulasan wajib diisi.");
         return;
     }
     if (!rating || rating < 1 || rating > 5) {
@@ -189,6 +196,7 @@ reviewForm?.addEventListener("submit", async (e) => {
         await addDoc(collection(db, "reviews"), {
             name,
             product,
+            message,
             rating,
             createdAt: serverTimestamp()
         });
@@ -196,6 +204,7 @@ reviewForm?.addEventListener("submit", async (e) => {
         window.showToast?.("Ulasan berhasil dikirim, terima kasih!", "fa-solid fa-star");
 
         reviewForm.reset();
+        reviewMessageInput.value = "";
         reviewRatingInput.value = "0";
         paintStars(0);
         closeReviewModal();

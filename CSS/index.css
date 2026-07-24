@@ -210,31 +210,6 @@ nav a.active-link{
     color:var(--accent);
 }
 
-/* Ikon Pengaturan (gear) di navigasi - hanya ikon di Windows/desktop,
-   teks "Pengaturan" muncul lagi khusus di menu hamburger (mobile) */
-.settings-link{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-}
-
-.settings-link:hover{
-    color:var(--accent);
-}
-
-.settings-link i{
-    font-size:18px;
-    transition:transform .4s var(--ease);
-}
-
-.settings-link:hover i{
-    transform:rotate(90deg);
-}
-
-.settings-text{
-    display:none;
-}
-
 /* Hamburger (mobile nav toggle) */
 .hamburger{
     display:none;
@@ -1238,14 +1213,6 @@ margin-top:60px;
         border-bottom:1px solid rgba(255,255,255,.06);
     }
 
-    .settings-link{
-        justify-content:flex-start;
-    }
-
-    .settings-text{
-        display:inline;
-    }
-
     .nav-overlay{
         position:fixed;
         inset:0;
@@ -1539,6 +1506,15 @@ margin-top:60px;
     letter-spacing:3px;
 }
 
+.review-message{
+    margin-top:12px;
+    font-size:13.5px;
+    line-height:1.6;
+    color:var(--text-muted);
+    white-space:pre-line;
+    word-break:break-word;
+}
+
 .review-modal-content label{
     display:block;
     margin:16px 0 8px;
@@ -1547,7 +1523,8 @@ margin-top:60px;
     color:#ddd;
 }
 
-.review-modal-content input[type="text"]{
+.review-modal-content input[type="text"],
+.review-modal-content textarea{
     width:100%;
     padding:14px;
     border-radius:10px;
@@ -1555,9 +1532,12 @@ margin-top:60px;
     background:var(--bg);
     color:#fff;
     font-size:14px;
+    font-family:inherit;
+    resize:vertical;
 }
 
-.review-modal-content input[type="text"]:focus{
+.review-modal-content input[type="text"]:focus,
+.review-modal-content textarea:focus{
     outline:none;
     border-color:var(--accent);
 }
@@ -1602,9 +1582,11 @@ margin-top:60px;
 }
 /* =====================================================================
    MODE TAMPILAN: GELAP (default) / TERANG
-   Diatur lewat halaman Pengaturan (settings.html) & js/theme.js, yang
-   menambahkan atribut data-theme="light" pada <html> serta menyimpan
-   pilihan pengguna di localStorage supaya tetap konsisten antar halaman.
+   Diatur lewat js/theme.js, yang menambahkan atribut data-theme="light"
+   pada <html> serta menyimpan pilihan pengguna di localStorage supaya
+   tetap konsisten antar halaman. (Halaman Pengaturan sudah dihapus;
+   saat ini mode Terang hanya bisa aktif kalau sebelumnya sempat
+   tersimpan di localStorage browser pengguna.)
 ===================================================================== */
 
 html[data-theme="light"]{
@@ -1754,7 +1736,8 @@ html[data-theme="light"] .card-sold{
 }
 
 /* Form ulasan */
-html[data-theme="light"] .review-modal-content input[type="text"]{
+html[data-theme="light"] .review-modal-content input[type="text"],
+html[data-theme="light"] .review-modal-content textarea{
     background:#ffffff;
     color:var(--text);
     border-color:rgba(0,0,128,.15);
