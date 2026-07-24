@@ -220,16 +220,30 @@ Featured Collections
 <section class="section" id="reviews">
 
 <div class="reviews-heading" data-aos="fade-up">
-    <h2 class="title section-title">Review</h2>
+    <h2 class="title section-title">Ulasan Pelanggan</h2>
     <button type="button" class="btn btn-primary" id="openReviewModalBtn">
         <i class="fa-solid fa-pen"></i> Tulis Ulasan
     </button>
 </div>
 
-<div class="reviews-grid" id="reviewsGrid">
-    <div class="skeleton-card"></div>
-    <div class="skeleton-card"></div>
-    <div class="skeleton-card"></div>
+<div class="reviews-carousel" data-aos="fade-up">
+
+    <button type="button" class="reviews-arrow reviews-arrow-prev" id="reviewsPrevBtn" aria-label="Ulasan sebelumnya">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <div class="reviews-viewport" id="reviewsViewport">
+        <div class="reviews-grid" id="reviewsGrid">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+    </div>
+
+    <button type="button" class="reviews-arrow reviews-arrow-next" id="reviewsNextBtn" aria-label="Ulasan berikutnya">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
 </div>
 
 </section>

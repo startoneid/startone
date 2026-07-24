@@ -26,6 +26,9 @@ function escapeHTML(str) {
 }
 
 const reviewsGrid = document.getElementById("reviewsGrid");
+const reviewsViewport = document.getElementById("reviewsViewport");
+const reviewsPrevBtn = document.getElementById("reviewsPrevBtn");
+const reviewsNextBtn = document.getElementById("reviewsNextBtn");
 const reviewModal = document.getElementById("reviewModal");
 const reviewModalClose = document.getElementById("reviewModalClose");
 const openReviewModalBtn = document.getElementById("openReviewModalBtn");
@@ -139,7 +142,92 @@ function renderReviews(reviews) {
     }
 
     reviewsGrid.innerHTML = reviews.map(reviewCardHTML).join("");
+    updateArrowState();
 }
+
+// ==============================================================
+// CAROUSEL: TOMBOL GESER (‹ ›) + AUTO-SCROLL SAAT IDLE
+// ==============================================================
+const AUTO_SCROLL_DELAY = 3000;   // jeda diam sebelum auto-scroll (ms)
+const AUTO_SCROLL_INTERVAL = 4000; // jarak antar auto-scroll (ms)
+
+let autoScrollTimer = null;
+let autoScrollStarter = null;
+
+function getStep() {
+    // Geser sejauh lebar satu kartu ulasan (termasuk gap-nya)
+    const firstCard = reviewsGrid?.querySelector(".review-card, .skeleton-card");
+    if (!firstCard) return reviewsViewport ? reviewsViewport.clientWidth : 0;
+    const gap = parseFloat(getComputedStyle(reviewsGrid).gap) || 0;
+    return firstCard.getBoundingClientRect().width + gap;
+}
+
+function updateArrowState() {
+    if (!reviewsViewport || !reviewsPrevBtn || !reviewsNextBtn) return;
+    const maxScroll = reviewsViewport.scrollWidth - reviewsViewport.clientWidth - 1;
+    reviewsPrevBtn.disabled = reviewsViewport.scrollLeft <= 0;
+    reviewsNextBtn.disabled = reviewsViewport.scrollLeft >= maxScroll || maxScroll <= 0;
+}
+
+function scrollByStep(direction) {
+    if (!reviewsViewport) return;
+    const maxScroll = reviewsViewport.scrollWidth - reviewsViewport.clientWidth - 1;
+
+    if (direction > 0 && reviewsViewport.scrollLeft >= maxScroll) {
+        // Sudah di ujung kanan, putar balik ke awal
+        reviewsViewport.scrollTo({ left: 0, behavior: "smooth" });
+        return;
+    }
+    if (direction < 0 && reviewsViewport.scrollLeft <= 0) {
+        reviewsViewport.scrollTo({ left: maxScroll, behavior: "smooth" });
+        return;
+    }
+
+    reviewsViewport.scrollBy({ left: direction * getStep(), behavior: "smooth" });
+}
+
+function stopAutoScroll() {
+    clearInterval(autoScrollTimer);
+    autoScrollTimer = null;
+}
+
+const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+function scheduleAutoScroll() {
+    if (prefersReducedMotion) return;
+    clearTimeout(autoScrollStarter);
+    stopAutoScroll();
+    autoScrollStarter = setTimeout(() => {
+        autoScrollTimer = setInterval(() => scrollByStep(1), AUTO_SCROLL_INTERVAL);
+    }, AUTO_SCROLL_DELAY);
+}
+
+function resetIdleTimer() {
+    scheduleAutoScroll();
+}
+
+reviewsPrevBtn?.addEventListener("click", () => {
+    scrollByStep(-1);
+    resetIdleTimer();
+});
+
+reviewsNextBtn?.addEventListener("click", () => {
+    scrollByStep(1);
+    resetIdleTimer();
+});
+
+reviewsViewport?.addEventListener("scroll", () => {
+    updateArrowState();
+});
+
+reviewsViewport?.addEventListener("mouseenter", stopAutoScroll);
+reviewsViewport?.addEventListener("mouseleave", resetIdleTimer);
+reviewsViewport?.addEventListener("touchstart", stopAutoScroll, { passive: true });
+reviewsViewport?.addEventListener("touchend", resetIdleTimer, { passive: true });
+
+window.addEventListener("resize", updateArrowState);
+
+resetIdleTimer();
 
 // ==============================================================
 // REALTIME LISTENER (ulasan terbaru di atas, maksimal 24 ulasan)
