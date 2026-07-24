@@ -6,6 +6,111 @@ Sebagian fitur **langsung aktif** tanpa perlu setting apa pun, sebagian lagi
 
 ---
 
+## 💳 WAJIB DILAKUKAN — Ganti Metode Pembayaran ke iPaymu
+
+QRIS statis + upload bukti manual **sudah dihapus total** dari situs ini.
+Sekarang semua transaksi diproses lewat **iPaymu** (Virtual Account,
+E-Wallet, QRIS, Transfer Bank, dll — pembeli tinggal pilih sendiri di
+halaman iPaymu), dan verifikasi pembayaran terjadi **otomatis** (Admin
+tidak perlu klik "Verifikasi" manual lagi untuk order lewat iPaymu).
+
+### File yang berubah/baru untuk fitur ini
+
+| File | Keterangan |
+|---|---|
+| `functions/api/ipaymu-create.js` | **Baru.** Cloudflare Function yang membuat transaksi pembayaran ke iPaymu, dipanggil otomatis oleh `checkout.js`. |
+| `functions/api/ipaymu-callback.js` | **Baru.** Cloudflare Function yang menerima notifikasi otomatis dari iPaymu, mengecek ulang status ke server iPaymu, lalu menandai order sebagai "verified" + mengirim email konfirmasi. |
+| `payment-success.html` | **Baru.** Halaman tujuan setelah pembeli kembali dari halaman pembayaran iPaymu (menggantikan `payment.html` lama). |
+| `js/payment-status.js` | **Baru.** Script realtime status pembayaran untuk `payment-success.html` (menggantikan `js/payment.js` lama). |
+| `js/checkout.js` | Diubah: setelah order tersimpan, sekarang memanggil `/api/ipaymu-create` lalu mengarahkan pembeli ke halaman pembayaran iPaymu (bukan lagi ke `payment.html`). |
+| `guide.html` | Diubah: teks langkah pembayaran disesuaikan (bukan lagi "scan QRIS"). |
+| `Admin/admin.js` | Diubah sedikit: kolom bukti bayar menampilkan "✅ iPaymu (Otomatis)" untuk order yang lunas lewat iPaymu. |
+| `firestore.rules` | Diubah: izin publik untuk mengisi bukti transfer manual dihapus (sudah tidak dibutuhkan). **Wajib di-publish ulang**, lihat bagian di bawah. |
+| `payment.html`, `js/payment.js` | **Dihapus.** Halaman QRIS manual + upload bukti lama, sudah tidak dipakai. |
+| `images/QRIS.png`, `images/qris tester.png`, `Admin/images/QRIS.png`, `Admin/images/qris tester.png` | **Dihapus.** Gambar QRIS statis, sudah tidak dipakai di mana pun. |
+
+### Langkah 1 — Daftar akun iPaymu & ambil kredensial
+
+1. Buka **https://my.ipaymu.com/register** dan daftar akun (gratis).
+2. Untuk **testing dulu** (sangat disarankan sebelum transaksi asli), daftar
+   juga akun terpisah di **https://sandbox.ipaymu.com** (mode sandbox
+   memakai VA & API Key yang BERBEDA dari mode production/live).
+3. Setelah login, buka menu **Integrasi / API** di dashboard iPaymu kamu.
+   Catat dua hal ini:
+   - **VA** (nomor Virtual Account akun kamu)
+   - **API Key**
+4. Kalau situs kamu punya lebih dari satu domain, tambahkan juga domainnya
+   di menu **API Integrasi → Multi Domain**.
+
+### Langkah 2 — Buat Service Account Firebase (supaya verifikasi bisa otomatis)
+
+Ini dibutuhkan supaya `functions/api/ipaymu-callback.js` bisa menandai
+order sebagai "verified" secara otomatis di Firestore begitu iPaymu
+mengonfirmasi pembayaran, **tanpa perlu melonggarkan Firestore Rules**
+untuk pengunjung biasa (yang justru akan membuka celah keamanan besar).
+
+1. Buka **https://console.firebase.google.com** → pilih project `startone-d8aee`.
+2. Klik ikon ⚙️ (Project Settings) → tab **Service accounts**.
+3. Klik **Generate new private key** → sebuah file `.json` akan terdownload.
+   **Simpan file ini baik-baik dan JANGAN dibagikan ke siapa pun** — file ini
+   setara dengan akses penuh ke database Firestore kamu.
+4. Buka file `.json` tersebut, cari dua field ini:
+   - `"client_email"` → nilainya akan kamu isi ke `FIREBASE_SERVICE_ACCOUNT_EMAIL`
+   - `"private_key"` → nilainya akan kamu isi ke `FIREBASE_SERVICE_ACCOUNT_KEY`
+     (copy **apa adanya**, termasuk baris `-----BEGIN PRIVATE KEY-----` dan
+     `-----END PRIVATE KEY-----`, serta karakter `\n` di dalamnya — jangan
+     diedit/dirapikan manual).
+
+### Langkah 3 — Isi Environment Variables di Cloudflare Pages
+
+Buka dashboard Cloudflare Pages project kamu → **Settings → Environment
+variables**, lalu tambahkan:
+
+| Variable | Isi | Keterangan |
+|---|---|---|
+| `IPAYMU_VA` | Nomor VA dari Langkah 1 | |
+| `IPAYMU_API_KEY` | API Key dari Langkah 1 | |
+| `IPAYMU_MODE` | `sandbox` atau `production` | Pakai `sandbox` dulu untuk uji coba, baru ganti ke `production` setelah yakin semua berjalan lancar |
+| `IPAYMU_CALLBACK_TOKEN` | String acak bebas buatanmu sendiri (mis. `str0n3-x8f2kq...`) | Untuk mencegah endpoint callback dipanggil sembarang orang. Harus SAMA persis di kedua function (otomatis, karena keduanya membaca variable yang sama) |
+| `FIREBASE_SERVICE_ACCOUNT_EMAIL` | `client_email` dari file JSON Langkah 2 | |
+| `FIREBASE_SERVICE_ACCOUNT_KEY` | `private_key` dari file JSON Langkah 2 | Paste apa adanya |
+
+Setelah semua terisi, **redeploy project**.
+
+### Langkah 4 — Uji coba di Sandbox
+
+1. Pastikan `IPAYMU_MODE` masih `sandbox`.
+2. Lakukan checkout percobaan di situsmu sampai diarahkan ke halaman
+   pembayaran iPaymu (sandbox).
+3. Selesaikan pembayaran di halaman sandbox tersebut. Kalau status belum
+   otomatis "Bayar", buka **https://sandbox.ipaymu.com** → klik **"Tes
+   Notify"** → masukkan Session ID/Trx ID dari transaksi tadi (lihat
+   tutorial resmi iPaymu soal ini kalau perlu).
+4. Cek halaman **Tracking** di situsmu (atau panel Admin) — status order
+   seharusnya berubah otomatis menjadi **"verified"** dalam beberapa detik,
+   dan email konfirmasi (kalau Resend sudah di-setup) otomatis terkirim.
+5. **Kalau belum berubah otomatis**: buka **Cloudflare Pages dashboard →
+   tab Functions/Logs (real-time logs)** untuk melihat pesan error dari
+   `/api/ipaymu-callback`. Field nama notifikasi dari iPaymu kadang sedikit
+   berbeda antar versi API — kalau ada error di sini, kirimkan pesan error
+   tersebut ke saya supaya bisa saya sesuaikan.
+6. Kalau sudah lancar di sandbox, ganti `IPAYMU_MODE` menjadi `production`
+   dan ganti `IPAYMU_VA`/`IPAYMU_API_KEY` dengan yang dari akun **production**
+   (BUKAN sandbox), lalu redeploy.
+
+### Catatan keamanan
+
+- File JSON Service Account dari Langkah 2 memberi akses penuh ke database.
+  Jangan pernah diunggah ke folder project/GitHub — cukup dipakai untuk
+  mengisi 2 environment variable di atas, lalu file aslinya disimpan aman
+  di luar project (mis. password manager), tidak perlu disimpan di server.
+- Fungsi callback **tidak langsung percaya** notifikasi yang masuk — ia
+  selalu mengecek ulang status transaksi tersebut langsung ke server
+  iPaymu sebelum menandai order sebagai lunas, supaya tidak bisa
+  dipalsukan orang lain.
+
+---
+
 ## ⚠️ WAJIB DILAKUKAN — Update Keamanan Data Pelanggan
 
 Update kali ini memperbaiki beberapa celah keamanan yang cukup serius.
@@ -192,14 +297,21 @@ jadi tidak akan mengganggu pembeli sebelum kamu sempat setting captcha asli.
 
 | Variable | Dari mana | Wajib untuk fitur |
 |---|---|---|
+| `IPAYMU_VA` | Dashboard iPaymu | Pembayaran iPaymu |
+| `IPAYMU_API_KEY` | Dashboard iPaymu | Pembayaran iPaymu |
+| `IPAYMU_MODE` | `sandbox` atau `production` | Pembayaran iPaymu |
+| `IPAYMU_CALLBACK_TOKEN` | Buatan sendiri (string acak) | Pembayaran iPaymu |
+| `FIREBASE_SERVICE_ACCOUNT_EMAIL` | File JSON Service Account Firebase | Verifikasi otomatis iPaymu |
+| `FIREBASE_SERVICE_ACCOUNT_KEY` | File JSON Service Account Firebase | Verifikasi otomatis iPaymu |
 | `RESEND_API_KEY` | Dashboard Resend | Email otomatis |
 | `SENDER_EMAIL` | Domain email kamu | Email otomatis |
 
 Semua fitur lain di daftar "✅ Langsung Aktif" di atas **tidak butuh**
 environment variable tambahan apa pun. Yang **wajib** kamu lakukan secara
-manual adalah men-deploy `firestore.rules` (lihat bagian "⚠️ WAJIB
-DILAKUKAN" di atas) — itu satu-satunya langkah yang tidak bisa otomatis
-lewat file di project ini.
+manual adalah men-deploy ulang `firestore.rules` (lihat bagian "⚠️ WAJIB
+DILAKUKAN" di atas, isinya sudah diperbarui untuk mendukung penghapusan
+QRIS manual) — itu satu-satunya langkah yang tidak bisa otomatis lewat
+file di project ini.
 
 ---
 

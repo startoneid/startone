@@ -82,17 +82,15 @@ service cloud.firestore {
         && request.resource.data.email is string
         && request.resource.data.customerName is string;
 
-      // Update dokumen order yang SUDAH ADA: pembeli hanya boleh
-      // mengisi bukti pembayaran (status -> "waiting_verification"),
-      // sisanya (verifikasi/tolak/isi downloadURL) hanya admin.
-      allow update: if isAdmin()
-        || (
-          resource.data.status in ["waiting", "rejected"]
-          && request.resource.data.status == "waiting_verification"
-          && request.resource.data.paymentProof is string
-          && request.resource.data.diff(resource.data).affectedKeys()
-              .hasOnly(["status", "paymentTime", "paymentProof"])
-        );
+      // Update dokumen order yang SUDAH ADA: HANYA admin (lewat Admin
+      // panel) atau server (Cloudflare Function /api/ipaymu-callback,
+      // yang login memakai Service Account sehingga otomatis melewati
+      // Security Rules ini, bukan lewat jalur publik/tanpa-login) yang
+      // boleh mengubah status/downloadURL sebuah order. Sejak metode
+      // pembayaran QRIS manual dihapus (semua transaksi lewat iPaymu),
+      // pengunjung biasa tidak lagi butuh (dan tidak lagi diberi izin)
+      // menulis apa pun ke order yang sudah ada.
+      allow update: if isAdmin();
 
       allow delete: if isAdmin();
     }

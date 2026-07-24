@@ -113,6 +113,7 @@ form.addEventListener("submit", async (e) => {
         }
 
         const invoiceNumber = invoiceResult.invoiceNumber;
+        const customerName = firstName.trim() + " " + lastName.trim();
 
         // 6. Simpan order dengan ID dokumen = nomor invoice itu sendiri.
         //    Ini membuat halaman Tracking bisa mengambil 1 order lewat ID
@@ -120,7 +121,7 @@ form.addEventListener("submit", async (e) => {
         //    seluruh koleksi (list) — lebih aman untuk data pelanggan lain.
         await setDoc(doc(db, "orders", invoiceNumber), {
             invoiceNumber,
-            customerName: firstName.trim() + " " + lastName.trim(),
+            customerName,
             email: email.trim(),
             phone: phone.trim(),
             product,
@@ -135,7 +136,30 @@ form.addEventListener("submit", async (e) => {
         localStorage.setItem("orderID", invoiceNumber);
         localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
 
-        window.location.href = "payment.html";
+        // 7. Buat transaksi pembayaran iPaymu (Cloudflare Function), lalu
+        //    arahkan pembeli ke halaman pembayaran iPaymu. Semua metode
+        //    bayar (Virtual Account, E-Wallet, QRIS, Transfer Bank, dll)
+        //    sekarang ditangani otomatis oleh iPaymu, bukan lagi QRIS
+        //    statis + upload bukti manual.
+        const ipaymuRes = await fetch("/api/ipaymu-create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                invoiceNumber,
+                product,
+                price,
+                customerName,
+                email: email.trim(),
+                phone: phone.trim()
+            })
+        });
+        const ipaymuResult = await ipaymuRes.json().catch(() => ({}));
+
+        if (!ipaymuRes.ok || !ipaymuResult.success || !ipaymuResult.url) {
+            throw new Error(ipaymuResult.error || "Gagal membuat transaksi pembayaran iPaymu. Silakan coba lagi.");
+        }
+
+        window.location.href = ipaymuResult.url;
 
     } catch (error) {
 
