@@ -1,0 +1,61 @@
+// ==============================================================
+// FIREBASE STORAGE SECURITY RULES — StarTone
+// ==============================================================
+// File ini dipakai untuk fitur upload gambar Before/After di halaman
+// Admin (Kelola Produk > Galeri Before/After > tombol "Upload Gambar").
+// Sama seperti firestore.rules, file ini TIDAK otomatis aktif hanya
+// dengan berada di folder project — harus di-deploy terpisah:
+//
+//   CARA 1 (paling gampang — lewat browser, tanpa install apa-apa):
+//   1. Buka https://console.firebase.google.com
+//   2. Pilih project "startone-d8aee"
+//   3. Menu kiri: Storage -> kalau belum pernah dipakai, klik "Get started"
+//      dulu (pilih lokasi server terdekat, misalnya asia-southeast1/2)
+//   4. Buka tab "Rules"
+//   5. Hapus isi yang ada, copy-paste SELURUH isi file ini ke sana
+//   6. Klik "Publish"
+//
+//   CARA 2 (lewat terminal, kalau sudah familiar dengan Firebase CLI):
+//   1. npm install -g firebase-tools
+//   2. firebase login
+//   3. firebase deploy --only storage
+//      (butuh file firebase.json yang menunjuk ke storage.rules ini)
+//
+// PENTING: Kalau Storage belum pernah diaktifkan sama sekali di project
+// Firebase ini, tombol "Upload Gambar" di halaman Admin akan gagal
+// dengan error. Aktifkan dulu Storage lewat langkah CARA 1 di atas
+// (cukup sekali saja), baru publish rules ini.
+// ==============================================================
+
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Ganti email di bawah ini kalau suatu saat email admin StarTone berubah
+    // (samakan dengan firestore.rules).
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "startone.id@gmail.com";
+    }
+
+    // ------------------------------------------------------------
+    // Foto Before/After produk (galeri di halaman Admin > Edit Produk).
+    // Siapa saja boleh melihat (ditampilkan publik di Shop/Featured
+    // Collections/halaman detail produk), tapi hanya admin yang login
+    // yang boleh mengunggah/menghapus, dan dibatasi maksimal 8MB per
+    // file gambar supaya tidak disalahgunakan untuk upload sembarangan.
+    // ------------------------------------------------------------
+    match /product-gallery/{productId}/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && request.resource.size < 8 * 1024 * 1024
+        && request.resource.contentType.matches("image/.*");
+    }
+
+    // Tutup akses ke semua path lain yang tidak disebutkan di atas.
+    match /{allPaths=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

@@ -6,6 +6,52 @@ Sebagian fitur **langsung aktif** tanpa perlu setting apa pun, sebagian lagi
 
 ---
 
+## 🆕 FITUR BARU — Galeri Before/After di Detail Produk
+
+Sekarang setiap kali pelanggan **klik kartu produk** (di halaman Shop
+maupun Featured Collections), atau membuka halaman `product.html`
+langsung, mereka bisa melihat galeri foto **Before/After** dengan slider
+geser (mirip contoh di ecommerce preset lain) — kalau kamu isi datanya.
+
+### Cara mengisinya (di Admin panel)
+
+1. Buka **Admin → Kelola Produk → Tambah/Edit Produk**.
+2. Scroll ke bagian **"Galeri Before/After (opsional)"**.
+3. Klik **"+ Tambah Before/After"** untuk menambah 1 baris (1 pasang foto).
+4. Untuk tiap baris, isi foto **Before** dan **After** dengan salah satu cara:
+   - **Tempel link foto** langsung ke kotak input (kalau fotonya sudah
+     online, misalnya link Google Drive/ImgBB/dsb yang bisa diakses publik), **atau**
+   - Klik tombol **"📤 Upload"** untuk pilih file dari komputer/HP — fotonya
+     otomatis diupload ke Firebase Storage dan link-nya terisi sendiri.
+5. Bisa tambah beberapa baris (beberapa pasang before/after) untuk 1 produk.
+6. Klik **Simpan Produk** seperti biasa.
+
+Kalau field ini dikosongkan (tidak ada baris sama sekali), tampilan detail
+produk akan seperti biasa tanpa galeri — jadi aman untuk produk lama.
+
+### ⚠️ WAJIB — Aktifkan Firebase Storage & Deploy `storage.rules`
+
+Fitur **upload gambar langsung** (tombol "📤 Upload") butuh **Firebase
+Storage**, yang kemungkinan **belum pernah diaktifkan** di project ini
+sebelumnya. Kalau kamu HANYA mau pakai cara "tempel link foto" (tanpa
+tombol Upload), langkah ini boleh dilewati.
+
+1. Buka **https://console.firebase.google.com** → pilih project `startone-d8aee`.
+2. Menu kiri: **Storage** → kalau belum pernah dipakai, klik **"Get started"**
+   (pilih lokasi server terdekat, misalnya Singapore/`asia-southeast1`).
+3. Buka tab **"Rules"** di halaman Storage.
+4. Hapus isi yang ada, lalu copy-paste **seluruh isi file `storage.rules`**
+   (ada di folder utama project ini, sejajar dengan `firestore.rules`).
+5. Klik **Publish**.
+6. Coba lagi: buka Admin → Edit produk → klik "📤 Upload" di galeri
+   Before/After → pilih foto. Kalau muncul "✓ Berhasil diupload", berarti
+   sudah aktif.
+
+Kalau langkah ini dilewati, tombol Upload akan gagal dengan pesan error —
+tapi kotak "tempel link foto" tetap berfungsi normal tanpa perlu Storage.
+
+---
+
 ## ⚠️ WAJIB DILAKUKAN — Update Keamanan Data Pelanggan
 
 Update kali ini memperbaiki beberapa celah keamanan yang cukup serius.

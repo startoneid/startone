@@ -84,6 +84,81 @@ export function addRecentlyViewed(id) {
 }
 
 // ==============================================================
+// GALERI BEFORE/AFTER (slider geser) — dipakai oleh modal cepat
+// (Featured Collections/Shop) DAN halaman detail product.html.
+//
+// Data produk: product.gallery = [{ before: "url", after: "url" }, ...]
+// Diatur oleh admin lewat halaman Admin > Edit Produk (bisa upload
+// gambar langsung atau tempel link foto).
+// ==============================================================
+export function galleryHTML(product) {
+    const items = Array.isArray(product?.gallery)
+        ? product.gallery.filter(g => g && g.before && g.after)
+        : [];
+
+    if (!items.length) return "";
+
+    const slides = items.map((g) => `
+        <div class="ba-slider" style="--pos:50%;">
+            <img class="ba-img ba-after" src="${escapeHTML(g.after)}" alt="Sesudah pakai preset ${escapeHTML(product.name)}" loading="lazy" draggable="false">
+            <img class="ba-img ba-before" src="${escapeHTML(g.before)}" alt="Sebelum pakai preset ${escapeHTML(product.name)}" loading="lazy" draggable="false">
+            <span class="ba-line"></span>
+            <span class="ba-handle-btn"><i class="fa-solid fa-arrows-left-right"></i></span>
+            <span class="ba-tag ba-tag-before">Before</span>
+            <span class="ba-tag ba-tag-after">After</span>
+        </div>
+    `).join("");
+
+    return `
+        <div class="ba-gallery-wrap">
+            <h4 class="ba-gallery-title"><i class="fa-solid fa-image"></i> Before &amp; After</h4>
+            <p class="ba-gallery-hint">Geser tiap foto untuk lihat perbandingan sebelum &amp; sesudah pakai preset ini.</p>
+            <div class="ba-gallery">${slides}</div>
+        </div>
+    `;
+}
+
+// Interaksi geser (mouse & touch) untuk semua .ba-slider di halaman.
+// Dipasang sekali secara global (delegasi lewat document) supaya tetap
+// jalan meskipun kontennya baru saja dibuat ulang lewat innerHTML
+// (mis. setiap kali modal produk dibuka).
+(function initBeforeAfterSliderDrag() {
+    let activeSlider = null;
+
+    function setSliderPos(slider, clientX) {
+        const rect = slider.getBoundingClientRect();
+        let pct = ((clientX - rect.left) / rect.width) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+        slider.style.setProperty("--pos", pct + "%");
+    }
+
+    function handleDown(e) {
+        const slider = e.target.closest?.(".ba-slider");
+        if (!slider) return;
+        activeSlider = slider;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        setSliderPos(slider, clientX);
+    }
+
+    function handleMove(e) {
+        if (!activeSlider) return;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        setSliderPos(activeSlider, clientX);
+    }
+
+    function handleUp() {
+        activeSlider = null;
+    }
+
+    document.addEventListener("mousedown", handleDown);
+    document.addEventListener("touchstart", handleDown, { passive: true });
+    document.addEventListener("mousemove", handleMove);
+    document.addEventListener("touchmove", handleMove, { passive: true });
+    document.addEventListener("mouseup", handleUp);
+    document.addEventListener("touchend", handleUp);
+})();
+
+// ==============================================================
 // RENDER KARTU PRODUK (dipakai oleh Featured Collections & Shop)
 // ==============================================================
 export function cardHTML(p, index = 0) {
@@ -169,6 +244,8 @@ export function createProductModalController(modal, modalBody, modalCloseBtn) {
             <img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}">
             <h2>${escapeHTML(product.name)}</h2>
             <div class="price">${formatPrice(product.price)}</div>
+
+            ${galleryHTML(product)}
 
             <h4>Detail Produk</h4>
             <p>${escapeHTML(product.detail || "Belum ada detail untuk produk ini.").replace(/\n/g, "<br>")}</p>

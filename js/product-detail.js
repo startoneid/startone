@@ -13,7 +13,7 @@
 // dibagikan langsung ke 1 produk spesifik, bukan jaminan peringkat SEO.
 // ==============================================================
 
-import { getProductById, formatPrice, escapeHTML } from "./product-shared.js";
+import { getProductById, formatPrice, escapeHTML, galleryHTML } from "./product-shared.js";
 
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
@@ -65,6 +65,8 @@ function renderProduct(product) {
                 <p>${escapeHTML(product.tips || "Belum ada tips untuk produk ini.").replace(/\n/g, "<br>")}</p>
             </div>
         </div>
+
+        ${galleryHTML(product)}
     `;
 
     document.getElementById("productDetailBuyBtn")?.addEventListener("click", () => {
