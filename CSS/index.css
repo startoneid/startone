@@ -1573,10 +1573,55 @@ html[data-theme="light"] .ba-gallery-hint{ color:#666; }
     margin-bottom:0;
 }
 
+.reviews-carousel{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.reviews-viewport{
+    flex:1;
+    min-width:0;
+    overflow:hidden;
+}
+
+.reviews-arrow{
+    flex-shrink:0;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.12);
+    background:var(--bg-alt);
+    color:#fff;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .25s var(--ease), transform .2s var(--ease), opacity .25s var(--ease);
+}
+
+.reviews-arrow:hover:not(:disabled){
+    background:var(--accent);
+    color:#28282B;
+    transform:scale(1.08);
+}
+
+.reviews-arrow:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
 .reviews-grid{
     display:grid;
     grid-template-columns:repeat(3, 1fr);
     gap:24px;
+    animation:reviewsFadeIn .35s var(--ease);
+}
+
+@keyframes reviewsFadeIn{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 .review-card{
@@ -1642,6 +1687,7 @@ html[data-theme="light"] .ba-gallery-hint{ color:#666; }
 }
 
 .review-modal-content input[type="text"],
+.review-modal-content select,
 .review-modal-content textarea{
     width:100%;
     padding:14px;
@@ -1654,7 +1700,13 @@ html[data-theme="light"] .ba-gallery-hint{ color:#666; }
     resize:vertical;
 }
 
+.review-modal-content select{
+    appearance:auto;
+    cursor:pointer;
+}
+
 .review-modal-content input[type="text"]:focus,
+.review-modal-content select:focus,
 .review-modal-content textarea:focus{
     outline:none;
     border-color:var(--accent);
@@ -1677,14 +1729,12 @@ html[data-theme="light"] .ba-gallery-hint{ color:#666; }
     transform:scale(1.15);
 }
 
-@media (max-width: 1024px) {
-    .reviews-grid{ grid-template-columns:repeat(2, 1fr); }
-}
-
 @media (max-width: 768px) {
     .reviews-heading{ margin-bottom:24px; }
-    .reviews-grid{ grid-template-columns:1fr; gap:16px; }
+    .reviews-grid{ grid-template-columns:repeat(2, 1fr); gap:16px; }
     .review-card{ padding:18px; }
+    .reviews-carousel{ gap:10px; }
+    .reviews-arrow{ width:36px; height:36px; font-size:14px; }
 }
 
 /* ===================== */
@@ -1855,6 +1905,7 @@ html[data-theme="light"] .card-sold{
 
 /* Form ulasan */
 html[data-theme="light"] .review-modal-content input[type="text"],
+html[data-theme="light"] .review-modal-content select,
 html[data-theme="light"] .review-modal-content textarea{
     background:#ffffff;
     color:var(--text);
@@ -1863,6 +1914,12 @@ html[data-theme="light"] .review-modal-content textarea{
 
 html[data-theme="light"] .review-modal-content label{
     color:var(--text);
+}
+
+html[data-theme="light"] .reviews-arrow{
+    background:#ffffff;
+    color:var(--text);
+    border-color:rgba(0,0,128,.15);
 }
 
 /* Footer */

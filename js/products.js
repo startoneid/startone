@@ -17,19 +17,22 @@
 import {
     cardHTML,
     attachGridEvents,
-    createProductModalController,
     subscribeToProducts
 } from "./product-shared.js";
 
 const grid = document.getElementById("productsGrid");
-const modal = document.getElementById("productModal");
-const modalBody = document.getElementById("productModalBody");
-const modalCloseBtn = document.getElementById("productModalClose");
 
 // Cache lokal supaya saat kartu diklik kita tidak perlu fetch ulang
 let productsCache = [];
 
-const { openProductModal } = createProductModalController(modal, modalBody, modalCloseBtn);
+// Kartu produk di halaman utama sekarang langsung membuka halaman
+// detail produk (product.html) alih-alih modal cepat, supaya
+// tampilan detail produk (gambar, before/after, deskripsi & ulasan)
+// selalu memakai halaman lengkap.
+function goToProductPage(product) {
+    if (!product?.id) return;
+    window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+}
 
 function getFeaturedProducts() {
     // Produk lama yang belum punya field showInFeatured tetap dianggap
@@ -75,5 +78,5 @@ subscribeToProducts((products) => {
 // ==============================================================
 attachGridEvents(grid, {
     getProductById: (id) => productsCache.find(p => p.id === id),
-    onOpenModal: openProductModal
+    onOpenModal: goToProductPage
 });

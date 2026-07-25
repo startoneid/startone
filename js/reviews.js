@@ -19,6 +19,8 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+import { subscribeToProducts } from "./product-shared.js";
+
 function escapeHTML(str) {
     const div = document.createElement("div");
     div.textContent = str ?? "";
@@ -26,6 +28,9 @@ function escapeHTML(str) {
 }
 
 const reviewsGrid = document.getElementById("reviewsGrid");
+const reviewsViewport = document.getElementById("reviewsViewport");
+const reviewsPrevBtn = document.getElementById("reviewsPrevBtn");
+const reviewsNextBtn = document.getElementById("reviewsNextBtn");
 const reviewModal = document.getElementById("reviewModal");
 const reviewModalClose = document.getElementById("reviewModalClose");
 const openReviewModalBtn = document.getElementById("openReviewModalBtn");
@@ -97,6 +102,32 @@ window.addEventListener("keydown", (e) => {
 });
 
 // ==============================================================
+// ISI DROPDOWN "PRODUK YANG DIBELI" (hanya produk yang benar-benar
+// diupload admin di website — bukan lagi ketik bebas)
+// ==============================================================
+subscribeToProducts((products) => {
+    if (!reviewProductInput) return;
+
+    const currentValue = reviewProductInput.value;
+    const options = products
+        .map((p) => p.name)
+        .filter(Boolean)
+        .map((name) => `<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`)
+        .join("");
+
+    reviewProductInput.innerHTML = `<option value="">-- Pilih Produk --</option>${options}`;
+
+    // Pertahankan pilihan sebelumnya kalau masih ada di daftar produk
+    if (currentValue && products.some((p) => p.name === currentValue)) {
+        reviewProductInput.value = currentValue;
+    }
+}, () => {
+    if (reviewProductInput) {
+        reviewProductInput.innerHTML = `<option value="">Gagal memuat daftar produk</option>`;
+    }
+});
+
+// ==============================================================
 // RENDER BINTANG (read-only) UNTUK SETIAP KARTU ULASAN
 // ==============================================================
 function starsHTML(rating) {
@@ -126,20 +157,82 @@ function reviewCardHTML(review) {
     `;
 }
 
-function renderReviews(reviews) {
+// ==============================================================
+// CAROUSEL ULASAN (hanya di halaman utama, bukan halaman produk)
+// 3 kartu per halaman di desktop, 2 kartu per halaman di mobile,
+// digeser pakai tombol panah kiri/kanan.
+// ==============================================================
+let reviewsData = [];
+let reviewsPage = 0;
+
+const reviewsMobileQuery = window.matchMedia("(max-width: 768px)");
+
+function getReviewsPerPage() {
+    return reviewsMobileQuery.matches ? 2 : 3;
+}
+
+function getReviewsTotalPages() {
+    const perPage = getReviewsPerPage();
+    return Math.max(1, Math.ceil(reviewsData.length / perPage));
+}
+
+function updateReviewsArrows() {
+    const totalPages = getReviewsTotalPages();
+    if (reviewsPrevBtn) reviewsPrevBtn.disabled = reviewsData.length === 0 || reviewsPage <= 0;
+    if (reviewsNextBtn) reviewsNextBtn.disabled = reviewsData.length === 0 || reviewsPage >= totalPages - 1;
+}
+
+function renderReviewsPage() {
     if (!reviewsGrid) return;
 
-    if (reviews.length === 0) {
+    const perPage = getReviewsPerPage();
+    reviewsGrid.style.gridTemplateColumns = `repeat(${perPage}, 1fr)`;
+
+    if (reviewsData.length === 0) {
         reviewsGrid.innerHTML = `
             <p style="grid-column:1/-1;text-align:center;color:#bbb;padding:20px 0;">
                 Belum ada ulasan. Jadilah yang pertama menulis ulasan!
             </p>
         `;
+        updateReviewsArrows();
         return;
     }
 
-    reviewsGrid.innerHTML = reviews.map(reviewCardHTML).join("");
+    const totalPages = getReviewsTotalPages();
+    if (reviewsPage > totalPages - 1) reviewsPage = totalPages - 1;
+    if (reviewsPage < 0) reviewsPage = 0;
+
+    const start = reviewsPage * perPage;
+    const pageItems = reviewsData.slice(start, start + perPage);
+
+    reviewsGrid.innerHTML = pageItems.map(reviewCardHTML).join("");
+    updateReviewsArrows();
 }
+
+function renderReviews(reviews) {
+    reviewsData = reviews;
+    reviewsPage = 0;
+    renderReviewsPage();
+}
+
+reviewsPrevBtn?.addEventListener("click", () => {
+    if (reviewsPage <= 0) return;
+    reviewsPage--;
+    renderReviewsPage();
+});
+
+reviewsNextBtn?.addEventListener("click", () => {
+    if (reviewsPage >= getReviewsTotalPages() - 1) return;
+    reviewsPage++;
+    renderReviewsPage();
+});
+
+// Kalau ukuran layar berpindah antara mobile & desktop, jumlah kartu
+// per halaman berubah (2 <-> 3) — sesuaikan ulang tampilannya.
+reviewsMobileQuery.addEventListener("change", () => {
+    reviewsPage = 0;
+    renderReviewsPage();
+});
 
 // ==============================================================
 // REALTIME LISTENER (ulasan terbaru di atas, maksimal 24 ulasan)
