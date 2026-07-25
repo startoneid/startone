@@ -12,16 +12,12 @@
 import {
     cardHTML,
     attachGridEvents,
-    createProductModalController,
     subscribeToProducts,
     getWishlist,
     escapeHTML
 } from "./product-shared.js";
 
 const grid = document.getElementById("shopProductsGrid");
-const modal = document.getElementById("productModal");
-const modalBody = document.getElementById("productModalBody");
-const modalCloseBtn = document.getElementById("productModalClose");
 const searchInput = document.getElementById("shopProductSearch");
 const sortSelect = document.getElementById("shopProductSort");
 const wishlistFilterBtn = document.getElementById("shopWishlistFilterBtn");
@@ -34,7 +30,13 @@ let currentSort = "default";
 let currentCategory = "all";
 let wishlistOnly = false;
 
-const { openProductModal } = createProductModalController(modal, modalBody, modalCloseBtn);
+// Kartu produk di halaman Shop sekarang langsung membuka halaman detail
+// produk (product.html), sama persis seperti kartu di Featured
+// Collections (halaman utama) — tidak lagi lewat modal cepat.
+function goToProductPage(product) {
+    if (!product?.id) return;
+    window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+}
 
 function getShopProducts() {
     // Produk lama yang belum punya field showInShop tetap dianggap
@@ -192,6 +194,6 @@ wishlistFilterBtn?.addEventListener("click", () => {
 // ==============================================================
 attachGridEvents(grid, {
     getProductById: (id) => productsCache.find(p => p.id === id),
-    onOpenModal: openProductModal,
+    onOpenModal: goToProductPage,
     onWishlistToggled: () => { if (wishlistOnly) renderProducts(); }
 });

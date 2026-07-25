@@ -26,6 +26,176 @@ const contentEl = document.getElementById("productDetailContent");
 const MAX_QTY = 10;
 
 // ==============================================================
+// LIGHTBOX POPUP GALERI (layar 9:16) — dipakai bersama oleh
+// tombol search di pojok thumbnail utama & tombol kaca pembesar
+// di galeri Before/After. Thumbnail utama sendiri SENGAJA tidak
+// bisa diklik langsung untuk membuka popup ini — hanya lewat
+// tombol search yang disediakan.
+// ==============================================================
+const pdLightbox = document.getElementById("pdLightbox");
+const pdLightboxStage = document.getElementById("pdLightboxStage");
+const pdLightboxImage = document.getElementById("pdLightboxImage");
+const pdLightboxCounter = document.getElementById("pdLightboxCounter");
+const pdLightboxCaption = document.getElementById("pdLightboxCaption");
+const pdLightboxPrevBtn = document.getElementById("pdLightboxPrevBtn");
+const pdLightboxNextBtn = document.getElementById("pdLightboxNextBtn");
+const pdLightboxCloseBtn = document.getElementById("pdLightboxCloseBtn");
+const pdLightboxZoomBtn = document.getElementById("pdLightboxZoomBtn");
+const pdLightboxFullscreenBtn = document.getElementById("pdLightboxFullscreenBtn");
+
+let lightboxItems = [];
+let lightboxIndex = 0;
+let lightboxTransitioning = false;
+
+function renderLightboxContent() {
+    const item = lightboxItems[lightboxIndex];
+    if (!item || !pdLightboxImage) return;
+
+    pdLightboxImage.src = item.src;
+    pdLightboxImage.alt = item.caption || "";
+    if (pdLightboxCounter) pdLightboxCounter.textContent = `${lightboxIndex + 1} / ${lightboxItems.length}`;
+    if (pdLightboxCaption) pdLightboxCaption.textContent = item.caption || "";
+    if (pdLightboxPrevBtn) pdLightboxPrevBtn.disabled = lightboxIndex <= 0;
+    if (pdLightboxNextBtn) pdLightboxNextBtn.disabled = lightboxIndex >= lightboxItems.length - 1;
+}
+
+function openLightbox(items, startIndex = 0) {
+    if (!pdLightbox || !items?.length) return;
+
+    lightboxItems = items;
+    lightboxIndex = Math.min(Math.max(startIndex, 0), items.length - 1);
+
+    pdLightboxStage?.classList.remove("zoomed", "slide-out-left", "slide-out-right", "slide-in-left", "slide-in-right");
+    pdLightboxZoomBtn?.classList.remove("active");
+
+    renderLightboxContent();
+
+    pdLightbox.classList.add("active");
+    pdLightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+function closeLightbox() {
+    if (!pdLightbox) return;
+
+    pdLightbox.classList.remove("active");
+    pdLightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+
+    if (document.fullscreenElement === pdLightbox) {
+        document.exitFullscreen?.().catch(() => {});
+    }
+}
+
+// Animasi geser halus setiap kali tombol < atau > ditekan: gambar lama
+// fade + geser keluar, baru gambar berikutnya di-set lalu fade + geser
+// masuk dari arah berlawanan.
+function animateLightboxChange(direction, updateFn) {
+    if (!pdLightboxStage || lightboxTransitioning) {
+        updateFn();
+        return;
+    }
+    lightboxTransitioning = true;
+
+    const outClass = direction === "next" ? "slide-out-left" : "slide-out-right";
+    const inClass = direction === "next" ? "slide-in-right" : "slide-in-left";
+
+    pdLightboxStage.classList.add(outClass);
+
+    const handleOutEnd = () => {
+        pdLightboxImage.removeEventListener("transitionend", handleOutEnd);
+        pdLightboxStage.classList.remove(outClass);
+
+        updateFn();
+        pdLightboxStage.classList.add(inClass);
+
+        // Paksa reflow supaya transisi masuk benar-benar dijalankan ulang
+        void pdLightboxStage.offsetWidth;
+
+        requestAnimationFrame(() => {
+            pdLightboxStage.classList.remove(inClass);
+            setTimeout(() => { lightboxTransitioning = false; }, 240);
+        });
+    };
+    pdLightboxImage.addEventListener("transitionend", handleOutEnd, { once: true });
+}
+
+function goLightboxPrev() {
+    if (lightboxIndex <= 0) return;
+    animateLightboxChange("prev", () => {
+        lightboxIndex--;
+        renderLightboxContent();
+    });
+}
+
+function goLightboxNext() {
+    if (lightboxIndex >= lightboxItems.length - 1) return;
+    animateLightboxChange("next", () => {
+        lightboxIndex++;
+        renderLightboxContent();
+    });
+}
+
+pdLightboxPrevBtn?.addEventListener("click", goLightboxPrev);
+pdLightboxNextBtn?.addEventListener("click", goLightboxNext);
+pdLightboxCloseBtn?.addEventListener("click", closeLightbox);
+
+pdLightbox?.addEventListener("click", (e) => {
+    if (e.target === pdLightbox) closeLightbox();
+});
+
+pdLightboxZoomBtn?.addEventListener("click", () => {
+    const zoomed = pdLightboxStage.classList.toggle("zoomed");
+    pdLightboxZoomBtn.classList.toggle("active", zoomed);
+});
+
+pdLightboxImage?.addEventListener("click", () => {
+    const zoomed = pdLightboxStage.classList.toggle("zoomed");
+    pdLightboxZoomBtn?.classList.toggle("active", zoomed);
+});
+
+pdLightboxFullscreenBtn?.addEventListener("click", async () => {
+    try {
+        if (!document.fullscreenElement) {
+            await pdLightbox.requestFullscreen?.();
+        } else {
+            await document.exitFullscreen?.();
+        }
+    } catch (error) {
+        console.warn("Fullscreen tidak didukung di browser ini:", error);
+    }
+});
+
+document.addEventListener("fullscreenchange", () => {
+    const isFs = document.fullscreenElement === pdLightbox;
+    pdLightboxFullscreenBtn?.classList.toggle("active", isFs);
+    const icon = pdLightboxFullscreenBtn?.querySelector("i");
+    if (icon) icon.className = isFs ? "fa-solid fa-compress" : "fa-solid fa-expand";
+});
+
+document.addEventListener("keydown", (e) => {
+    if (!pdLightbox?.classList.contains("active")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") goLightboxPrev();
+    if (e.key === "ArrowRight") goLightboxNext();
+});
+
+// Susun daftar gambar Before/After (berselang-seling) untuk lightbox,
+// dipakai saat tombol kaca pembesar di galeri Before/After ditekan.
+function buildGalleryLightboxItems(product) {
+    const items = Array.isArray(product.gallery)
+        ? product.gallery.filter((g) => g && g.before && g.after)
+        : [];
+
+    const result = [];
+    items.forEach((g, i) => {
+        result.push({ src: g.before, caption: `${product.name} — Before (${i + 1})` });
+        result.push({ src: g.after, caption: `${product.name} — After (${i + 1})` });
+    });
+    return result;
+}
+
+// ==============================================================
 // Kumpulkan gambar untuk galeri utama (foto utama produk + foto
 // "sesudah" dari galeri before/after), tanpa duplikat.
 // ==============================================================
@@ -73,6 +243,9 @@ function renderProduct(product) {
             <div class="pd-gallery">
                 <div class="pd-main">
                     <img id="pdMainImage" src="${escapeHTML(images[0] || "")}" alt="${escapeHTML(product.name)}">
+                    <button type="button" class="pd-search-btn" id="pdSearchBtn" aria-label="Lihat gambar produk lebih jelas">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
                 </div>
                 ${thumbsHTML ? `<div class="pd-thumbs" id="pdThumbs">${thumbsHTML}</div>` : ""}
             </div>
@@ -146,13 +319,38 @@ function renderProduct(product) {
     });
 
     // ---- Ganti foto utama lewat thumbnail ----
+    let currentThumbIndex = 0;
+
     document.getElementById("pdThumbs")?.addEventListener("click", (e) => {
         const thumb = e.target.closest(".pd-thumb");
         if (!thumb) return;
 
-        document.querySelectorAll(".pd-thumb").forEach((t) => t.classList.remove("active"));
+        const allThumbs = Array.from(document.querySelectorAll(".pd-thumb"));
+        allThumbs.forEach((t) => t.classList.remove("active"));
         thumb.classList.add("active");
         document.getElementById("pdMainImage").src = thumb.dataset.src;
+        currentThumbIndex = allThumbs.indexOf(thumb);
+    });
+
+    // ---- Tombol search di pojok thumbnail utama -> buka lightbox
+    // berisi semua foto utama produk (bukan galeri before/after) ----
+    document.getElementById("pdSearchBtn")?.addEventListener("click", () => {
+        const mainItems = images.map((src, i) => ({
+            src,
+            caption: `${product.name} — Foto ${i + 1}`
+        }));
+        openLightbox(mainItems, currentThumbIndex);
+    });
+
+    // ---- Klik tombol kaca pembesar di galeri Before/After -> buka
+    // lightbox berisi hasil preview (before & after), bukan thumbnail ----
+    contentEl.querySelector(".ba-gallery")?.addEventListener("click", (e) => {
+        const expandBtn = e.target.closest(".ba-expand-btn");
+        if (!expandBtn) return;
+
+        const galleryIndex = Number(expandBtn.dataset.galleryIndex) || 0;
+        const galleryItems = buildGalleryLightboxItems(product);
+        openLightbox(galleryItems, galleryIndex * 2 + 1);
     });
 
     // ---- Tab Deskripsi / Ulasan ----

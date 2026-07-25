@@ -215,16 +215,54 @@ function renderReviews(reviews) {
     renderReviewsPage();
 }
 
+// Animasi geser halus setiap kali tombol < atau > ditekan: kartu lama
+// fade + geser keluar dulu, baru halaman baru di-render lalu fade +
+// geser masuk dari arah berlawanan.
+let reviewsTransitioning = false;
+
+function animateReviewsChange(direction, updateFn) {
+    if (!reviewsGrid || reviewsTransitioning) {
+        updateFn();
+        return;
+    }
+    reviewsTransitioning = true;
+
+    const outClass = direction === "next" ? "reviews-grid--out-left" : "reviews-grid--out-right";
+    const inClass = direction === "next" ? "reviews-grid--in-right" : "reviews-grid--in-left";
+
+    reviewsGrid.classList.add(outClass);
+
+    const handleOutEnd = () => {
+        reviewsGrid.removeEventListener("transitionend", handleOutEnd);
+        reviewsGrid.classList.remove(outClass);
+
+        updateFn();
+
+        reviewsGrid.classList.add(inClass);
+        void reviewsGrid.offsetWidth; // paksa reflow supaya transisi masuk terpicu ulang
+
+        requestAnimationFrame(() => {
+            reviewsGrid.classList.remove(inClass);
+            setTimeout(() => { reviewsTransitioning = false; }, 260);
+        });
+    };
+    reviewsGrid.addEventListener("transitionend", handleOutEnd, { once: true });
+}
+
 reviewsPrevBtn?.addEventListener("click", () => {
-    if (reviewsPage <= 0) return;
-    reviewsPage--;
-    renderReviewsPage();
+    if (reviewsPage <= 0 || reviewsTransitioning) return;
+    animateReviewsChange("prev", () => {
+        reviewsPage--;
+        renderReviewsPage();
+    });
 });
 
 reviewsNextBtn?.addEventListener("click", () => {
-    if (reviewsPage >= getReviewsTotalPages() - 1) return;
-    reviewsPage++;
-    renderReviewsPage();
+    if (reviewsPage >= getReviewsTotalPages() - 1 || reviewsTransitioning) return;
+    animateReviewsChange("next", () => {
+        reviewsPage++;
+        renderReviewsPage();
+    });
 });
 
 // Kalau ukuran layar berpindah antara mobile & desktop, jumlah kartu

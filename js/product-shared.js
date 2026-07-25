@@ -98,21 +98,24 @@ export function galleryHTML(product) {
 
     if (!items.length) return "";
 
-    const slides = items.map((g) => `
-        <div class="ba-slider" style="--pos:50%;">
+    const slides = items.map((g, i) => `
+        <div class="ba-slider" style="--pos:50%;" data-gallery-index="${i}">
             <img class="ba-img ba-after" src="${escapeHTML(g.after)}" alt="Sesudah pakai preset ${escapeHTML(product.name)}" loading="lazy" draggable="false">
             <img class="ba-img ba-before" src="${escapeHTML(g.before)}" alt="Sebelum pakai preset ${escapeHTML(product.name)}" loading="lazy" draggable="false">
             <span class="ba-line"></span>
             <span class="ba-handle-btn"><i class="fa-solid fa-arrows-left-right"></i></span>
             <span class="ba-tag ba-tag-before">Before</span>
             <span class="ba-tag ba-tag-after">After</span>
+            <button type="button" class="ba-expand-btn" data-gallery-index="${i}" aria-label="Lihat hasil lebih jelas">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
         </div>
     `).join("");
 
     return `
         <div class="ba-gallery-wrap">
             <h4 class="ba-gallery-title"><i class="fa-solid fa-image"></i> Before &amp; After</h4>
-            <p class="ba-gallery-hint">Geser tiap foto untuk lihat perbandingan sebelum &amp; sesudah pakai preset ini.</p>
+            <p class="ba-gallery-hint">Geser tiap foto untuk lihat perbandingan sebelum &amp; sesudah pakai preset ini, atau klik ikon kaca pembesar untuk lihat lebih jelas.</p>
             <div class="ba-gallery">${slides}</div>
         </div>
     `;
@@ -133,6 +136,11 @@ export function galleryHTML(product) {
     }
 
     function handleDown(e) {
+        // Klik tombol perbesar (kaca pembesar) TIDAK boleh ikut menggeser
+        // posisi slider before/after — biarkan tombol itu ditangani
+        // listener klik terpisah (buka popup lightbox) di product-detail.js.
+        if (e.target.closest?.(".ba-expand-btn")) return;
+
         const slider = e.target.closest?.(".ba-slider");
         if (!slider) return;
         activeSlider = slider;
