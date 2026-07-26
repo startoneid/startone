@@ -23,8 +23,6 @@ const loadingEl = document.getElementById("productDetailLoading");
 const notFoundEl = document.getElementById("productDetailNotFound");
 const contentEl = document.getElementById("productDetailContent");
 
-const MAX_QTY = 10;
-
 // ==============================================================
 // LIGHTBOX POPUP GALERI (layar 9:16) — dipakai bersama oleh
 // tombol search di pojok thumbnail utama & tombol kaca pembesar
@@ -196,6 +194,27 @@ function buildGalleryLightboxItems(product) {
 }
 
 // ==============================================================
+// Sesuaikan ukuran kontainer gambar mengikuti resolusi ASLI foto
+// (16:9, 3:4, 9:16, atau rasio apa pun) supaya foto tidak pernah
+// terpotong (crop) saat ditampilkan.
+// ==============================================================
+function applyNaturalAspectRatio(imgEl, containerEl) {
+    if (!imgEl || !containerEl) return;
+
+    const setRatio = () => {
+        const w = imgEl.naturalWidth;
+        const h = imgEl.naturalHeight;
+        if (w && h) containerEl.style.aspectRatio = `${w} / ${h}`;
+    };
+
+    if (imgEl.complete && imgEl.naturalWidth) {
+        setRatio();
+    } else {
+        imgEl.addEventListener("load", setRatio, { once: true });
+    }
+}
+
+// ==============================================================
 // Kumpulkan gambar untuk galeri utama (foto utama produk + foto
 // "sesudah" dari galeri before/after), tanpa duplikat.
 // ==============================================================
@@ -265,18 +284,11 @@ function renderProduct(product) {
 
                 ${product.compatibility ? `<p class="pd-compat"><i class="fa-solid fa-mobile-screen"></i>Kompatibel: ${escapeHTML(product.compatibility)}</p>` : ""}
 
-                <div class="pd-qty-row">
-                    <div class="pd-qty-box">
-                        <button type="button" class="pd-qty-btn" id="pdQtyMinus" aria-label="Kurangi jumlah">−</button>
-                        <input type="text" id="pdQtyInput" value="1" readonly inputmode="numeric" aria-label="Jumlah">
-                        <button type="button" class="pd-qty-btn" id="pdQtyPlus" aria-label="Tambah jumlah">+</button>
-                    </div>
-                    <div class="pd-actions">
-                        <button class="btn btn-primary" id="productDetailBuyBtn"><i class="fa-solid fa-bolt"></i> Buy Now</button>
-                        <button class="btn btn-outline" id="productDetailShareBtn">
-                            <i class="fa-solid fa-link"></i> Salin Link
-                        </button>
-                    </div>
+                <div class="pd-actions">
+                    <button class="btn btn-primary" id="productDetailBuyBtn"><i class="fa-solid fa-bolt"></i> Buy Now</button>
+                    <button class="btn btn-outline" id="productDetailShareBtn">
+                        <i class="fa-solid fa-link"></i> Salin Link
+                    </button>
                 </div>
 
                 ${product.category ? `<p class="pd-category-line">Kategori: <b>${escapeHTML(product.category)}</b></p>` : ""}
@@ -305,17 +317,13 @@ function renderProduct(product) {
         </div>
     `;
 
-    // ---- Kuantitas beli ----
-    const qtyInput = document.getElementById("pdQtyInput");
-    let qty = 1;
+    // ---- Sesuaikan ukuran foto utama & tiap thumbnail mengikuti
+    // resolusi asli masing-masing (agar tidak terpotong) ----
+    const pdMainEl = document.querySelector(".pd-main");
+    applyNaturalAspectRatio(document.getElementById("pdMainImage"), pdMainEl);
 
-    document.getElementById("pdQtyMinus")?.addEventListener("click", () => {
-        qty = Math.max(1, qty - 1);
-        qtyInput.value = qty;
-    });
-    document.getElementById("pdQtyPlus")?.addEventListener("click", () => {
-        qty = Math.min(MAX_QTY, qty + 1);
-        qtyInput.value = qty;
+    document.querySelectorAll(".pd-thumb").forEach((thumb) => {
+        applyNaturalAspectRatio(thumb.querySelector("img"), thumb);
     });
 
     // ---- Ganti foto utama lewat thumbnail ----
@@ -328,7 +336,11 @@ function renderProduct(product) {
         const allThumbs = Array.from(document.querySelectorAll(".pd-thumb"));
         allThumbs.forEach((t) => t.classList.remove("active"));
         thumb.classList.add("active");
-        document.getElementById("pdMainImage").src = thumb.dataset.src;
+
+        const mainImg = document.getElementById("pdMainImage");
+        mainImg.src = thumb.dataset.src;
+        applyNaturalAspectRatio(mainImg, pdMainEl);
+
         currentThumbIndex = allThumbs.indexOf(thumb);
     });
 
@@ -370,9 +382,9 @@ function renderProduct(product) {
         });
     });
 
-    // ---- Buy Now (jumlah ikut dikalikan ke harga yang dikirim) ----
+    // ---- Buy Now ----
     document.getElementById("productDetailBuyBtn")?.addEventListener("click", () => {
-        window.buyProduct?.(product.name, Number(product.price) * qty, product.id);
+        window.buyProduct?.(product.name, Number(product.price), product.id);
     });
 
     document.getElementById("productDetailShareBtn")?.addEventListener("click", async () => {
