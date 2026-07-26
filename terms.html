@@ -6,126 +6,244 @@
 
 <title>StarTone | Terms & Conditions</title>
 
+<link rel="icon" href="icon/StarTone Circle.png" type="image/x-icon">
+<link rel="shortcut icon" href="icon/StarTone Circle.png">
+<link rel="apple-touch-icon" href="icon/StarTone Circle.png">
+
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#090909">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Plus Jakarta Sans',sans-serif;
+:root{
+    --bg:#090909;
+    --bg-alt:#35363A;
+    --accent:#FFD166;
+    --accent-2:#ff9e6d;
+    --ease:cubic-bezier(.25,.8,.25,1);
 }
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+h1,h2,h3{ font-family:'Sora','Plus Jakarta Sans',sans-serif; letter-spacing:-.02em; }
+
 body{
-background:#28282B;
-color:white;
-padding:40px;
+    background:var(--bg);
+    color:white;
+    padding:60px 20px 70px;
+    min-height:100vh;
+}
+
+@keyframes flowFadeUp{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+/* ===== Progress Steps ===== */
+.flow-steps{
+    max-width:520px;
+    margin:0 auto 36px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    animation:flowFadeUp .5s var(--ease) both;
+}
+.flow-step{ flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; }
+.flow-step-num{
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+    background:rgba(255,255,255,.06);
+    border:1.5px solid rgba(255,255,255,.16);
+    color:#8a8a8f;
+    transition:.35s var(--ease);
+}
+.flow-step-label{ font-size:11.5px; color:#8a8a8f; font-weight:600; text-align:center; letter-spacing:.2px; }
+.flow-step::after{
+    content:"";
+    position:absolute;
+    top:17px; left:calc(50% + 24px);
+    width:calc(100% - 48px);
+    height:2px;
+    background:rgba(255,255,255,.1);
+    z-index:0;
+}
+.flow-step:last-child::after{ display:none; }
+.flow-step.done .flow-step-num{ background:linear-gradient(135deg,var(--accent),var(--accent-2)); border-color:transparent; color:#28282B; }
+.flow-step.done .flow-step-label{ color:#fff; }
+.flow-step.done::after{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.flow-step.active .flow-step-num{ background:var(--bg); border-color:var(--accent); color:var(--accent); box-shadow:0 0 0 5px rgba(255,209,102,.15); animation:flowPulse 1.8s infinite; }
+.flow-step.active .flow-step-label{ color:var(--accent); }
+@keyframes flowPulse{
+    0%,100%{ box-shadow:0 0 0 5px rgba(255,209,102,.15); }
+    50%{ box-shadow:0 0 0 9px rgba(255,209,102,.05); }
 }
 
 .container{
-max-width:800px;
-margin:auto;
-background:#35363A;
-padding:40px;
-border-radius:20px;
+    max-width:820px;
+    margin:0 auto;
+    background:var(--bg-alt);
+    padding:44px 42px 40px;
+    border-radius:22px;
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:0 25px 60px rgba(0,0,0,.4);
+    position:relative;
+    overflow:hidden;
+    animation:flowFadeUp .6s var(--ease) both;
+    animation-delay:.05s;
+}
+.container::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:4px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
 }
 
-h1{
-margin-bottom:25px;
-text-align:center;
+.terms-head{ text-align:center; margin-bottom:34px; }
+.terms-head span{
+    color:#9b9b9b;
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:12.5px;
+}
+.terms-head h1{ font-size:30px; margin-top:10px; margin-bottom:12px; }
+.terms-head p{ color:#bdbdbd; line-height:1.8; font-size:14.5px; max-width:520px; margin:0 auto; }
+
+.terms-box{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-bottom:32px;
 }
 
-h3{
-margin-top:25px;
-margin-bottom:10px;
+.term-item{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    padding:18px 20px;
+    background:var(--bg);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    transition:.3s var(--ease);
+    opacity:0;
+    transform:translateY(12px);
+    animation:termIn .5s var(--ease) forwards;
 }
+.term-item:hover{ transform:translateY(-4px); border-color:rgba(255,209,102,.35); box-shadow:0 12px 26px rgba(0,0,0,.3); }
+.term-item i{ color:#4ade80; font-size:19px; margin-top:2px; }
+.term-item p{ color:#d8d8d8; line-height:1.7; font-size:14.5px; }
 
-p{
-line-height:1.8;
-color:#ddd;
-}
+@keyframes termIn{ to{ opacity:1; transform:translateY(0); } }
+.term-item:nth-child(1){ animation-delay:.05s; }
+.term-item:nth-child(2){ animation-delay:.1s; }
+.term-item:nth-child(3){ animation-delay:.15s; }
+.term-item:nth-child(4){ animation-delay:.2s; }
+.term-item:nth-child(5){ animation-delay:.25s; }
+.term-item:nth-child(6){ animation-delay:.3s; }
+.term-item:nth-child(7){ animation-delay:.35s; }
+.term-item:nth-child(8){ animation-delay:.4s; }
 
 .check{
-margin-top:30px;
-display:flex;
-align-items:center;
-gap:10px;
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    background:var(--bg);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:18px 20px;
+    margin-bottom:26px;
+    cursor:pointer;
+    transition:.3s var(--ease);
 }
+.check:hover{ border-color:rgba(255,209,102,.35); }
+.check input{
+    appearance:none;
+    -webkit-appearance:none;
+    width:22px; height:22px;
+    min-width:22px;
+    border-radius:6px;
+    border:2px solid rgba(255,255,255,.25);
+    background:transparent;
+    cursor:pointer;
+    position:relative;
+    transition:.25s var(--ease);
+    margin-top:1px;
+}
+.check input:checked{
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    border-color:transparent;
+    animation:checkPop .3s var(--ease);
+}
+.check input:checked::after{
+    content:"\f00c";
+    font-family:"Font Awesome 6 Free";
+    font-weight:900;
+    font-size:12px;
+    color:#28282B;
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+@keyframes checkPop{
+    0%{ transform:scale(.7); }
+    60%{ transform:scale(1.15); }
+    100%{ transform:scale(1); }
+}
+.check label{ font-size:14.5px; color:#ddd; line-height:1.6; cursor:pointer; }
 
 button{
-margin-top:30px;
-width:100%;
-padding:15px;
-border:none;
-border-radius:10px;
-background:#FFD166;
-font-size:17px;
-font-weight:600;
-cursor:pointer;
-transition: 0.3s;
+    width:100%;
+    padding:17px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    font-size:16.5px;
+    font-weight:700;
+    color:#28282B;
+    cursor:pointer;
+    transition:.3s var(--ease);
+    box-shadow:0 12px 28px rgba(255,209,102,.18);
 }
-
+button:hover:not(:disabled){
+    transform:translateY(-3px);
+    box-shadow:0 16px 32px rgba(255,209,102,.3);
+}
 button:disabled{
-background:#777;
-cursor:not-allowed;
+    background:#4a4a4d;
+    color:#9a9a9a;
+    cursor:not-allowed;
+    box-shadow:none;
 }
 
-/* ========================================== */
-/* KODE RESPONSIF SMARTPHONE (TAMBAHAN BHARU)  */
-/* ========================================== */
-@media (max-width: 768px) {
-    body {
-        padding: 20px 12px; /* Mengurangi jarak di luar kotak */
-    }
-
-    .container {
-        padding: 30px 20px; /* Mengurangi jarak di dalam kotak */
-        border-radius: 15px;
-    }
-
-    h1 {
-        font-size: 26px; /* Menyesuaikan ukuran judul utama */
-        margin-bottom: 20px;
-    }
-
-    h3 {
-        font-size: 18px; /* Menyesuaikan sub-judul ketentuan */
-    }
-
-    p {
-        font-size: 14px; /* Ukuran teks isi sedikit diperkecil agar pas */
-        line-height: 1.6;
-    }
-
-    .check {
-        align-items: flex-start; /* Menjaga checkbox tetap rapi di atas jika teks membungkus jadi 2 baris */
-    }
-
-    .check label {
-        font-size: 14px;
-        line-height: 1.4;
-    }
-
-    button {
-        padding: 14px;
-        font-size: 16px;
-    }
+@media (max-width:768px){
+    body{ padding:40px 14px 60px; }
+    .container{ padding:30px 22px; border-radius:18px; }
+    .terms-head h1{ font-size:24px; }
+    .terms-head p{ font-size:13.5px; }
+    .term-item{ padding:15px 16px; gap:12px; }
+    .term-item p{ font-size:13.5px; }
+    .flow-step-label{ font-size:9.5px; }
+    .flow-step-num{ width:28px; height:28px; font-size:11px; }
+    .flow-step::after{ top:14px; }
 }
 
-@media (max-width: 480px) {
-    body {
-        padding: 15px 8px;
-    }
-
-    .container {
-        padding: 25px 15px;
-        border-radius: 12px;
-    }
-
-    h1 {
-        font-size: 22px;
-    }
+@media (max-width:380px){
+    .container{ padding:24px 16px; }
+    .terms-head h1{ font-size:21px; }
 }
 
 </style>
@@ -134,47 +252,71 @@ cursor:not-allowed;
 
 <body>
 
-<div class="container">
-
-<h1>Syarat & Ketentuan</h1>
-
-<h3>1. Produk Digital</h3>
-
-<p>
-Semua preset merupakan produk digital sehingga tidak dapat dikembalikan atau ditukar setelah pembayaran berhasil.
-</p>
-
-<h3>2. Penggunaan</h3>
-
-<p>
-Preset hanya boleh digunakan untuk kebutuhan pribadi atau komersial milik pembeli.
-</p>
-
-<h3>3. Dilarang Menjual Ulang</h3>
-
-<p>
-Dilarang membagikan atau menjual ulang file preset tanpa izin dari StarTone.
-</p>
-
-<h3>4. Download</h3>
-
-<p>
-Link download akan diberikan setelah proses pembayaran selesai.
-</p>
-
-<div class="check">
-
-<input type="checkbox" id="agree">
-
-<label for="agree">
-Saya telah membaca dan menyetujui syarat & ketentuan.
-</label>
-
+<div class="flow-steps">
+    <div class="flow-step done"><div class="flow-step-num"><i class="fa-solid fa-check"></i></div><div class="flow-step-label">Konfirmasi</div></div>
+    <div class="flow-step active"><div class="flow-step-num">2</div><div class="flow-step-label">Syarat</div></div>
+    <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-label">Checkout</div></div>
+    <div class="flow-step"><div class="flow-step-num">4</div><div class="flow-step-label">Pembayaran</div></div>
 </div>
 
-<button id="next" disabled>
-Lanjut ke Checkout
-</button>
+<div class="container">
+
+    <div class="terms-head">
+        <span>Information</span>
+        <h1>Syarat & Ketentuan</h1>
+        <p>Harap membaca seluruh syarat dan ketentuan berikut sebelum melanjutkan pembelian preset.</p>
+    </div>
+
+    <div class="terms-box">
+
+        <div class="term-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Semua preset merupakan produk digital sehingga tidak dapat dikembalikan atau ditukar setelah pembayaran berhasil.</p>
+        </div>
+
+        <div class="term-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Preset hanya boleh digunakan untuk kebutuhan pribadi atau komersial milik pembeli (personal use).</p>
+        </div>
+
+        <div class="term-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Dilarang membagikan atau menjual ulang file preset dalam bentuk apa pun tanpa izin dari StarTone.</p>
+        </div>
+
+        <div class="term-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Pembayaran yang sudah berhasil diverifikasi tidak dapat dibatalkan maupun direfund.</p>
+        </div>
+
+        <div class="term-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Pastikan alamat email dan nomor telepon yang digunakan masih aktif untuk keperluan pengiriman produk.</p>
+        </div>
+
+        <div class="term-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Pastikan bukti pembayaran yang diupload jelas dan dapat dibaca oleh admin.</p>
+        </div>
+
+        <div class="term-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Link download akan diberikan setelah proses pembayaran selesai diverifikasi oleh admin.</p>
+        </div>
+
+        <div class="term-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Dengan melakukan pembelian, pembeli dianggap telah membaca dan menyetujui seluruh syarat & ketentuan StarTone.</p>
+        </div>
+
+    </div>
+
+    <label class="check" for="agree">
+        <input type="checkbox" id="agree">
+        Saya telah membaca dan menyetujui syarat & ketentuan.
+    </label>
+
+    <button id="next" disabled>Lanjut ke Checkout</button>
 
 </div>
 
@@ -183,17 +325,14 @@ Lanjut ke Checkout
 const check = document.getElementById("agree");
 const next = document.getElementById("next");
 
-check.addEventListener("change",function(){
-
-next.disabled=!this.checked;
-
+check.addEventListener("change", function () {
+    next.disabled = !this.checked;
 });
 
-next.onclick=function(){
-
-window.location.href="checkout.html";
-
-}
+next.onclick = function () {
+    if (next.disabled) return;
+    window.location.href = "checkout.html";
+};
 
 </script>
 

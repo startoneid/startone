@@ -61,7 +61,8 @@
     box-shadow:0 20px 50px rgba(0,0,0,.35);
     background:#000;
     aspect-ratio:16/9; /* fallback sebelum resolusi asli terdeteksi */
-    max-height:78vh;
+    max-height:68vh; /* sedikit lebih kecil dari sebelumnya (78vh) */
+    width:92%;
     margin:0 auto;
 }
 .pd-main img{
@@ -95,24 +96,30 @@
     transform:scale(1.08);
 }
 .pd-thumbs{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(96px,1fr));
-    gap:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
     margin-top:12px;
 }
 .pd-thumb{
-    aspect-ratio:16/9; /* fallback sebelum resolusi asli terdeteksi */
-    border-radius:10px;
+    flex:0 0 auto;
+    width:64px; /* kartu dibuat sedikit lebih kecil & rapi */
+    aspect-ratio:3/4; /* semua kartu preview hasil preset seragam 3:4 */
+    border-radius:8px;
     overflow:hidden;
     cursor:pointer;
     border:2px solid transparent;
     opacity:.7;
     background:#000;
-    transition:opacity .2s, border-color .2s;
+    transition:opacity .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
 }
-.pd-thumb img{ width:100%; height:100%; object-fit:contain; display:block; }
-.pd-thumb:hover{ opacity:1; }
+.pd-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.pd-thumb:hover{ opacity:1; transform:translateY(-2px); }
 .pd-thumb.active{ opacity:1; border-color:var(--accent); }
+
+@media (max-width:480px){
+    .pd-thumb{ width:56px; }
+}
 
 .pd-info .pill{ cursor:default; margin-bottom:8px; display:inline-block; }
 .pd-info h1{ font-family:'Sora',sans-serif; font-size:32px; margin:6px 0 10px; }

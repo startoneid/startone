@@ -9,7 +9,7 @@ function buyProduct(name, price, id = "") {
     localStorage.setItem("productPrice", price);
     localStorage.setItem("productId", id);
 
-    window.location.href = "terms.html";
+    window.location.href = "confirm.html";
 }
 
 window.buyProduct = buyProduct;

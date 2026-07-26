@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StarTone | Konfirmasi Pembelian</title>
+
+<link rel="icon" href="icon/StarTone Circle.png" type="image/x-icon">
+<link rel="shortcut icon" href="icon/StarTone Circle.png">
+<link rel="apple-touch-icon" href="icon/StarTone Circle.png">
+
+<meta name="description" content="Konfirmasi bahwa kamu sudah membaca panduan dan tutorial sebelum melanjutkan pembelian preset StarTone.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#090909">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+:root{
+    --bg:#090909;
+    --bg-alt:#35363A;
+    --accent:#FFD166;
+    --accent-2:#ff9e6d;
+    --ease:cubic-bezier(.25,.8,.25,1);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+h1,h2,h3{ font-family:'Sora','Plus Jakarta Sans',sans-serif; letter-spacing:-.02em; }
+
+body{
+    background:var(--bg);
+    color:#fff;
+    padding:60px 20px;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+@keyframes flowFadeUp{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+.page-wrap{ width:100%; max-width:680px; }
+
+/* ===== Progress Steps ===== */
+.flow-steps{
+    max-width:520px;
+    margin:0 auto 36px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    animation:flowFadeUp .5s var(--ease) both;
+}
+.flow-step{ flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; }
+.flow-step-num{
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+    background:rgba(255,255,255,.06);
+    border:1.5px solid rgba(255,255,255,.16);
+    color:#8a8a8f;
+    transition:.35s var(--ease);
+}
+.flow-step-label{ font-size:11.5px; color:#8a8a8f; font-weight:600; text-align:center; letter-spacing:.2px; }
+.flow-step::after{
+    content:"";
+    position:absolute;
+    top:17px; left:calc(50% + 24px);
+    width:calc(100% - 48px);
+    height:2px;
+    background:rgba(255,255,255,.1);
+    z-index:0;
+}
+.flow-step:last-child::after{ display:none; }
+.flow-step.active .flow-step-num{ background:var(--bg); border-color:var(--accent); color:var(--accent); box-shadow:0 0 0 5px rgba(255,209,102,.15); animation:flowPulse 1.8s infinite; }
+.flow-step.active .flow-step-label{ color:var(--accent); }
+@keyframes flowPulse{
+    0%,100%{ box-shadow:0 0 0 5px rgba(255,209,102,.15); }
+    50%{ box-shadow:0 0 0 9px rgba(255,209,102,.05); }
+}
+
+/* ===== Card ===== */
+.container{
+    background:var(--bg-alt);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:22px;
+    padding:44px 40px;
+    box-shadow:0 25px 60px rgba(0,0,0,.4);
+    position:relative;
+    overflow:hidden;
+    animation:flowFadeUp .6s var(--ease) both;
+    animation-delay:.05s;
+}
+.container::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:4px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+}
+
+.confirm-icon{
+    width:66px; height:66px;
+    border-radius:50%;
+    background:linear-gradient(135deg,rgba(255,209,102,.18),rgba(255,158,109,.1));
+    border:1px solid rgba(255,209,102,.35);
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px;
+    color:var(--accent);
+    margin:0 auto 22px;
+    animation:iconFloat 3s ease-in-out infinite;
+}
+@keyframes iconFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-6px); }
+}
+
+h1{
+    font-size:26px;
+    text-align:center;
+    margin-bottom:10px;
+}
+.subtitle{
+    text-align:center;
+    color:#bbb;
+    line-height:1.7;
+    margin-bottom:8px;
+    font-size:15px;
+}
+
+.order-recap{
+    margin:26px 0;
+    background:var(--bg);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:14px;
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+.order-recap span{ color:#9a9a9a; font-size:13px; }
+.order-recap strong{ color:#fff; font-size:15px; }
+.order-recap strong#confirmPrice{ color:var(--accent); }
+
+.notice-box{
+    display:flex;
+    gap:16px;
+    background:#3f3721;
+    border:1px solid rgba(255,209,102,.4);
+    border-radius:16px;
+    padding:20px 22px;
+    margin:26px 0;
+}
+.notice-box i{ font-size:24px; color:var(--accent); margin-top:2px; }
+.notice-box h4{ color:var(--accent); margin-bottom:6px; font-size:16px; }
+.notice-box p{ color:#eaddc3; font-size:14px; line-height:1.75; }
+
+.guide-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin:26px 0 30px;
+}
+.guide-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:16px 14px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.03);
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
+    font-size:14.5px;
+    transition:.3s var(--ease);
+}
+.guide-btn i{ font-size:17px; color:var(--accent); }
+.guide-btn:hover{
+    transform:translateY(-4px);
+    border-color:rgba(255,209,102,.5);
+    background:rgba(255,209,102,.08);
+    box-shadow:0 12px 25px rgba(0,0,0,.35);
+}
+
+.check{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    background:var(--bg);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:18px 20px;
+    margin-bottom:26px;
+    cursor:pointer;
+    transition:.3s var(--ease);
+}
+.check:hover{ border-color:rgba(255,209,102,.35); }
+.check input{
+    appearance:none;
+    -webkit-appearance:none;
+    width:22px; height:22px;
+    min-width:22px;
+    border-radius:6px;
+    border:2px solid rgba(255,255,255,.25);
+    background:transparent;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.25s var(--ease);
+    position:relative;
+    margin-top:1px;
+}
+.check input:checked{
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    border-color:transparent;
+    animation:checkPop .3s var(--ease);
+}
+.check input:checked::after{
+    content:"\f00c";
+    font-family:"Font Awesome 6 Free";
+    font-weight:900;
+    font-size:12px;
+    color:#28282B;
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+@keyframes checkPop{
+    0%{ transform:scale(.7); }
+    60%{ transform:scale(1.15); }
+    100%{ transform:scale(1); }
+}
+.check label{
+    font-size:14.5px;
+    color:#ddd;
+    line-height:1.6;
+    cursor:pointer;
+}
+
+button#continueBtn{
+    width:100%;
+    padding:17px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#28282B;
+    font-size:16.5px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s var(--ease);
+    box-shadow:0 12px 28px rgba(255,209,102,.18);
+}
+button#continueBtn:hover:not(:disabled){
+    transform:translateY(-3px);
+    box-shadow:0 16px 32px rgba(255,209,102,.3);
+}
+button#continueBtn:disabled{
+    background:#4a4a4d;
+    color:#9a9a9a;
+    cursor:not-allowed;
+    box-shadow:none;
+}
+
+/* ===== Responsive ===== */
+@media (max-width:640px){
+    body{ padding:40px 14px; }
+    .container{ padding:30px 22px; border-radius:18px; }
+    h1{ font-size:21px; }
+    .subtitle{ font-size:13.5px; }
+    .guide-actions{ grid-template-columns:1fr; }
+    .notice-box{ flex-direction:column; padding:16px 16px; }
+    .order-recap{ flex-direction:column; align-items:flex-start; gap:4px; }
+    .flow-step-label{ font-size:9.5px; }
+    .flow-step-num{ width:28px; height:28px; font-size:11px; }
+    .flow-step::after{ top:14px; }
+}
+
+@media (max-width:380px){
+    .container{ padding:26px 16px; }
+    h1{ font-size:19px; }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="page-wrap">
+
+    <div class="flow-steps">
+        <div class="flow-step active">
+            <div class="flow-step-num">1</div>
+            <div class="flow-step-label">Konfirmasi</div>
+        </div>
+        <div class="flow-step">
+            <div class="flow-step-num">2</div>
+            <div class="flow-step-label">Syarat</div>
+        </div>
+        <div class="flow-step">
+            <div class="flow-step-num">3</div>
+            <div class="flow-step-label">Checkout</div>
+        </div>
+        <div class="flow-step">
+            <div class="flow-step-num">4</div>
+            <div class="flow-step-label">Pembayaran</div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="confirm-icon">
+            <i class="fa-solid fa-book-open-reader"></i>
+        </div>
+
+        <h1>Sebelum Melanjutkan Pembelian</h1>
+        <p class="subtitle">Yuk pastikan kamu sudah paham cara pakai preset ini supaya hasil fotomu maksimal.</p>
+
+        <div class="order-recap">
+            <span>Produk yang dipilih</span>
+            <strong id="confirmProductName">-</strong>
+        </div>
+
+        <div class="notice-box">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+                <h4>Baca Panduan &amp; Tonton Tutorial Dulu, ya!</h4>
+                <p>
+                    Preset ini adalah produk digital yang tidak dapat dikembalikan setelah pembayaran berhasil.
+                    Sebelum lanjut, luangkan waktu sebentar untuk membaca panduan pembelian dan melihat tutorial
+                    instalasi preset agar tidak ada kendala setelah produk kamu terima.
+                </p>
+            </div>
+        </div>
+
+        <div class="guide-actions">
+            <a href="guide.html#purchaseGuide" target="_blank" rel="noopener noreferrer" class="guide-btn">
+                <i class="fa-solid fa-book"></i> Baca Panduan
+            </a>
+            <a href="guide.html#tutorial" target="_blank" rel="noopener noreferrer" class="guide-btn">
+                <i class="fa-solid fa-circle-play"></i> Lihat Tutorial
+            </a>
+        </div>
+
+        <label class="check" for="confirmAgree">
+            <input type="checkbox" id="confirmAgree">
+            Saya telah membaca serta memahami Panduan dan Tutorial.
+        </label>
+
+        <button id="continueBtn" disabled>Lanjut ke Syarat &amp; Ketentuan</button>
+
+    </div>
+
+</div>
+
+<script>
+
+    const productName = localStorage.getItem("productName");
+
+    if (!productName) {
+        window.location.href = "shop.html";
+    } else {
+        document.getElementById("confirmProductName").textContent = productName;
+    }
+
+    const agreeBox = document.getElementById("confirmAgree");
+    const continueBtn = document.getElementById("continueBtn");
+
+    agreeBox.addEventListener("change", function () {
+        continueBtn.disabled = !this.checked;
+    });
+
+    continueBtn.addEventListener("click", function () {
+        if (continueBtn.disabled) return;
+        window.location.href = "terms.html";
+    });
+
+</script>
+
+<script src="js/back-button.js"></script>
+
+</body>
+</html>

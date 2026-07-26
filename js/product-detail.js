@@ -231,6 +231,24 @@ function collectGalleryImages(product) {
     return images.length ? images : [product.image].filter(Boolean);
 }
 
+// ==============================================================
+// Kumpulkan gambar untuk STRIP thumbnail di bawah foto utama.
+// Sengaja TIDAK menyertakan foto thumbnail utama produk (product.image)
+// — hanya foto hasil/"after" dari preset yang ditampilkan di sini,
+// supaya tidak ada duplikat foto thumbnail di bagian bawah.
+// ==============================================================
+function collectThumbStripImages(product) {
+    const images = [];
+
+    if (Array.isArray(product.gallery)) {
+        product.gallery.forEach((g) => {
+            if (g?.after && !images.includes(g.after)) images.push(g.after);
+        });
+    }
+
+    return images;
+}
+
 function renderProduct(product) {
     document.title = `${product.name} | StarTone`;
 
@@ -248,11 +266,12 @@ function renderProduct(product) {
     if (ogImage && product.image) ogImage.setAttribute("content", product.image);
 
     const images = collectGalleryImages(product);
+    const thumbStripImages = collectThumbStripImages(product);
 
-    const thumbsHTML = images.length > 1
-        ? images.map((src, i) => `
-            <div class="pd-thumb ${i === 0 ? "active" : ""}" data-src="${escapeHTML(src)}">
-                <img src="${escapeHTML(src)}" alt="${escapeHTML(product.name)} ${i + 1}" loading="lazy">
+    const thumbsHTML = thumbStripImages.length
+        ? thumbStripImages.map((src, i) => `
+            <div class="pd-thumb" data-src="${escapeHTML(src)}">
+                <img src="${escapeHTML(src)}" alt="${escapeHTML(product.name)} - hasil preset ${i + 1}" loading="lazy">
             </div>
         `).join("")
         : "";
@@ -322,9 +341,9 @@ function renderProduct(product) {
     const pdMainEl = document.querySelector(".pd-main");
     applyNaturalAspectRatio(document.getElementById("pdMainImage"), pdMainEl);
 
-    document.querySelectorAll(".pd-thumb").forEach((thumb) => {
-        applyNaturalAspectRatio(thumb.querySelector("img"), thumb);
-    });
+    // Catatan: kartu di strip thumbnail (.pd-thumb) sengaja dibuat seragam
+    // dengan rasio 3:4 lewat CSS (bukan mengikuti resolusi asli tiap foto),
+    // supaya tampilan strip lebih rapi & konsisten.
 
     // ---- Ganti foto utama lewat thumbnail ----
     let currentThumbIndex = 0;
@@ -341,7 +360,11 @@ function renderProduct(product) {
         mainImg.src = thumb.dataset.src;
         applyNaturalAspectRatio(mainImg, pdMainEl);
 
-        currentThumbIndex = allThumbs.indexOf(thumb);
+        // Cari posisi foto ini di dalam daftar "images" (dipakai lightbox),
+        // bukan posisi di dalam strip thumbnail (karena strip sekarang
+        // hanya berisi foto after preset, tanpa foto thumbnail utama).
+        const foundIndex = images.indexOf(thumb.dataset.src);
+        currentThumbIndex = foundIndex >= 0 ? foundIndex : 0;
     });
 
     // ---- Tombol search di pojok thumbnail utama -> buka lightbox

@@ -20,7 +20,17 @@ content="noindex,nofollow">
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 <style>
+
+:root{
+    --bg:#090909;
+    --bg-alt:#35363A;
+    --accent:#FFD166;
+    --accent-2:#ff9e6d;
+    --ease:cubic-bezier(.25,.8,.25,1);
+}
 
 *{
 margin:0;
@@ -29,8 +39,60 @@ box-sizing:border-box;
 font-family:'Plus Jakarta Sans',sans-serif;
 }
 
+h1{ font-family:'Sora','Plus Jakarta Sans',sans-serif; letter-spacing:-.02em; }
+
+@keyframes flowFadeUp{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+/* ===== Progress Steps ===== */
+.flow-steps{
+    max-width:520px;
+    margin:0 auto 36px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    animation:flowFadeUp .5s var(--ease) both;
+}
+.flow-step{ flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; }
+.flow-step-num{
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+    background:rgba(255,255,255,.06);
+    border:1.5px solid rgba(255,255,255,.16);
+    color:#8a8a8f;
+    transition:.35s var(--ease);
+}
+.flow-step-label{ font-size:11.5px; color:#8a8a8f; font-weight:600; text-align:center; letter-spacing:.2px; }
+.flow-step::after{
+    content:"";
+    position:absolute;
+    top:17px; left:calc(50% + 24px);
+    width:calc(100% - 48px);
+    height:2px;
+    background:rgba(255,255,255,.1);
+    z-index:0;
+}
+.flow-step:last-child::after{ display:none; }
+.flow-step.done .flow-step-num{ background:linear-gradient(135deg,var(--accent),var(--accent-2)); border-color:transparent; color:#28282B; }
+.flow-step.done .flow-step-label{ color:#fff; }
+.flow-step.done::after{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
+.flow-step.active .flow-step-num{ background:var(--bg); border-color:var(--accent); color:var(--accent); box-shadow:0 0 0 5px rgba(255,209,102,.15); animation:flowPulse 1.8s infinite; }
+.flow-step.active .flow-step-label{ color:var(--accent); }
+@keyframes flowPulse{
+    0%,100%{ box-shadow:0 0 0 5px rgba(255,209,102,.15); }
+    50%{ box-shadow:0 0 0 9px rgba(255,209,102,.05); }
+}
+@media (max-width:480px){
+    .flow-step-label{ font-size:9.5px; }
+    .flow-step-num{ width:28px; height:28px; font-size:11px; }
+    .flow-step::after{ top:14px; }
+}
+
 body{
-background:#28282B;
+background:var(--bg);
 color:white;
 padding:50px;
 }
@@ -39,11 +101,24 @@ padding:50px;
 
 max-width:700px;
 margin:auto;
-background:#35363A;
+background:var(--bg-alt);
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 25px 60px rgba(0,0,0,.4);
 padding:40px;
 border-radius:20px;
 text-align:center;
+position:relative;
+overflow:hidden;
+animation:flowFadeUp .6s var(--ease) both;
 
+}
+
+.container::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:4px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
 }
 
 img{
@@ -86,26 +161,33 @@ margin-bottom:20px;
     padding:18px;
     border:none;
     border-radius:10px;
-    background:#FFD166;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
     color:#28282B;
     font-size:18px;
     font-weight:600;
     cursor:pointer;
-    transition:.3s;
+    transition:.3s var(--ease);
+    box-shadow:0 12px 28px rgba(255,209,102,.18);
 }
 
 .pay-btn:hover{
-    background:white;
-    transform:translateY(-2px);
+    transform:translateY(-3px);
+    box-shadow:0 16px 32px rgba(255,209,102,.3);
 }
 
 input[type=file]{
     width:100%;
     padding:14px;
-    background:#28282B;
+    background:var(--bg);
+    border:1px solid rgba(255,255,255,.08);
     border-radius:10px;
     color:white;
     cursor:pointer;
+    transition:.25s var(--ease);
+}
+
+input[type=file]:hover{
+    border-color:rgba(255,209,102,.4);
 }
 
 #previewImage{
@@ -115,10 +197,12 @@ input[type=file]{
     margin:20px auto;
     border:3px solid #FFD166;
     object-fit:cover;
+    animation:flowFadeUp .4s var(--ease) both;
 }
 
 .order-box{
-    background:#28282B;
+    background:var(--bg);
+    border:1px solid rgba(255,255,255,.06);
     padding:25px;
     border-radius:15px;
     margin:30px 0;
@@ -145,28 +229,34 @@ width:100%;
 padding:18px;
 border:none;
 border-radius:10px;
-background:#FFD166;
+background:linear-gradient(90deg,var(--accent),var(--accent-2));
+color:#28282B;
 font-size:18px;
 font-weight:600;
 cursor:pointer;
+transition:.3s var(--ease);
+box-shadow:0 12px 28px rgba(255,209,102,.18);
 
 }
 
 button:hover{
 
-opacity:.9;
+transform:translateY(-3px);
+box-shadow:0 16px 32px rgba(255,209,102,.3);
 
 }
 
 .invoice-box{
 
-background:#28282B;
+background:var(--bg);
+border:1px solid rgba(255,255,255,.06);
 
 padding:20px;
 
 border-radius:12px;
 
 margin-bottom:25px;
+
 
 text-align:center;
 
@@ -292,6 +382,19 @@ transform:translateY(-2px);
 
 }
 
+#paymentStatus{
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:20px;
+    background:rgba(255,209,102,.12);
+    animation:statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:.65; }
+}
+
 /* ========================================== */
 /* KODE RESPONSIF SMARTPHONE (TAMBAHAN BARU)  */
 /* ========================================== */
@@ -388,6 +491,13 @@ transform:translateY(-2px);
 </head>
 
 <body>
+
+<div class="flow-steps">
+    <div class="flow-step done"><div class="flow-step-num"><i class="fa-solid fa-check"></i></div><div class="flow-step-label">Konfirmasi</div></div>
+    <div class="flow-step done"><div class="flow-step-num"><i class="fa-solid fa-check"></i></div><div class="flow-step-label">Syarat</div></div>
+    <div class="flow-step done"><div class="flow-step-num"><i class="fa-solid fa-check"></i></div><div class="flow-step-label">Checkout</div></div>
+    <div class="flow-step active"><div class="flow-step-num">4</div><div class="flow-step-label">Pembayaran</div></div>
+</div>
 
 <div class="container">
 

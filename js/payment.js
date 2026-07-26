@@ -155,6 +155,8 @@ downloadBtn.style.display="block";
 
 downloadBtn.href=data.downloadURL;
 
+downloadBtn.style.animation="flowFadeUp .5s cubic-bezier(.25,.8,.25,1) both";
+
 break;
 
 case "rejected":
