@@ -24,11 +24,21 @@ const wishlistFilterBtn = document.getElementById("shopWishlistFilterBtn");
 const categoryPills = document.getElementById("shopCategoryPills");
 const resultsCount = document.getElementById("shopResultsCount");
 
+// Dukungan link pencarian langsung, misalnya dari kotak pencarian
+// sitelinks Google: shop.html?q=Japan akan otomatis mengisi &
+// menjalankan pencarian ini saat halaman dibuka.
+const urlSearchParams = new URLSearchParams(window.location.search);
+const qFromUrl = urlSearchParams.get("q");
+
 let productsCache = [];
-let currentSearch = "";
+let currentSearch = qFromUrl ? qFromUrl.trim() : "";
 let currentSort = "default";
 let currentCategory = "all";
 let wishlistOnly = false;
+
+if (qFromUrl && searchInput) {
+    searchInput.value = qFromUrl;
+}
 
 // Kartu produk di halaman Shop sekarang langsung membuka halaman detail
 // produk (product.html), sama persis seperti kartu di Featured

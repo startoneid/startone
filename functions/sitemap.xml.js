@@ -26,6 +26,8 @@ const STATIC_PAGES = [
     { path: "/", priority: "1.00" },
     { path: "/shop.html", priority: "0.90" },
     { path: "/guide.html", priority: "0.80" },
+    { path: "/about.html", priority: "0.70" },
+    { path: "/contact.html", priority: "0.60" },
     { path: "/tracking.html", priority: "0.60" },
     { path: "/terms.html", priority: "0.50" },
     { path: "/privacy-policy.html", priority: "0.30" },

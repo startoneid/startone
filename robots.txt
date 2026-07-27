@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /Admin/
+Disallow: /checkout.html
+Disallow: /confirm.html
+Disallow: /payment.html
 
 Sitemap: https://startone.pages.dev/sitemap.xml
